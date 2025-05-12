@@ -18,6 +18,7 @@
     <link href="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/extra-libs/calendar/calendar.css') }}" rel="stylesheet" />
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
+    @yield('aditionnal_css')
 </head>
 
 <body>
@@ -255,22 +256,7 @@
             </div>
         </aside>
         <div class="page-wrapper">
-            <div class="page-breadcrumb">
-                <div class="row">
-                    <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Calendar</h4>
-                        <div class="ms-auto text-end">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Library</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            
             @yield('content')
 
             <footer class="footer text-center">
@@ -297,6 +283,7 @@
     <script src="{{ asset('assets/libs/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.js') }}"></script>
     <script src="{{ asset('dist/js/pages/calendar/cal-init.js') }}"></script>
+    @yield('scripts')
 </body>
 
 </html>
