@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Course;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $courses = Course::all();
+    return view('dashboard',compact('courses'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth','role:admin'])->prefix('admin')->group(function(){

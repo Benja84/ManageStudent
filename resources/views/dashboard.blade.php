@@ -108,29 +108,48 @@
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.js') }}"></script>
-    {{-- <script src="{{ asset('dist/js/pages/calendar/cal-init.js') }}"></script> --}}
+    <script src="{{ asset('assets/libs/fullcalendar/dist/locale/fr.js') }}"></script>
     <script>
         $(document).ready(function (){
+            let cr = @json($courses);
+            console.log('ici',cr)
             var courses = [
-                {'title':'Birthday for school','start':'2025-05-12 08:30:00','end':'2025-05-13 10:30:00'},
-                {'title':'Math 103','start':'2025-05-13 08:30:00','end':'2025-05-13 10:30:00'},
-                {'title':'Anglais','start':'2025-05-14 08:30:00','end':'2025-05-14 10:30:00'},
+                {'_id':1,'title':'Birthday for school','start':'2025-05-12 08:30:00','end':'2025-05-13 10:30:00'},
+                {'_id':2,'title':'Math 103','start':'2025-05-13 08:30:00','end':'2025-05-13 10:30:00'},
+                {'_id':3,'title':'Anglais','start':'2025-05-14 08:30:00','end':'2025-05-14 10:30:00'},
             ];
             
             $('#calendar').fullCalendar({
+                locale: 'fr',
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
+                monthNames: [
+                    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+                ],
+                monthShortNames: [
+                    'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun',
+                    'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'
+                ],
+                dayNames: [
+                    'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 
+                    'Jeudi', 'Vendredi', 'Samedi'
+                ],
+                dayShortNames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                
                 events: courses,
                 selectable: true,
                 selectHelper: true,
-                select: function(start,end,allDays){
+                eventClick: function(info){
+                    console.log('info',info)
                     $('#add-new-event').modal('toggle');
-                }
+                },
             });
         })
     </script>
+    
 @endsection
             
