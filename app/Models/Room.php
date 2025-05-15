@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Professor extends Model
+class Room extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'section_id',
-        'group_id',
-        'phone',
-        'comments',
-        'documents',
+        'name',
+        'number',
+        'department',
+        'floor',
+        'seating_capacity',
+        'material_capacity',
     ];
-
-    protected $with = ['user'];
 }
