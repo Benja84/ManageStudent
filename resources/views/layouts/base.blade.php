@@ -14,9 +14,6 @@
     <title>Student management</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
-    <!-- Custom CSS -->
-    <link href="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/extra-libs/calendar/calendar.css') }}" rel="stylesheet" />
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
     @yield('aditionnal_css')
 </head>
@@ -267,6 +264,8 @@
     </div>
     <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/js/jquery.ui.touch-punch-improved.js') }}"></script>
+    
+    <script src="{{ asset('assets/libs/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('dist/js/jquery-ui.min.js') }}"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
@@ -280,9 +279,7 @@
     <!--Custom JavaScript -->
     <script src="{{ asset('dist/js/custom.min.js') }}"></script>
     <!-- this page js -->
-    <script src="{{ asset('assets/libs/moment/min/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.js') }}"></script>
-    <script src="{{ asset('dist/js/pages/calendar/cal-init.js') }}"></script>
+    
     @yield('scripts')
 </body>
 
