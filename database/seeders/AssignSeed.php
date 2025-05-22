@@ -20,9 +20,11 @@ class AssignSeed extends Seeder
         $user = User::find(1);
         $permissions = ['admin.manage', 'advisor.manage', 'professor.manage', 'student.manage', 'secretary.manage'];
         $role = Role::findByName('admin');
-    
+
         foreach ($permissions as $permission) {
             $per = Permission::create(['name' => $permission]);
+            // Utilise firstOrCreate pour éviter les doublons
+            //$per = Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
             // $user->givePermissionTo($per);
             $role->givePermissionTo($per);
         }
