@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\MembersController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StudentController;
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // Route::resource('/roles',RoleController::class);
     // Route::resource('/permissions',PermissionController::class);
     Route::resource('/students', StudentController::class);
+    Route::resource('/members', MembersController::class);
 });
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

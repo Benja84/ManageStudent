@@ -80,8 +80,48 @@
                         <li class="sidebar-item"> 
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('dashboard') }}" aria-expanded="false">
                                 <i class="mdi mdi-view-dashboard"></i>
-                                <span class="hide-menu">Dashboard</span>
+                                <span class="hide-menu">Tableaux de bord</span>
                             </a>
+                        </li>
+                        <li class="sidebar-item"> 
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                <i class="mdi mdi-account-multiple"></i>
+                                <span class="hide-menu">Membres du personnel </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item">
+                                    <a href="{{ route('members.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-note-outline"></i>
+                                        <span class="hide-menu"> Créer  </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="form-wizard.html" class="sidebar-link">
+                                        <i class="mdi mdi-receipt"></i>
+                                        <span class="hide-menu"> Liste du personnel </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item"> 
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                <i class="mdi mdi-school"></i>
+                                <span class="hide-menu">Etudiants </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item">
+                                    <a href="{{ route('students.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-note-outline"></i>
+                                        <span class="hide-menu"> Créer  </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="form-wizard.html" class="sidebar-link">
+                                        <i class="mdi mdi-receipt"></i>
+                                        <span class="hide-menu"> Liste des étudiants </span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="sidebar-item"> 
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="charts.html" aria-expanded="false">
@@ -106,26 +146,6 @@
                                 <i class="mdi mdi-blur-linear"></i>
                                 <span class="hide-menu">Full Width</span>
                             </a>
-                        </li>
-                        <li class="sidebar-item"> 
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="mdi mdi-receipt"></i>
-                                <span class="hide-menu">Etudiants </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('students.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="form-wizard.html" class="sidebar-link">
-                                        <i class="mdi mdi-note-plus"></i>
-                                        <span class="hide-menu"> Form Wizard </span>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <li class="sidebar-item"> 
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="pages-buttons.html" aria-expanded="false">
