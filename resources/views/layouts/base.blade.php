@@ -14,6 +14,7 @@
     <title>Student management</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
+    
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
     @yield('aditionnal_css')
 </head>
@@ -96,7 +97,7 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="form-wizard.html" class="sidebar-link">
+                                    <a href="{{ route('members.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
                                         <span class="hide-menu"> Liste du personnel </span>
                                     </a>
@@ -107,6 +108,26 @@
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-school"></i>
                                 <span class="hide-menu">Etudiants </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item">
+                                    <a href="{{ route('students.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-note-outline"></i>
+                                        <span class="hide-menu"> Créer  </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="form-wizard.html" class="sidebar-link">
+                                        <i class="mdi mdi-receipt"></i>
+                                        <span class="hide-menu"> Liste des étudiants </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item"> 
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                <i class="mdi mdi-clipboard-account"></i>
+                                <span class="hide-menu">Proffesseurs </span>
                             </a>
                             <ul aria-expanded="false" class="collapse  first-level">
                                 <li class="sidebar-item">

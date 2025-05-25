@@ -31,7 +31,7 @@ Route::get('/dashboard', function () {
     return view('dashboard',compact('courses'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::resource('/roles',RoleController::class);
     // Route::resource('/permissions',PermissionController::class);
     Route::resource('/students', StudentController::class);

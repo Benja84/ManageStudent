@@ -17,12 +17,12 @@ class User extends Authenticatable
 
     protected $cascadeDeletes = ['student', 'professor'];
 
-    public const ADMIN = 'administrators';
-    public const PROFESSOR = 'professors';
-    public const TRAINEE = 'students';
-    public const COORDINATOR = 'coordinators';
-    public const ADVISOR = 'advisors';
-    public const SECRETARY = 'secretaries';
+    public const ADMIN = 'admin';
+    public const PROFESSOR = 'professor';
+    public const TRAINEE = 'student';
+    public const COORDINATOR = 'coordinator';
+    public const ADVISOR = 'advisor';
+    public const SECRETARY = 'secretary';
 
     /**
      * The attributes that are mass assignable.
@@ -36,10 +36,10 @@ class User extends Authenticatable
         'email',
         'phone',
         'birthdate',
-        'birthplace_postcode',
+        // 'birthplace_postcode',
         'birthplace_city',
-        'address_street',
-        'address_postcode',
+        // 'address_street',
+        // 'address_postcode',
         'address_city',
         'password',
         'active',
@@ -66,5 +66,37 @@ class User extends Authenticatable
 
     public function student(){
         return $this->hasOne(Student::class);
+    }
+    
+    public function advisor()
+    {
+        return $this->hasOne(Advisor::class);
+    }
+
+    public function role(){
+        $role= $this->roles()->get()[0]->name;
+        switch ($role) {
+            case 'admin':
+                return 'Administrateur';
+                break;
+            case 'professor':
+                return 'Professeur';
+                break;
+            case 'student':
+                return 'Etudiant';
+                break;
+            case 'coordinator':
+                return 'Coordinateur';
+                break;
+            case 'advisor':
+                return 'Conseiller';
+                break;
+            case 'secretary':
+                return 'Secretaire';
+                break;
+            default:
+                return "";
+                break;
+        }
     }
 }

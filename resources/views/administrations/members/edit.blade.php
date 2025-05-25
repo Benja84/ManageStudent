@@ -10,7 +10,7 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">Ajouter un membre du personnel</h4>
+            <h4 class="page-title">Editer un membre du personnel</h4>
             <div class="ms-auto text-end">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -36,8 +36,10 @@
                 </div>
             @endif
 
-            <form id="example-form" action="{{ route('members.store') }}" method="POST" enctype="multipart/form-data" class="mt-2">
+            <form id="example-form" action="{{ route('members.update',$member->id) }}" method="POST" enctype="multipart/form-data" class="mt-2">
                 @csrf
+                @method('PUT')
+                <input type="hidden" value="{{ $member->user->id }}" name="id">
                 <div>
                     <h3>Identité</h3>
                     <section>
@@ -49,28 +51,28 @@
                         <label for="gender">Genre *</label>
                         <div class="form-group d-flex row  mb-3" style="margin-left: 1px">
                             <div class="form-check col-md-2">
-                                <input type="radio" class="form-check-input" id="genderHomme" name="gender" value="M" required checked>
+                                <input type="radio" class="form-check-input" id="genderHomme" name="gender" value="M" required @if($member->user->gender == "M")checked @endif>
                                 <label class="form-check-label mb-0" for="genderHomme">Homme</label>
                             </div>
                             <div class="form-check col-md-2">
-                                <input type="radio" class="form-check-input" id="genderFemme" name="gender" value="F" required>
+                                <input type="radio" class="form-check-input" id="genderFemme" name="gender" value="F" required @if($member->user->gender == "F")checked @endif>
                                 <label class="form-check-label mb-0" for="genderFemme">Femme</label>
                             </div>
                         </div>
 
                         <label for="firstname">Prénom *</label>
-                        <input id="firstname" name="firstname" type="text" class="form-control mb-2" value="{{ old('firstname') }}" required>
+                        <input id="firstname" name="firstname" type="text" class="form-control mb-2" value="{{ $member->user->firstname }}" required>
 
                         <label for="lastname">Nom *</label>
-                        <input id="lastname" name="lastname" type="text" class="form-control mb-2" value="{{ old('lastname') }}" required>
+                        <input id="lastname" name="lastname" type="text" class="form-control mb-2" value="{{ $member->user->lastname }}" required>
 
                         <label for="email">Email *</label>
-                        <input id="email" name="email" type="email" class="form-control mb-2" value="{{ old('email') }}" required>
+                        <input id="email" name="email" type="email" class="form-control mb-2" value="{{ $member->user->email }}" required>
 
                         <label for="phone">Téléphone *</label>
-                        <input id="phone" name="phone" type="text" class="form-control mb-2" value="{{ old('phone') }}" required>
+                        <input id="phone" name="phone" type="text" class="form-control mb-2" value="{{ $member->user->phone }}" required>
                         
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                           <label for="role" class="mt-3">Rôles *</label>
                           <div class="col-md-6">
                             <select class="select2 form-select shadow-none" name="role" id="role" style="width: 100%; height:36px;">
@@ -80,23 +82,23 @@
                               @endforeach
                             </select>
                           </div>
-                        </div>
+                        </div> --}}
                         <p class="text-warning">(*) Champ obligatoire</p>
                     </section>
 
                     <h3>Information</h3>
                     <section>
                         <label for="birth">Date de naissance *</label>
-                        <input id="birth" name="birthdate" type="date" class="form-control" value="{{ old('birthdate') }}" required>
+                        <input id="birth" name="birthdate" type="date" class="form-control" value="{{ $member->user->birthdate }}" required>
 
                         <label for="lieu">Lieu de naissance : *</label>
-                        <input id="lieu" name="birthplace_city" type="txt" class="form-control" value="{{ old('birthplace_city') }}" required>
+                        <input id="lieu" name="birthplace_city" type="txt" class="form-control" value="{{ $member->user->birthplace_city }}" required>
 
                         <label for="nationality">Nationalité </label>
-                        <input id="nationality" name="nationality" type="text" class="form-control" value="{{ old('nationality') }}">
+                        <input id="nationality" name="nationality" type="text" class="form-control" value="{{ $member->user->nationality }}" >
 
                         <label for="address">Adresse</label>
-                        <input id="address" name="address_city" type="text" class="form-control" value="{{ old('address_city') }}">
+                        <input id="address" name="address_city" type="text" class="form-control" value="{{ $member->user->address_city }}">
 
                         <p class="text-warning">(*) Champ obligatoire</p>
                     </section>
