@@ -20,8 +20,10 @@ class MembersController extends Controller
      */
     public function index()
     {
+        $title = "Liste des membres du personnel";
+        $page = "Membres";
         $members = Advisor::all();
-        return view('administrations.members.index',compact('members'));
+        return view('administrations.members.index',compact('members','title','page'));
     }
 
     /**
@@ -31,8 +33,10 @@ class MembersController extends Controller
      */
     public function create()
     {
+        $title = "Ajouter un membre du personnel";
+        $page = 'Membres';
         $roles = [User::ADMIN => 'administrateur-trice',User::ADVISOR => 'conseiller-ère',User::SECRETARY => 'secrétaire'];
-        return view('administrations.members.create',compact('roles'));
+        return view('administrations.members.create',compact('roles','title','page'));
     }
 
     /**
@@ -96,9 +100,11 @@ class MembersController extends Controller
      */
     public function edit($id)
     {
+        $title = "Editer un membre du personnel";
+        $page = "Membres";
         $member = Advisor::find($id);
         $roles = [User::ADMIN => 'administrateur-trice',User::ADVISOR => 'conseiller-ère',User::SECRETARY => 'secrétaire'];
-        return view('administrations.members.edit',compact('member','roles'));
+        return view('administrations.members.edit',compact('member','roles','title','page'));
     }
 
     /**

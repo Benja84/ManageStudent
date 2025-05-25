@@ -28,7 +28,9 @@ Route::get('/students/{student}', [StudentController::class, 'show'])->name('stu
 
 Route::get('/dashboard', function () {
     $courses = Course::all();
-    return view('dashboard',compact('courses'));
+    $title = "Emploie du temps";
+    $page = "Tableau de bord";
+    return view('dashboard',compact('courses','title','page'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

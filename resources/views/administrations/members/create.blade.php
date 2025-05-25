@@ -7,23 +7,7 @@
 @endsection
 
 @section('content')
-<div class="page-breadcrumb">
-    <div class="row">
-        <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">Ajouter un membre du personnel</h4>
-            <div class="ms-auto text-end">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Accueil</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Membres</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="container-fluid">
     <div class="card">
         <div class="card-body wizard-content">
             @if ($errors->any())
@@ -104,7 +88,6 @@
             </form>
         </div>
     </div>
-</div>
 @endsection
 
 @section('scripts')

@@ -294,8 +294,25 @@
             </div>
         </aside>
         <div class="page-wrapper">
-            
-            @yield('content')
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-12 d-flex no-block align-items-center">
+                        <h4 class="page-title">{{ $title }}</h4>
+                        <div class="ms-auto text-end">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Accueil</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ $page }}</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                @yield('content')
+            </div>
 
             <footer class="footer text-center">
                 All Rights Reserved by Matrix-admin. Designed and Developed by <a
