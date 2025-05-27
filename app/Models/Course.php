@@ -22,4 +22,24 @@ class Course extends Model
         'absences_checked',
         'checked_by_prof'
     ];
+
+    public function group(){
+        return $this->belongsTo(Group::class);
+    }
+
+    public function subject(){
+        return $this->belongsTo(Subject::class);
+    }
+
+    public function room(){
+        return $this->belongsTo(Room::class);
+    }
+
+    public function professor(){
+        return $this->belongsTo(Professor::class);
+    }
+
+    public function checkedByProf(){
+        return $this->belongsTo(Professor::class);
+    }
 }

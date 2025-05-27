@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CoursesController;
 use App\Http\Controllers\Admin\MembersController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
@@ -38,6 +39,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::resource('/permissions',PermissionController::class);
     Route::resource('/students', StudentController::class);
     Route::resource('/members', MembersController::class);
+    Route::resource('/courses', CoursesController::class);
 });
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

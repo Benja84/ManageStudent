@@ -145,6 +145,26 @@
                             </ul>
                         </li>
                         <li class="sidebar-item"> 
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                <i class="fas fa-calendar"></i>
+                                <span class="hide-menu">Cours </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item">
+                                    <a href="{{ route('courses.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-note-outline"></i>
+                                        <span class="hide-menu"> Créer  </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="form-wizard.html" class="sidebar-link">
+                                        <i class="mdi mdi-receipt"></i>
+                                        <span class="hide-menu"> Liste des cours </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item"> 
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="charts.html" aria-expanded="false">
                                 <i class="mdi mdi-chart-bar"></i>
                                 <span class="hide-menu">Charts</span>
