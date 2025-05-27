@@ -7,31 +7,33 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Exécute les migrations pour créer la table 'professors'.
      *
      * @return void
      */
     public function up()
     {
+        // Crée une nouvelle table 'professors' dans la base de données
         Schema::create('professors', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-
-			$table->longText('comments')->nullable();
+            $table->string('photo')->nullable();
+            $table->longText('comments')->nullable();
             $table->timestamps();
-            // Foreign keys
-			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-			
+
+            // Définition de la clé étrangère pour 'user_id'
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Annule les migrations en supprimant la table 'professors'.
      *
      * @return void
      */
     public function down()
     {
+        // Supprime la table 'professors' si elle existe
         Schema::dropIfExists('professors');
     }
 };

@@ -48,7 +48,7 @@
                             <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a>
                         </li>
                     </ul>
-                    
+
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -77,37 +77,37 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="pt-4">
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('dashboard') }}" aria-expanded="false">
                                 <i class="mdi mdi-view-dashboard"></i>
                                 <span class="hide-menu">Dashboard</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="charts.html" aria-expanded="false">
                                 <i class="mdi mdi-chart-bar"></i>
                                 <span class="hide-menu">Charts</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="widgets.html" aria-expanded="false">
                                 <i class="mdi mdi-chart-bubble"></i>
                                 <span class="hide-menu">Widgets</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="tables.html" aria-expanded="false">
                                 <i class="mdi mdi-border-inside"></i>
                                 <span class="hide-menu">Tables</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="grid.html" aria-expanded="false">
                                 <i class="mdi mdi-blur-linear"></i>
                                 <span class="hide-menu">Full Width</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-receipt"></i>
                                 <span class="hide-menu">Etudiants </span>
@@ -127,13 +127,35 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+
+                        <li class="sidebar-item">
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                <i class="mdi mdi-receipt"></i>
+                                <span class="hide-menu">Professors </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item">
+                                    <a href="{{ route('professors.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-note-outline"></i>
+                                        <span class="hide-menu"> Créer </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="form-wizard.html" class="sidebar-link">
+                                        <i class="mdi mdi-note-plus"></i>
+                                        <span class="hide-menu"> Form Wizard </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="pages-buttons.html" aria-expanded="false">
                                 <i class="mdi mdi-relative-scale"></i>
                                 <span class="hide-menu">Buttons</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-face"></i>
                                 <span class="hide-menu">Icons </span>
@@ -152,13 +174,13 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="pages-elements.html" aria-expanded="false">
                                 <i class="mdi mdi-pencil"></i>
                                 <span class="hide-menu">Elements</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-move-resize-variant"></i>
                                 <span class="hide-menu">Addons </span>
@@ -196,7 +218,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-account-key"></i>
                                 <span class="hide-menu">Authentication </span>
@@ -216,7 +238,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-alert"></i>
                                 <span class="hide-menu">Errors </span>
@@ -253,7 +275,7 @@
             </div>
         </aside>
         <div class="page-wrapper">
-            
+
             @yield('content')
 
             <footer class="footer text-center">

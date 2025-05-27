@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     static $permissions = NULL;
 
@@ -43,6 +43,8 @@ class User extends Authenticatable
         'address_city',
         'password',
         'active',
+        'email',
+        'photo',
     ];
 
     /**
@@ -64,7 +66,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function student(){
+    public function student()
+    {
         return $this->hasOne(Student::class);
+    }
+
+    public function professor()
+    {
+        return $this->hasOne(Professor::class);
     }
 }
