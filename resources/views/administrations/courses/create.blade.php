@@ -18,7 +18,7 @@
                     <h5 class="card-title mb-0">Ajouter un cours</h5>
                     <div class="form-group mt-3">
                         <label>Matière</label>
-                        <select class="select2 form-select shadow-none" style="width: 100%; height:36px;" name="subject">
+                        <select class="select2 form-select shadow-none" name="subject_id">
                             <option value="">Select</option>
                             @foreach($subjects as $subject)
                                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group mt-3">
                         <label>Professeur</label>
-                        <select class="select2 form-select shadow-none" style="width: 100%; height:36px;" name="subject">
+                        <select class="select2 form-select shadow-none" name="professor_id">
                             <option value="">Select</option>
                             @foreach($subjects as $subject)
                                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group mt-3">
                         <label>Salle</label>
-                        <select class="select2 form-select shadow-none" style="width: 100%; height:36px;" name="subject">
+                        <select class="select2 form-select shadow-none" name="room_id">
                             <option value="">Select</option>
                             @foreach($rooms as $room)
                                 <option value="{{ $room->id }}">{{ $room->name }}</option>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group mt-3">
                         <label>Classe</label>
-                        <select class="select2 form-select shadow-none" style="width: 100%; height:36px;" name="subject">
+                        <select class="select2 form-select shadow-none" name="subject">
                             <option value="">GL</option>
                             @foreach($rooms as $room)
                                 <option value="{{ $room->id }}">{{ $room->name }}</option>
@@ -54,16 +54,45 @@
                     </div>
                     <div class="form-group mt-3">
                         <label>Période</label>
-                        <div class="d-flex">
+                        <div class="d-flex justify-content-between">
                             <div class="col-md-2">
-                                <select class="select2 form-select shadow-none col-md-2" style="width: 100%; height:36px;" name="subject">
-                                    <option value="">Select</option>
-                                    @foreach($rooms as $room)
-                                        <option value="{{ $room->id }}">{{ $room->name }}</option>
+                                <select class="select2 form-select shadow-none col-md-2"  name="weekday">
+                                    <option value="" disabled selected hidden>Selectionner un jour de la semaine</option>
+                                    @foreach ($weekdays as $weekday => $localeWeekday)
+                                        <option class="form-control" data-tokens="{{ $localeWeekday }}"
+                                            @if(old('weekday') == $weekday) @php($selected = TRUE) selected @endif
+                                            value="{{ $weekday+1 }}">{{ $localeWeekday }}</option>
+                                        @php($selected = FALSE)
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="col-md-2">
+                                <input class="form-control col-md-2 js-masked-time" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)"> 
+                            </div>
+                            <div class="col-md-2">
+                                <select class="select2 form-select shadow-none col-md-2" name="duration">
+                                    <option value="" disabled selected hidden>Selectionner la durée du cours</option>
+                                    @for ($duration = 0.5; $duration < 10; $duration+=0.5)
+                                        <option class="form-control" data-tokens="{{ $duration }} heure(s)"
+                                            @if(old('duration') == $duration) @php($selected = TRUE) selected @endif
+                                            value="{{ $duration }}">{{ $duration }} heure{{ $duration > 1 ? 's' : '' }}
+                                        </option>
+                                        @php($selected = FALSE)
+                                    @endfor
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <input class="form-control col-md-2" type="date" name="start_date" placeholder="Date début de la période"> 
+                            </div>
+                            <div class="col-md-2">
+                                <input class="form-control col-md-2" type="date" name="end_date" placeholder="Date fin de la période"> 
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success btn-rounded">Ajouter</button>
                     </div>
                 </div>
             </div>

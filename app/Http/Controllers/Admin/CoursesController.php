@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Models\Subject;
+use DateTime;
 use Illuminate\Http\Request;
+use IntlDateFormatter;
 
 class CoursesController extends Controller
 {
@@ -30,8 +32,18 @@ class CoursesController extends Controller
         $page = "Cours";
         $subjects = Subject::all();
         $rooms = Room::all();
+        $weekdays = [];
+        $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+        $formatter->setPattern('EEEE');
 
-        return view('administrations.courses.create',compact('title','page','subjects','rooms'));
+        // Créer un tableau des jours (du lundi au dimanche)
+        $date = new DateTime('next Monday'); // Commence par lundi
+        for ($i = 0; $i < 5; $i++) {
+            $weekdays[] = $formatter->format($date);
+            $date->modify('+1 day');
+        }
+
+        return view('administrations.courses.create',compact('title','page','subjects','rooms','weekdays'));
     }
 
     /**

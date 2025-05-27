@@ -10,6 +10,7 @@ $(function(e) {
     $(".isbn-inputmask").inputmask("999-99-999-9999-9"), 
     $(".currency-inputmask").inputmask("$9999"), 
     $(".percentage-inputmask").inputmask("99%"), 
+    $('.js-masked-time').inputmask('99:99');
     $(".decimal-inputmask").inputmask({
         alias: "decimal"
         , radixPoint: "."
