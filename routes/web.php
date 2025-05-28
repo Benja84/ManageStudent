@@ -4,7 +4,9 @@ use App\Http\Controllers\Admin\CoursesController;
 use App\Http\Controllers\Admin\MembersController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\RoomsController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Course;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +42,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/students', StudentController::class);
     Route::resource('/members', MembersController::class);
     Route::resource('/courses', CoursesController::class);
+    Route::resource('/subjects',SubjectController::class);
+    Route::resource('/rooms',RoomsController::class);
 });
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
