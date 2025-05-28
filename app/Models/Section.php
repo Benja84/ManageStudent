@@ -15,4 +15,17 @@ class Section extends Model
         'promotion',
         'pricing'
     ];
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'section_subject')
+                    ->using(SectionSubject::class)
+                    ->withTimestamps()
+                    ->withTrashed();
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
+    }
 }

@@ -131,7 +131,27 @@
                             </a>
                             <ul aria-expanded="false" class="collapse  first-level">
                                 <li class="sidebar-item">
-                                    <a href="{{ route('students.create') }}" class="sidebar-link">
+                                    <a href="{{ route('professors.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-note-outline"></i>
+                                        <span class="hide-menu"> Créer  </span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="form-wizard.html" class="sidebar-link">
+                                        <i class="mdi mdi-receipt"></i>
+                                        <span class="hide-menu"> Liste des étudiants </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="sidebar-item"> 
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                <i class="fas fa-bookmark"></i>
+                                <span class="hide-menu">Sections </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item">
+                                    <a href="{{ route('sections.create') }}" class="sidebar-link">
                                         <i class="mdi mdi-note-outline"></i>
                                         <span class="hide-menu"> Créer  </span>
                                     </a>

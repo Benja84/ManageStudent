@@ -12,8 +12,8 @@ class Professor extends Model
     protected $fillable = [
         'user_id',
         'section_id',
-        'group_id',
-        'phone',
+        // 'group_id',
+        // 'phone',
         'comments',
         'documents',
     ];
