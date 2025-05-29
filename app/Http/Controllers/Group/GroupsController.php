@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Http\Controllers\Group;
+
+use App\Http\Controllers\Controller;
+use App\Models\Group;
+use App\Models\Professor;
+use App\Models\Section;
+use App\Models\Subject;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
+class GroupsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $title = "Ajouter une groupe";
+        $page = "Groupe";
+        $sections = Section::all();
+        $professors = Professor::all();
+        $subjects = Subject::all();
+        return view('groups.create',compact('title','page','sections','subjects','professors'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $yearAbbreviations = $this->getYearAbreviation($request->school_year);
+        $data = $request->validate([
+            'abbreviation' => ['required',Rule::notIn($yearAbbreviations)],
+            'section_id' => 'required',
+            'school_year' => 'required',
+            'period_type' => 'required',
+            'coordinator_id' => 'required',
+            'subject_id' => 'required',
+        ]);
+
+        $group = Group::create($data);
+        return $group;
+        return redirect()->route('groups.index');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+
+    // Récuperer les abréviations d'une année scolaire
+    public function getYearAbreviation($school_year){
+        return Group::where('school_year',$school_year)->get()->pluck('abbreviation');
+    }
+}

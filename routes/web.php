@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RoomsController;
 use App\Http\Controllers\Admin\SectionsController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Group\GroupsController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Course;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/subjects',SubjectController::class);
     Route::resource('/sections',SectionsController::class);
     Route::resource('/rooms',RoomsController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('/groups',GroupsController::class);
 });
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
