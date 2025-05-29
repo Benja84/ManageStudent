@@ -10,13 +10,16 @@
 
     <div class="row">
         <div class="col-md-12">
+          @if(session('error'))
+            <div class="alert alert-danger" role="alert">{{session('error')}}</div>
+          @endif
             <div class="card">
                 <form action="{{ route('groups.store') }}" method="POST">
                     @csrf
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label>Abréviation</label>
-                            <input class="form-control" type="text" name="abbreviation" placeholder="ex: GL" required>
+                            <input class="form-control" type="text" value="{{ old('section_id') ?? '' }}" name="abbreviation" placeholder="ex: GL" required>
                         </div>
                         <div class="form-group mt-3">
                             <label>Section</label>

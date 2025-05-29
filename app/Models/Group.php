@@ -15,4 +15,22 @@ class Group extends Model
         'school_year',
         'period_type'
     ];
+
+    public function section()
+    {
+        return $this->belongsTo(Section::class)->with('subjects');
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class)
+                    ->using(GroupSubject::class)
+                    ->withTimestamps()
+                    ->withTrashed();
+    }
 }

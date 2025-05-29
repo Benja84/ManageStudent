@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Professor;
 use App\Models\Room;
 use App\Models\Subject;
 use DateTime;
@@ -32,6 +33,7 @@ class CoursesController extends Controller
         $page = "Cours";
         $subjects = Subject::all();
         $rooms = Room::all();
+        $professors = Professor::all();
         $weekdays = [];
         $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
         $formatter->setPattern('EEEE');
@@ -43,7 +45,7 @@ class CoursesController extends Controller
             $date->modify('+1 day');
         }
 
-        return view('administrations.courses.create',compact('title','page','subjects','rooms','weekdays'));
+        return view('administrations.courses.create',compact('title','page','subjects','rooms','professors','weekdays'));
     }
 
     /**

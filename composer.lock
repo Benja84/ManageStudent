@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b893be9e4c536dc2fefe5d09c6cd4ec6",
+    "content-hash": "53d038dd24296807ea83174462f2a1be",
     "packages": [
         {
             "name": "brick/math",
@@ -504,6 +504,61 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "fico7489/laravel-eloquent-join",
+            "version": "4.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fico7489/laravel-eloquent-join.git",
+                "reference": "847096fac908fc41a37b466220ab287fcc0048bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fico7489/laravel-eloquent-join/zipball/847096fac908fc41a37b466220ab287fcc0048bb",
+                "reference": "847096fac908fc41a37b466220ab287fcc0048bb",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^8.0|^9.0|^10.0|^11.0|^12.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "*",
+                "orchestra/testbench": "*",
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fico7489\\Laravel\\EloquentJoin\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Filip Horvat",
+                    "email": "filip.horvat@am2studio.hr",
+                    "homepage": "http://am2studio.hr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This package introduces the join magic for eloquent models and relations.",
+            "homepage": "https://github.com/fico7489/laravel-eloquent-join",
+            "keywords": [
+                "laravel eloquent join",
+                "laravel join",
+                "laravel join relation",
+                "laravel sort join",
+                "laravel where join"
+            ],
+            "support": {
+                "issues": "https://github.com/fico7489/laravel-eloquent-join/issues",
+                "source": "https://github.com/fico7489/laravel-eloquent-join"
+            },
+            "time": "2025-05-05T10:37:37+00:00"
         },
         {
             "name": "fruitcake/php-cors",

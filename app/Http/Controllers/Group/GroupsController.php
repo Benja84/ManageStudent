@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Group;
 
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use App\Models\GroupSubject;
 use App\Models\Professor;
 use App\Models\Section;
 use App\Models\Subject;
@@ -45,19 +46,33 @@ class GroupsController extends Controller
      */
     public function store(Request $request)
     {
-        $yearAbbreviations = $this->getYearAbreviation($request->school_year);
+        
         $data = $request->validate([
-            'abbreviation' => ['required',Rule::notIn($yearAbbreviations)],
+            'abbreviation' => 'required',
             'section_id' => 'required',
             'school_year' => 'required',
             'period_type' => 'required',
-            'coordinator_id' => 'required',
-            'subject_id' => 'required',
         ]);
 
+        $yearAbbreviations = $this->getYearAbreviation($request->school_year);
+        if(in_array($request->abbreviation,$yearAbbreviations->toArray())){
+            return redirect()->back()->with('error', 'Ce groupe existe déjà pour cette année scolaire');
+        }
+        
         $group = Group::create($data);
-        return $group;
-        return redirect()->route('groups.index');
+        foreach ($request->subject_id as $key => $subject) {
+            $groupsubject = new GroupSubject();
+            $groupsubject->group_id = $group->id;
+            $groupsubject->subject_id = $subject;
+            $groupsubject->save();
+        }
+
+        foreach ($request->coordinator_id as $prof_id){
+            $prof = Professor::find($prof_id);
+            $prof->user->assignRole('coordinator');
+        }
+        
+        return redirect()->route('groups.index')->with('success','Le groupe <a href="' . route('groups.show', $group->id) . '">' . $group->abbreviation . '</a> a bien été ajouté');
     }
 
     /**
@@ -107,6 +122,7 @@ class GroupsController extends Controller
 
     // Récuperer les abréviations d'une année scolaire
     public function getYearAbreviation($school_year){
+        // dd($school_year);
         return Group::where('school_year',$school_year)->get()->pluck('abbreviation');
     }
 }

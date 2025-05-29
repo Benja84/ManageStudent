@@ -29,8 +29,8 @@
                         <label>Professeur</label>
                         <select class="select2 form-select shadow-none" name="professor_id">
                             <option value="">Select</option>
-                            @foreach($subjects as $subject)
-                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                            @foreach($professors as $prof)
+                                <option value="{{ $prof->id }}">{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
                             @endforeach
                         </select>
                     </div>
