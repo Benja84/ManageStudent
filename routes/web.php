@@ -7,9 +7,9 @@ use App\Http\Controllers\Admin\ProfessorsController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoomsController;
 use App\Http\Controllers\Admin\SectionsController;
-use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Group\GroupsController;
+use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Course;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +29,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 // voire profile
-Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
+// Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 
 
 Route::get('/dashboard', function () {

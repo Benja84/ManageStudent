@@ -47,11 +47,11 @@
                         <label for="gender">Genre *</label>
                         <div class="form-group d-flex row" style="margin-left: 1px">
                             <div class="form-check col-md-2">
-                                <input type="radio" class="form-check-input" id="genderHomme" name="gender" value="Homme" required checked>
+                                <input type="radio" class="form-check-input" id="genderHomme" name="gender" value="M" required checked>
                                 <label class="form-check-label mb-0" for="genderHomme">Homme</label>
                             </div>
                             <div class="form-check col-md-2">
-                                <input type="radio" class="form-check-input" id="genderFemme" name="gender" value="Femme" required>
+                                <input type="radio" class="form-check-input" id="genderFemme" name="gender" value="F" required>
                                 <label class="form-check-label mb-0" for="genderFemme">Femme</label>
                             </div>
                         </div>
@@ -68,22 +68,49 @@
                         <label for="phone">Téléphone *</label>
                         <input id="phone" name="phone" type="text" class="form-control" value="{{ old('phone') }}" required>
 
+                        <div class="form-group">
+                            <label for="advisor">Conseiller-ère</label>
+                            <select name="advisor_id" data-live-search="true"
+                                class="form-control form-control-alt selectpicker"
+                                title="Sélectionner le/la conseiller/ère">
+                                @foreach ($advisors as $key => $advisor)
+                                    <option class="form-control-alt" data-tokens="{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}"
+                                        @if (old('advisor_id') == $key) @php($advisored = TRUE) selected  @endif
+                                        value="{{ $advisor->id }}">{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}</option>
+                                    @php($advisored = false)
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                          <label>Groupe</label>
+                          <select name="group_id" class="select2 form-select shadow-none mt-3"
+                          title="Sélectionner le groupe">
+                            @foreach($groups as $group)
+                              <option data-tokens="{{ $group->abbreviation }}"
+                                @if(old('group_id')) selected @php($selected = TRUE) @endif
+                                value="{{$group->id}}">{{ $group->abbreviation }}
+                              </option>
+                              @php($selected = FALSE)
+                            @endforeach
+                          </select>
+                        </div>
+
                         <p class="text-warning">(*) Champ obligatoire</p>
                     </section>
 
                     <h3>Information</h3>
                     <section>
                         <label for="birth">Date de naissance *</label>
-                        <input id="birth" name="birth" type="date" class="form-control" value="{{ old('birth') }}" required>
+                        <input id="birth" name="birthdate" type="date" class="form-control" value="{{ old('birthdate') }}" required>
 
                         <label for="lieu">Lieu de naissance : *</label>
-                        <input id="lieu" name="lieu" type="txt" class="form-control" value="{{ old('lieu') }}" required>
+                        <input id="lieu" name="birthplace_city" type="txt" class="form-control" value="{{ old('birthplace_city') }}" required>
 
                         <label for="nationality">Nationalité *</label>
                         <input id="nationality" name="nationality" type="text" class="form-control" value="{{ old('nationality') }}" required>
 
                         <label for="address">Adresse</label>
-                        <input id="address" name="address" type="text" class="form-control" value="{{ old('address') }}">
+                        <input id="address" name="address_city" type="text" class="form-control" value="{{ old('address_city') }}">
 
                         <p class="text-warning">(*) Champ obligatoire</p>
                     </section>

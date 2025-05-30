@@ -117,7 +117,7 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="form-wizard.html" class="sidebar-link">
+                                    <a href="{{ route('students.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
                                         <span class="hide-menu"> Liste des étudiants </span>
                                     </a>

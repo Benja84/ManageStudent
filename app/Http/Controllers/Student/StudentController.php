@@ -1,33 +1,39 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Advisor;
 use App\Models\Group;
 use App\Models\Professor;
 use App\Models\Student;
+use App\Models\StudentGroupHistory;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
     /**
-     * Affiche la liste des étudiants.
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $title = "Liste des étudiants";
         $page = "Etudiants";
-        $students = Student::select('id', 'photo', 'gender', 'lastname', 'firstname', 'email', 'phone')
-            ->latest()
-            ->paginate(10);
+        $students = Student::all();
 
         return view('students.index', compact('title','page','students'));
     }
 
     /**
-     * Affiche le formulaire de création.
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -35,89 +41,61 @@ class StudentController extends Controller
         $page = "Etudiants";
         $groups = Group::all();
         $professors = Professor::all();
-        return view('students.create',compact('title','page','groups','professors'));
+        $advisors = Advisor::all();
+        return view('students.create',compact('title','page','groups','professors','advisors'));
     }
 
     /**
-     * Enregistre un nouvel étudiant dans la base de données.
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        // Vérifie que l'utilisateur est bien connecté
-        if (!Auth::check()) {
-            abort(403, 'Utilisateur non authentifié');
-        }
-
-
-        $validated = $request->validate([
+        $data = $request->validate([
             // Étudiant
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gender' => 'required|in:Homme,Femme',
+            'gender' => 'required',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email',
+            'email' => 'required|email|unique:users,email',
             'phone' => 'required|string|max:20',
-            'birth' => 'required|date',
-            'lieu' => 'required|string|max:255',
+            'birthdate' => 'required|date',
+            'birthplace_city' => 'required|string|max:255',
             'nationality' => 'required|string|max:255',
-            'address' => 'nullable|string|max:255',
-
-            // Père (optionnel)
-            'father_firstname' => 'nullable|string|max:255',
-            'father_lastname' => 'nullable|string|max:255',
-            'father_company' => 'nullable|string|max:255',
-            'father_phone' => 'nullable|string|max:20',
-            'father_message' => 'nullable|string',
-
-            // Mère (optionnel)
-            'mother_firstname' => 'nullable|string|max:255',
-            'mother_lastname' => 'nullable|string|max:255',
-            'mother_company' => 'nullable|string|max:255',
-            'mother_phone' => 'nullable|string|max:20',
-            'mother_message' => 'nullable|string',
+            'address_city' => 'nullable|string|max:255',
         ]);
-
+        // dd($request);
+        $pass = str_replace('-','',$request->birthdate);
+        $data['password'] = Hash::make($pass);
+        $user = User::create($data);
+        $user->assignRole('student');
         // Upload de la photo
         $photoPath = null;
         if ($request->hasFile('photo')) {
             $photoPath = $request->file('photo')->store('students/photos', 'public');
         }
 
-        // Création de l'étudiant avec association à l'utilisateur connecté
+        // Création de l'étudiant
         $student = Student::create([
-            'firstname' => $request->firstname,
-            'lastname' => $request->lastname,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'gender' => $request->gender,
-            'birth' => $request->birth,
-            'lieu' => $request->lieu,
-            'nationality' => $request->nationality,
-            'address' => $request->address,
-            'photo' => $photoPath,
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
+            'advisor_id' => $request->advisor_id,
+            'parent1_firstname' => $request->father_firstname,
+            'parent1_lastname' => $request->father_lastname,
+            'parent1_phone' => $request->father_phone,
+            'parent1_relation' => $request->father_company,
+            
+            'parent2_firstname' => $request->mother_firstname,
+            'parent2_lastname' => $request->mother_lastname,
+            'parent2_phone' => $request->mother_phone,
+            'parent2_relation' => $request->mother_company,
 
         ]);
 
-        // Ajout des parents si les champs sont remplis
-        $student->parents()->createMany([
-            [
-                'type' => 'father',
-                'firstname' => $validated['father_firstname'],
-                'lastname' => $validated['father_lastname'],
-                'company' => $validated['father_company'],
-                'phone' => $validated['father_phone'],
-                'message' => $validated['father_message'],
-            ],
-            [
-
-                'type' => 'mother',
-                'firstname' => $validated['mother_firstname'],
-                'lastname' => $validated['mother_lastname'],
-                'company' => $validated['mother_company'],
-                'phone' => $validated['mother_phone'],
-                'message' => $validated['mother_message'],
-            ]
+        StudentGroupHistory::create([
+            'student_id' => $student->id,
+            'group_id' => $request->group_id,
         ]);
 
         // Redirection avec message de succès
@@ -125,7 +103,10 @@ class StudentController extends Controller
     }
 
     /**
-     * Affiche les détails d’un étudiant.
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -134,7 +115,10 @@ class StudentController extends Controller
     }
 
     /**
-     * Affiche le formulaire d’édition.
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -143,7 +127,11 @@ class StudentController extends Controller
     }
 
     /**
-     * Met à jour les informations d’un étudiant.
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
@@ -228,13 +216,15 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('success', 'Étudiant mis à jour avec succès.');
     }
 
-
     /**
-     * Supprime un étudiant.
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $student = Student::findOrFail($id);
+         $student = Student::findOrFail($id);
 
 
         // Supprimer la photo associée

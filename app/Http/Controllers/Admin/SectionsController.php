@@ -39,13 +39,13 @@ class SectionsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => 'required',
             'abbreviation' => 'required',
             'promotion' => 'required',
         ]);
 
-        $section = Section::create($data);
+        $section = Section::create($request->all());
     }
 
     /**
