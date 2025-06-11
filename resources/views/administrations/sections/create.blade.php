@@ -46,7 +46,7 @@
                         </div>
                         <div class="form-group mt-3">
                             <label>Prix année scolaire</label>
-                            <input class="form-control" type="text" name="praicing" placeholder="ex: 200 000" required>
+                            <input class="form-control" type="text" name="pricing" placeholder="ex: 200 000" required>
                         </div>
                     </div>
                     <div class="card-footer">

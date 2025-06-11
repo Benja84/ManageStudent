@@ -54,8 +54,6 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            // Étudiant
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'gender' => 'required',
             'firstname' => 'required|string|max:255',
             'lastname' => 'required|string|max:255',
@@ -69,11 +67,16 @@ class StudentController extends Controller
         // dd($request);
         $pass = str_replace('-','',$request->birthdate);
         $data['password'] = Hash::make($pass);
+        // création compte utilisateur pour l'étudiant
         $user = User::create($data);
+        // Donner un rôle 'student' pour l'utilisateur créé
         $user->assignRole('student');
         // Upload de la photo
         $photoPath = null;
         if ($request->hasFile('photo')) {
+            $request->validate([
+                'photo' => 'image|mimes:jpeg,png|max:2048',
+            ]);
             $photoPath = $request->file('photo')->store('students/photos', 'public');
         }
 

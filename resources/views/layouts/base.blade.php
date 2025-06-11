@@ -267,6 +267,14 @@
             </div>
 
             <div class="container-fluid">
+                
+                @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" role="alert">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
                 @yield('content')
             </div>
 
@@ -293,7 +301,7 @@
     <!--Custom JavaScript -->
     <script src="{{ asset('dist/js/custom.min.js') }}"></script>
     <!-- this page js -->
-    
+    <script src="{{ asset('assets/libs/toastr/build/toastr.min.js')}}"></script>
     @yield('scripts')
 </body>
 
