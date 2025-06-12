@@ -8,8 +8,10 @@ use App\Models\Group;
 use App\Models\Professor;
 use App\Models\Room;
 use App\Models\Subject;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use IntlDateFormatter;
 
 class CoursesController extends Controller
@@ -70,9 +72,13 @@ class CoursesController extends Controller
             "start_date" => "required",
             "end_date" => "required"
         ]);
+        // Modifier la durée choisi en minutes
         $duration = floatval($request->duration)*60 ."minutes";
+        // Calculer l'heure fin à partir de l'heure du début choisi et la durée en minutes
         $heureFin = date('H:i', strtotime("$request->start_time + $duration"));
+        // Récupérer les dates à partir du jour , date début et date fin séléctionnés
         $dates = $this->getDatesForDay($request->weekday,$request->start_date,$request->end_date);
+        
         if(count($dates)){
             foreach($dates as $date){
                 $course = new Course();
@@ -159,5 +165,52 @@ class CoursesController extends Controller
         }
         
         return $dates;
+    }
+
+    // Vérifier si le prof a des cours
+    public function checkDatesProfessor($request, $throw = TRUE)
+    {
+        $inputDates       = $this->getDatesForDay($request->weekday,$request->start_date,$request->end_date);
+        $professorCourses = $this->getCoursesOfProfessor($request->professor_id);
+        $professorDates   = [];
+        foreach ($professorCourses as $value) {
+            $professorDates[] = $value->date;
+        }
+
+        $commonDates = array_intersect($inputDates, $professorDates);
+
+        if (!empty($commonDates)) {
+            $this->checkHours($request, $professorCourses, $commonDates, 'Le professeur donne déjà des cours dans cette période', $throw);
+        }
+
+        return $inputDates;
+    }
+
+    public function getCoursesOfProfessor($professor_id)
+    {
+        return Course::where('professor_id',$professor_id)->get();
+    }
+
+    public function checkHours($request, $entityCourses, $commonDates, $message, $throw = TRUE)
+    {
+        $inputStartTime = Carbon::createFromFormat('H:i', $request->start_time);
+        $inputEndTime   = Carbon::createFromFormat('H:i', $request->start_time)->addHours($request->duration);
+        if ($entityCourses->isNotEmpty()) {
+            foreach ($entityCourses as $entityCourse) {
+                $entiDateStartTime = Carbon::createFromFormat('H:i:s', $entityCourse->start_time);
+                $entiDateEndTime   = Carbon::createFromFormat('H:i:s', $entityCourse->end_time);
+                if (in_array($entityCourse->date, $commonDates)) {
+                    if (!(($inputStartTime < $entiDateStartTime && $inputEndTime <= $entiDateStartTime) || $inputStartTime >= $entiDateEndTime)) {
+                        if ($throw) {
+                            throw ValidationException::withMessages(['started_on' => $message]);
+                        }
+
+                        return $message;
+                    }
+                }
+            }
+        }
+
+        return TRUE;
     }
 }

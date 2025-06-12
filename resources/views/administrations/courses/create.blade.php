@@ -68,7 +68,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 js-masked-time" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)"> 
+                                    <input class="form-control col-md-2 js-masked-time start_time" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)"> 
                                 </div>
                                 <div class="col-md-2">
                                     <select class="select2 form-select shadow-none col-md-2" name="duration">
@@ -83,10 +83,10 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2" type="date" name="start_date" placeholder="Date début de la période"> 
+                                    <input class="form-control col-md-2 start_date" type="date" name="start_date" placeholder="Date début de la période"> 
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2" type="date" name="end_date" placeholder="Date fin de la période"> 
+                                    <input class="form-control col-md-2 end_date" type="date" name="end_date" placeholder="Date fin de la période"> 
                                 </div>
                             </div>
                         </div>
@@ -107,52 +107,74 @@
     <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
     <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
     <script>
         //***********************************//
         // For select 2
         //***********************************//
         $(".select2").select2();
 
-        /*colorpicker*/
-        $('.demo').each(function () {
-            //
-            // Dear reader, it's actually very easy to initialize MiniColors. For example:
-            //
-            //  $(selector).minicolors();
-            //
-            // The way I've done it below is just for the demo, so don't get confused
-            // by it. Also, data- attributes aren't supported at this time...they're
-            // only used for this demo.
-            //
-            $(this).minicolors({
-                control: $(this).attr('data-control') || 'hue',
-                position: $(this).attr('data-position') || 'bottom left',
-
-                change: function (value, opacity) {
-                    if (!value) return;
-                    if (opacity) value += ', ' + opacity;
-                    if (typeof console === 'object') {
-                        console.log(value);
-                    }
-                },
-                theme: 'bootstrap'
-            });
-
-        });
-        /*datwpicker*/
-        jQuery('.mydatepicker').datepicker();
-        jQuery('#datepicker-autoclose').datepicker({
-            autoclose: true,
-            todayHighlight: true
-        });
-
-        // $(document).ready(function (){
+        $(document).ready(function (){
             let errors = @json($errors->all());
             errors.forEach(error => {
                 toastr.error('I do not think that word means what you think it means.', 'Inconceivable!');
             });
-        // })
+            $('.start_time').on('change',function (){
+                if(isValidTime($(this).val())){
+                    const valide = checkTimeWithDetails($(this).val());
+                    switch (valide) {
+                        case 'hours':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Heures doivent être entre 00 et 23', 'Heure non valide!');
+                            break;
+                        case 'minutes':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Minutes doivent être entre 00 et 59', 'Heure non valide!');
+                            break;
+                        case 'tot':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Trop tôt (min 06:00)', 'Heure non valide!');
+                            break;
+                        case 'tard':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Trop tard (max 19:00)', 'Heure non valide!');
+                            break;
+                        default:
+                            $(this).removeClass('is-invalid');
+                            break;
+                    }
+                }else{
+                    $(this).addClass('is-invalid');
+                    toastr.error('Veuillez vérifier l\'heure que vous avez saisis.', 'Heure non valide!');
+                }
+            })
+
+            function isValidTime(timeString) {
+                // Vérifie le format XX:XX avec des chiffres
+                const regex = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
+                return regex.test(timeString);
+            }
+            function checkTimeWithDetails(timeString) {
+                
+                const [hours, minutes] = timeString.split(':').map(Number);
+                
+                // Vérification plages standards
+                if (hours < 0 || hours > 23) return "hours";
+                if (minutes < 0 || minutes > 59) return "minutes";
+                
+                // Vérification plage 06:00-19:00
+                const totalMinutes = hours * 60 + minutes;
+                if (totalMinutes < 360) return "tot";
+                if (totalMinutes > 1140) return "tard";
+
+                return 'valide';
+            }
+
+            $('.end_date').on('change',function(){
+                if($('.start_date').val() != ""){
+                    
+                }
+            })
+        })
 
     </script>
 @endsection

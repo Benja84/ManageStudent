@@ -34,7 +34,7 @@
                                 alt="Photo de {{ $student->lastname }}"
                                 width="60"
                                 height="60"
-                                class="rounded-circle border border-2 shadow"
+                                class="rounded-circle border  shadow"
                                 style="object-fit: cover;">
                         @else
                             <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white"
