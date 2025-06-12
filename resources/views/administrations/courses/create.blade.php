@@ -35,6 +35,11 @@
                                     <option value="{{ $prof->id }}">{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
                                 @endforeach
                             </select>
+                            @error('weekday')
+                                <span class="text-danger" role="alert">
+                                    {{ $error('weekday') }} <br>
+                                </span>
+                            @enderror
                         </div>
                         <div class="form-group mt-3">
                             <label>Salle</label>
@@ -83,10 +88,10 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 start_date" type="date" name="start_date" placeholder="Date début de la période"> 
+                                    <input class="form-control col-md-2 start_date datepicker" type="text" name="start_date" placeholder="Date début de la période (dd/mm/yyyy)"> 
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 end_date" type="date" name="end_date" placeholder="Date fin de la période"> 
+                                    <input class="form-control col-md-2 end_date  datepicker" type="text" name="end_date" placeholder="Date fin de la période (dd/mm/yyyy)"> 
                                 </div>
                             </div>
                         </div>
@@ -170,8 +175,12 @@
             }
 
             $('.end_date').on('change',function(){
-                if($('.start_date').val() != ""){
-                    
+                const start = new Date($('.start_date').val());
+                const end = new Date($(this).val());
+                if(start != ""){
+                    if( start > end){
+                        toastr.error('La date début doit inférieur ou égal à la date fin','Erreur date!')
+                    }
                 }
             })
         })

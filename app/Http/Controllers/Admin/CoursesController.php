@@ -77,8 +77,9 @@ class CoursesController extends Controller
         // Calculer l'heure fin à partir de l'heure du début choisi et la durée en minutes
         $heureFin = date('H:i', strtotime("$request->start_time + $duration"));
         // Récupérer les dates à partir du jour , date début et date fin séléctionnés
-        $dates = $this->getDatesForDay($request->weekday,$request->start_date,$request->end_date);
-        
+        $date_start = DateTime::createFromFormat('d/m/Y', $request->start_date);
+        $date_end = DateTime::createFromFormat('d/m/Y', $request->end_date);
+        $dates = $this->getDatesForDay($request->weekday,$date_start->format('Y-m-d'),$date_end->format('Y-m-d'));
         if(count($dates)){
             foreach($dates as $date){
                 $course = new Course();
@@ -168,9 +169,9 @@ class CoursesController extends Controller
     }
 
     // Vérifier si le prof a des cours
-    public function checkDatesProfessor($request, $throw = TRUE)
+    public function checkDatesProfessor($request,$date_start,$date_end, $throw = TRUE)
     {
-        $inputDates       = $this->getDatesForDay($request->weekday,$request->start_date,$request->end_date);
+        $inputDates       = $this->getDatesForDay($request->weekday,$date_start,$date_end);
         $professorCourses = $this->getCoursesOfProfessor($request->professor_id);
         $professorDates   = [];
         foreach ($professorCourses as $value) {
@@ -197,8 +198,8 @@ class CoursesController extends Controller
         $inputEndTime   = Carbon::createFromFormat('H:i', $request->start_time)->addHours($request->duration);
         if ($entityCourses->isNotEmpty()) {
             foreach ($entityCourses as $entityCourse) {
-                $entiDateStartTime = Carbon::createFromFormat('H:i:s', $entityCourse->start_time);
-                $entiDateEndTime   = Carbon::createFromFormat('H:i:s', $entityCourse->end_time);
+                $entiDateStartTime = Carbon::createFromFormat('H:i', $entityCourse->start_time);
+                $entiDateEndTime   = Carbon::createFromFormat('H:i', $entityCourse->end_time);
                 if (in_array($entityCourse->date, $commonDates)) {
                     if (!(($inputStartTime < $entiDateStartTime && $inputEndTime <= $entiDateStartTime) || $inputStartTime >= $entiDateEndTime)) {
                         if ($throw) {

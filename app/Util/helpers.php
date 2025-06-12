@@ -11,4 +11,22 @@
       return $years;
     }
   }
+
+  if (!function_exists('closed_day_types')) {
+    function closed_day_types()
+    {
+      return [
+        'general_holiday' => 'Jours fériés',
+        'school_holiday' => 'Vacances scolaires',
+        'special_day'    => 'Journée(s) spéciale',
+      ];
+    }
+  }
+
+  if (!function_exists('throw_error')) {
+    function throw_error($message)
+    {
+      throw \Illuminate\Validation\ValidationException::withMessages(['general_error_msg' => $message]);
+    }
+  }
 ?>

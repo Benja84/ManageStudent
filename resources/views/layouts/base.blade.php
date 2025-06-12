@@ -17,6 +17,7 @@
     
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/libs/toastr/build/toastr.min.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
     @yield('aditionnal_css')
 </head>
 
@@ -303,6 +304,14 @@
     <script src="{{ asset('dist/js/custom.min.js') }}"></script>
     <!-- this page js -->
     <script src="{{ asset('assets/libs/toastr/build/toastr.min.js')}}"></script>
+    
+    <script src="{{asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
+    <script>
+        $('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+    </script>
     @yield('scripts')
 </body>
 
