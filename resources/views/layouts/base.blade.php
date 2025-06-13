@@ -205,6 +205,12 @@
                                         <span class="hide-menu"> Liste des cours </span>
                                     </a>
                                 </li>
+                                <li class="sidebar-item">
+                                    <a href="{{ route('closedays.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-calendar-check"></i>
+                                        <span class="hide-menu"> Gérer les jours fermés</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="sidebar-item"> 
@@ -270,13 +276,13 @@
 
             <div class="container-fluid">
                 
-                @if ($errors->any())
+                {{-- @if ($errors->any())
                     <div class="alert alert-danger col-md-12" role="alert">
                         @foreach ($errors->all() as $error)
                             <p>{{ $error }}</p>
                         @endforeach
                     </div>
-                @endif
+                @endif --}}
                 @yield('content')
             </div>
 
@@ -303,14 +309,24 @@
     <!--Custom JavaScript -->
     <script src="{{ asset('dist/js/custom.min.js') }}"></script>
     <!-- this page js -->
-    <script src="{{ asset('assets/libs/toastr/build/toastr.min.js')}}"></script>
     
+    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
+    <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
     <script src="{{asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/toastr/build/toastr.min.js')}}"></script>
     <script>
         $('.datepicker').datepicker({
             autoclose: true,
             todayHighlight: true
         });
+        //***********************************//
+        // For select 2
+        //***********************************//
+        $(".select2").select2();
     </script>
     @yield('scripts')
 </body>

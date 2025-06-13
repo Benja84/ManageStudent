@@ -10,7 +10,11 @@
 @endsection
 
 @section('content')
-
+    @error('start_date')
+        <span class="text-danger" role="alert">
+            {!! $message !!} <br>
+        </span>
+    @enderror
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -98,7 +102,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success btn-rounded">Ajouter</button>
+                            <button type="submit" class="btn btn-success btn-default">Ajouter</button>
                         </div>
                     </div>
                 </form>
@@ -108,16 +112,8 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
-    <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
-    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
     <script>
-        //***********************************//
-        // For select 2
-        //***********************************//
-        $(".select2").select2();
-
+        
         $(document).ready(function (){
             let errors = @json($errors->all());
             errors.forEach(error => {

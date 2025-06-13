@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CloseDayController;
 use App\Http\Controllers\Admin\CoursesController;
 use App\Http\Controllers\Admin\MembersController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -49,6 +50,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/subjects',SubjectController::class);
     Route::resource('/sections',SectionsController::class);
     Route::resource('/rooms',RoomsController::class);
+    Route::resource('/closedays',CloseDayController::class);
 });
 
 Route::middleware(['auth'])->group(function () {

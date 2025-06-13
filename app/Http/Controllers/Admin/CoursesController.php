@@ -72,16 +72,43 @@ class CoursesController extends Controller
             "start_date" => "required",
             "end_date" => "required"
         ]);
+        $messagesErrors = ['start_date' => ''];
+        try {
+            $inputDates = $this->checkDatesProfessor($request);
+        } catch (ValidationException $e) {
+            $messagesErrors['start_date'] .= 'Le professeur donne déjà des cours dans cette période <br>';
+        }
+
+        try {
+            $inputDates = $this->checkDatesRoom($request);
+        } catch (ValidationException $e) {
+            $messagesErrors['start_date'] .= 'La salle est occupée dans cette période <br>';
+        }
+
+        try {
+            $inputDates = $this->checkDatesGroup($request);
+        } catch (ValidationException $e) {
+            $messagesErrors['start_date'] .= 'Le groupe est déjà en cours dans cette période <br>';
+        }
+
+        
+        $inputDates = $this->avoidClosedDays($request);
+
+        if (!empty($messagesErrors['start_date'])) {
+            throw ValidationException::withMessages($messagesErrors);
+        }
+        
         // Modifier la durée choisi en minutes
         $duration = floatval($request->duration)*60 ."minutes";
         // Calculer l'heure fin à partir de l'heure du début choisi et la durée en minutes
         $heureFin = date('H:i', strtotime("$request->start_time + $duration"));
         // Récupérer les dates à partir du jour , date début et date fin séléctionnés
-        $date_start = DateTime::createFromFormat('d/m/Y', $request->start_date);
-        $date_end = DateTime::createFromFormat('d/m/Y', $request->end_date);
-        $dates = $this->getDatesForDay($request->weekday,$date_start->format('Y-m-d'),$date_end->format('Y-m-d'));
-        if(count($dates)){
-            foreach($dates as $date){
+        // $date_start = DateTime::createFromFormat('d/m/Y', $request->start_date);
+        // $dates = $this->getDatesForDay($request);
+        $createdCourses         = [];
+        dd($inputDates);
+        if(count($inputDates)){
+            foreach($inputDates as $date){
                 $course = new Course();
                 $course->subject_id = $request->subject_id;
                 $course->professor_id = $request->professor_id;
@@ -93,10 +120,18 @@ class CoursesController extends Controller
                 $course->date = $date;
                 $course->duration = $request->duration;
                 $course->save();
+                $createdCourses[] = $course;
             }
-        }else{
-            return redirect()->back()->withErrors('Vérifier le jour ou les dates début et fin!');
         }
+        // else{
+        //     return redirect()->back()->withErrors('Vérifier le jour ou les dates début et fin!');
+        // }
+
+        if (empty($createdCourses)) {
+            throw ValidationException::withMessages(['start_date' => 'Aucun cours n\'a été créé car les dates sont hors du jour indiqué ou sur des jours fermés']);
+        }
+
+        return redirect()->route('courses.create')->with('success', 'Le cours a bien été ajouté');
     }
 
     /**
@@ -145,14 +180,14 @@ class CoursesController extends Controller
     }
 
     // Récuperer le jour choisi entre deux dates
-    private function getDatesForDay($day, $startDate, $endDate) {        
-        $targetDay = $day;
-        $start = new DateTime($startDate);
-        $end = new DateTime($endDate);
+    private function getDatesForDay($request) {        
+        $targetDay = $request->weekday;
+        $start = new DateTime(date('d/m/Y',strtotime($request->start_date)));
+        $end = new DateTime(date('d/m/Y',strtotime($request->end_date)));
         
         // Trouver le premier jour cible après la date de début
         $current = clone $start;
-        $currentDay = (int)$current->format('N');
+        $currentDay = (int)$current->format('d');
         
         // Calculer le décalage nécessaire
         $offset = ($targetDay - $currentDay + 7) % 7;
@@ -169,9 +204,9 @@ class CoursesController extends Controller
     }
 
     // Vérifier si le prof a des cours
-    public function checkDatesProfessor($request,$date_start,$date_end, $throw = TRUE)
+    public function checkDatesProfessor($request, $throw = TRUE)
     {
-        $inputDates       = $this->getDatesForDay($request->weekday,$date_start,$date_end);
+        $inputDates       = $this->getDatesForDay($request);
         $professorCourses = $this->getCoursesOfProfessor($request->professor_id);
         $professorDates   = [];
         foreach ($professorCourses as $value) {
@@ -191,7 +226,7 @@ class CoursesController extends Controller
     {
         return Course::where('professor_id',$professor_id)->get();
     }
-
+    // Vérifier l'heure
     public function checkHours($request, $entityCourses, $commonDates, $message, $throw = TRUE)
     {
         $inputStartTime = Carbon::createFromFormat('H:i', $request->start_time);
@@ -203,7 +238,7 @@ class CoursesController extends Controller
                 if (in_array($entityCourse->date, $commonDates)) {
                     if (!(($inputStartTime < $entiDateStartTime && $inputEndTime <= $entiDateStartTime) || $inputStartTime >= $entiDateEndTime)) {
                         if ($throw) {
-                            throw ValidationException::withMessages(['started_on' => $message]);
+                            throw ValidationException::withMessages(['start_date' => $message]);
                         }
 
                         return $message;
@@ -213,5 +248,78 @@ class CoursesController extends Controller
         }
 
         return TRUE;
+    }
+    // Vérifier si la salle est dispo
+    public function checkDatesRoom($request, $throw = TRUE)
+    {
+        $inputDates  = $this->getDatesForDay($request);
+        $roomCourses = Course::where('room_id',$request->get('room_id'))->get();
+        $roomDates   = [];
+        foreach ($roomCourses as $value) {
+            $roomDates[] = $value->date;
+        }
+
+        $commonDates = array_intersect($inputDates, $roomDates);
+        if (!empty($commonDates)) {
+            $this->checkHours($request, $roomCourses, $commonDates, 'La salle est occupée dans cette période', $throw);
+        }
+
+        return $inputDates;
+    }
+    // Vérifier si le groupe à déjà un cours
+    public function checkDatesGroup($request, $throw = TRUE)
+    {
+        $inputDates   = $this->getDatesForDay($request);
+        $groupCourses = Course::where('group_id',$request->get('group_id'))->get();
+        $groupDates   = [];
+        foreach ($groupCourses as $value) {
+            $groupDates[] = $value->date;
+        }
+
+        $commonDates = array_intersect($inputDates, $groupDates);
+        if (!empty($commonDates)) {
+            $this->checkHours($request, $groupCourses, $commonDates, 'Le groupe a déjà des cours dans cette période', $throw);
+        }
+
+        return $inputDates;
+    }
+
+    public function avoidClosedDays($request, $dayType = NULL)
+    {
+        $inputDates         = $this->getDatesForDay($request);
+        $switchedInputdates = array_flip($inputDates);
+
+        if ((is_array($dayType) && in_array('generalHoliday', $dayType)) || $dayType == 'generalHoliday' || is_null($dayType)) {
+            $generalHolidays = Carbon::getGeneralHolidays();
+            $commonDates    = array_intersect($inputDates, $generalHolidays);
+            if (!empty($commonDates)) {
+                foreach ($commonDates as $commonDate) {
+                    unset($switchedInputdates[$commonDate]);
+                }
+            }
+        }
+        if ((is_array($dayType) && in_array('schoolHoliday', $dayType)) || $dayType == 'schoolHoliday' || is_null($dayType)) {
+            $schoolHolidays = Carbon::getSchoolHolidays();
+            $commonDates    = array_intersect($inputDates, $schoolHolidays);
+            if (!empty($commonDates)) {
+                foreach ($commonDates as $commonDate) {
+                    unset($switchedInputdates[$commonDate]);
+                }
+            }
+        }
+        if ((is_array($dayType) && in_array('specialDay', $dayType)) || $dayType == 'specialDay' || is_null($dayType)) {
+            $specialDays = Carbon::getSpecialDays();
+            $commonDates = array_intersect($inputDates, $specialDays);
+            if (!empty($commonDates)) {
+                foreach ($commonDates as $commonDate) {
+                    unset($switchedInputdates[$commonDate]);
+                }
+            }
+        }
+
+        $inputDates = array_flip($switchedInputdates);
+
+
+        return $inputDates;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+use Illuminate\Support\Carbon;
+
   if (!function_exists('school_years')) {
     function school_years($pastYears = 1, $range = 5)
     {
@@ -27,6 +30,12 @@
     function throw_error($message)
     {
       throw \Illuminate\Validation\ValidationException::withMessages(['general_error_msg' => $message]);
+    }
+  }
+
+  if(!function_exists('fotmat_date')){
+    function format_date($date){
+      return Carbon::parse($date)->format('Y-m-d');
     }
   }
 ?>
