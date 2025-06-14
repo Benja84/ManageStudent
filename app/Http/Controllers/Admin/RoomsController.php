@@ -41,14 +41,12 @@ class RoomsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|unique:rooms',
-            'number' => 'nullable|string',
-            'department' => 'nullable|string',
-            'floor' => 'nullable|integer',
-            'seating_capacity' => 'nullable|integer',
-            'material_capacity' => 'nullable|integer',
-            'computer_type' => 'nullable|string',
+        $data = $request->validate([
+            'name' => 'required',
+            'number' => 'required|numeric',
+            'department' => 'required|numeric',
+            'floor' => 'required|numeric',
+            'seating_capacity' => 'required|numeric',
         ]);
 
         Room::create($request->all());

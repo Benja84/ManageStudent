@@ -1,15 +1,34 @@
 @extends('layouts.base')
 
 @section('content')
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <form action="{{ route('rooms.store') }}" method="POST">
-                @csrf
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>Lieu :</label>
-                        <input type="text" name="name" class="form-control" placeholder="ex: Tsaratanana" required>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <form action="{{ route('rooms.store') }}" method="POST">
+                    @csrf
+                    <div class="card-body">
+                        <h5 class="card-title mb-0">Ajouter une salle</h5>
+                        <div class="form-group mt-3">
+                            <label>Lieu</label>
+                            <input class="form-control" type="text" name="name" placeholder="ex: Arcade" required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Numero</label>
+                            <input class="form-control" type="text" name="number" placeholder="ex: 4" required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Batiment</label>
+                            <input class="form-control" type="text" name="department" placeholder="ex: info" required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Etage</label>
+                            <input class="form-control" type="text" name="floor" placeholder="ex: 2" required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Capacité en personnes</label>
+                            <input class="form-control" type="text" name="seating_capacity" placeholder="ex: 20" required>
+                        </div>
                     </div>
 
                     <div class="form-group">

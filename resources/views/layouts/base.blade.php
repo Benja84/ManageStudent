@@ -21,6 +21,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
 
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/libs/toastr/build/toastr.min.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
     @yield('aditionnal_css')
 </head>
 
@@ -208,6 +210,12 @@
                                         <span class="hide-menu"> Liste des cours </span>
                                     </a>
                                 </li>
+                                <li class="sidebar-item">
+                                    <a href="{{ route('closedays.create') }}" class="sidebar-link">
+                                        <i class="mdi mdi-calendar-check"></i>
+                                        <span class="hide-menu"> Gérer les jours fermés</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="sidebar-item">
@@ -272,12 +280,20 @@
             </div>
 
             <div class="container-fluid">
+
+                {{-- @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" role="alert">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif --}}
                 @yield('content')
             </div>
 
             <footer class="footer text-center">
-                All Rights Reserved by Matrix-admin. Designed and Developed by <a
-                    href="https://www.wrappixel.com">WrapPixel</a>.
+
+                Gestion scolaire , <i class="mdi mdi-copyright" aria-hidden="true"></i> {{date('Y')}}.
             </footer>
         </div>
     </div>
@@ -309,6 +325,25 @@
       </script>
 
 
+
+    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
+    <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
+    <script src="{{asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/toastr/build/toastr.min.js')}}"></script>
+    <script>
+        $('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+        //***********************************//
+        // For select 2
+        //***********************************//
+        $(".select2").select2();
+    </script>
     @yield('scripts')
 </body>
 

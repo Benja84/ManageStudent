@@ -10,152 +10,187 @@
 @endsection
 
 @section('content')
-
+    @error('start_date')
+    <div class="alert alert-danger col-md-12 alert-block" role="alert">
+        <h4><i class="icon fa fa-warning"></i> Erreur!</h4>
+        {!! $message !!}
+    </div>
+    @enderror
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title mb-0">Ajouter un cours</h5>
-                    <div class="form-group mt-3">
-                        <label>Matière</label>
-                        <select class="select2 form-select shadow-none" name="subject_id">
-                            <option value="">Select</option>
-                            <option value="">Test Génie Logiciel</option>
-                            <option value="">IHM</option>
-                            <option value="">UML</option>
-                            @foreach($subjects as $subject)
-                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label>Professeur</label>
-                        <select class="select2 form-select shadow-none" name="professor_id">
-                            <option value="">Select</option>
-                            <option value="">Mr Zefania</option>
-                            <option value="">Mr Juslin</option>
-                            <option value="">Mm Larissa</option>
-                            <option value="">Mn Felana</option>
-                            @foreach($professors as $prof)
-                                <option value="{{ $prof->id }}">{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label>Salle</label>
-                        <select class="select2 form-select shadow-none" name="room_id">
-                            <option value="">Select</option>
-                            <option value="">Mahazoarivo</option>
-                            <option value="">Tsaratanana</option>
-                            <option value="">Cercle Mess</option>
-                            <option value="">FOFI</option>
-                            @foreach($rooms as $room)
-                                <option value="{{ $room->id }}">{{ $room->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label>Classe</label>
-                        <select class="select2 form-select shadow-none" name="subject">
-                            <option value="">GL</option>
-                            <option value="">AEII</option>
-                            @foreach($rooms as $room)
-                                <option value="{{ $room->id }}">{{ $room->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label>Période</label>
-                        <div class="d-flex justify-content-between">
-                            <div class="col-md-2">
-                                <select class="select2 form-select shadow-none col-md-2"  name="weekday">
-                                    <option value="" disabled selected hidden>Selectionner un jour de la semaine</option>
-                                    @foreach ($weekdays as $weekday => $localeWeekday)
-                                        <option class="form-control" data-tokens="{{ $localeWeekday }}"
-                                            @if(old('weekday') == $weekday) @php($selected = TRUE) selected @endif
-                                            value="{{ $weekday+1 }}">{{ $localeWeekday }}</option>
-                                        @php($selected = FALSE)
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <input class="form-control col-md-2 js-masked-time" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)">
-                            </div>
-                            <div class="col-md-2">
-                                <select class="select2 form-select shadow-none col-md-2" name="duration">
-                                    <option value="" disabled selected hidden>Selectionner la durée du cours</option>
-                                    @for ($duration = 0.5; $duration < 10; $duration+=0.5)
-                                        <option class="form-control" data-tokens="{{ $duration }} heure(s)"
-                                            @if(old('duration') == $duration) @php($selected = TRUE) selected @endif
-                                            value="{{ $duration }}">{{ $duration }} heure{{ $duration > 1 ? 's' : '' }}
-                                        </option>
-                                        @php($selected = FALSE)
-                                    @endfor
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <input class="form-control col-md-2" type="date" name="start_date" placeholder="Date début de la période">
-                            </div>
-                            <div class="col-md-2">
-                                <input class="form-control col-md-2" type="date" name="end_date" placeholder="Date fin de la période">
+                <form action="{{route('courses.store')}}" method="POST">
+                @csrf
+                    <div class="card-body">
+                        <h5 class="card-title mb-0">Ajouter un cours</h5>
+                        <div class="form-group mt-3">
+                            <label>Matière</label>
+                            <select class="select2 form-select shadow-none" name="subject_id">
+                                <option value="" selected disabled>Séléctionner une matière</option>
+                                @foreach($subjects as $subject)
+                                    <option value="{{ $subject->id }}"  @if(old('subject_id') == $subject->id) selected @endif>{{ $subject->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Professeur</label>
+                            <select class="select2 form-select shadow-none" name="professor_id">
+                                <option value="" selected disabled>Séléctionner un prof</option>
+                                @foreach($professors as $prof)
+                                    <option value="{{ $prof->id }}" @if(old('professor_id') == $prof->id) selected @endif>{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Salle</label>
+                            <select class="select2 form-select shadow-none" name="room_id">
+                                <option value="" selected disabled hidden>Séléctionner une salle</option>
+                                @foreach($rooms as $room)
+                                    <option value="{{ $room->id }}"  @if(old('room_id') == $room->id) selected @endif>{{ $room->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Group</label>
+                            <select class="select2 form-select shadow-none" name="group_id">
+                                <option value="" selected hidden disabled>Séléctionner un groupe</option>
+                                @foreach($groups as $group)
+                                    <option value="{{ $group->id }}"  @if(old('group_id') == $group->id) selected @endif>{{ $group->abbreviation }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Période</label>
+                            <div class="d-flex justify-content-between">
+                                <div class="col-md-2">
+                                    <select class="select2 form-select shadow-none col-md-2"  name="weekday">
+                                        <option value="" disabled selected hidden>Selectionner un jour de la semaine</option>
+                                        @foreach (weekdays() as $weekday => $localeWeekday)
+                                            <option class="form-control" data-tokens="{{ $localeWeekday }}"
+                                                @if(old('weekday') == $weekday) selected @endif
+                                                value="{{ $weekday }}">{{ $localeWeekday }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input class="form-control col-md-2 js-masked-time start_time" value="@if(old('start_time')) {{old('start_time')}} @endif" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)">
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="select2 form-select shadow-none col-md-2" name="duration">
+                                        <option value="" disabled selected >Selectionner la durée du cours</option>
+                                        @for ($duration = 0.5; $duration < 10; $duration+=0.5)
+                                            <option class="form-control" data-tokens="{{ $duration }} heure(s)"
+                                                @if(old('duration') == $duration) @php($selected = TRUE) selected @endif
+                                                value="{{ $duration }}">{{ $duration }} heure{{ $duration > 1 ? 's' : '' }}
+                                            </option>
+                                            @php($selected = FALSE)
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <input class="form-control col-md-2 start_date datepicker" value="{{old('start_date')}}" type="text" name="start_date" placeholder="Date début de la période (dd/mm/yyyy)">
+                                </div>
+                                <div class="col-md-2">
+                                    <input class="form-control col-md-2 end_date  datepicker" value="{{old('end_date')}}" type="text" name="end_date" placeholder="Date fin de la période (dd/mm/yyyy)">
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer">
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-success btn-rounded">Ajouter</button>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-success btn-default">Ajouter</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
-    <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
-    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
     <script>
-        //***********************************//
-        // For select 2
-        //***********************************//
-        $(".select2").select2();
 
-        /*colorpicker*/
-        $('.demo').each(function () {
-            //
-            // Dear reader, it's actually very easy to initialize MiniColors. For example:
-            //
-            //  $(selector).minicolors();
-            //
-            // The way I've done it below is just for the demo, so don't get confused
-            // by it. Also, data- attributes aren't supported at this time...they're
-            // only used for this demo.
-            //
-            $(this).minicolors({
-                control: $(this).attr('data-control') || 'hue',
-                position: $(this).attr('data-position') || 'bottom left',
-
-                change: function (value, opacity) {
-                    if (!value) return;
-                    if (opacity) value += ', ' + opacity;
-                    if (typeof console === 'object') {
-                        console.log(value);
-                    }
-                },
-                theme: 'bootstrap'
+        $(document).ready(function (){
+            let errors = @json($errors->all());
+            errors.forEach(error => {
+                toastr.error(error +'.', 'Erreur!');
             });
+            $('.start_time').on('change',function (){
+                if(isValidTime($(this).val())){
+                    const valide = checkTimeWithDetails($(this).val());
+                    switch (valide) {
+                        case 'hours':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Heures doivent être entre 00 et 23', 'Heure non valide!');
+                            break;
+                        case 'minutes':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Minutes doivent être entre 00 et 59', 'Heure non valide!');
+                            break;
+                        case 'tot':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Trop tôt (min 06:00)', 'Heure non valide!');
+                            break;
+                        case 'tard':
+                            $(this).addClass('is-invalid');
+                            toastr.error('Trop tard (max 19:00)', 'Heure non valide!');
+                            break;
+                        default:
+                            $(this).removeClass('is-invalid');
+                            break;
+                    }
+                }else{
+                    $(this).addClass('is-invalid');
+                    toastr.error('Veuillez vérifier l\'heure que vous avez saisis.', 'Heure non valide!');
+                }
+            })
 
-        });
-        /*datwpicker*/
-        jQuery('.mydatepicker').datepicker();
-        jQuery('#datepicker-autoclose').datepicker({
-            autoclose: true,
-            todayHighlight: true
-        });
+            function isValidTime(timeString) {
+                // Vérifie le format XX:XX avec des chiffres
+                const regex = /^([0-1][0-9]|2[0-3]):([0-5][0-9])$/;
+                return regex.test(timeString);
+            }
+            function checkTimeWithDetails(timeString) {
+
+                const [hours, minutes] = timeString.split(':').map(Number);
+
+                // Vérification plages standards
+                if (hours < 0 || hours > 23) return "hours";
+                if (minutes < 0 || minutes > 59) return "minutes";
+
+                // Vérification plage 06:00-19:00
+                const totalMinutes = hours * 60 + minutes;
+                if (totalMinutes < 360) return "tot";
+                if (totalMinutes > 1140) return "tard";
+
+                return 'valide';
+            }
+
+            $('.end_date').on('change',function(){
+                const startVal = $('.start_date').val();
+                const endVal = $(this).val();
+                const startParts = startVal.split('/');
+                const endParts = endVal.split('/');
+
+                // Créer des dates correctes (new Date(année, mois-1, jour))
+                const start = new Date(
+                    parseInt(startParts[2]),
+                    parseInt(startParts[1]) - 1,
+                    parseInt(startParts[0])
+                );
+
+                const end = new Date(
+                    parseInt(endParts[2]),
+                    parseInt(endParts[1]) - 1,
+                    parseInt(endParts[0])
+                );
+                if(start != ""){
+                    if( start > end){
+                        toastr.error('La date début doit inférieur ou égal à la date fin','Erreur date!')
+                    }
+                }
+            })
+        })
 
     </script>
 @endsection

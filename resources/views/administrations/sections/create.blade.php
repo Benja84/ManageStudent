@@ -45,7 +45,7 @@
                                 <input type="text" name="year" class="form-control" placeholder="ex: 2024-2025" value="{{ old('year') }}" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Prix (€)</label>
+                                <label class="form-label">Prix année scolaire</label>
                                 <input type="number" step="0.01" name="pricing" class="form-control" placeholder="ex: 200 000" value="{{ old('pricing') }}" required>
                             </div>
                         </div>
