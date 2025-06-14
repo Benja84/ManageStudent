@@ -13,15 +13,17 @@ class Section extends Model
         'name',
         'abbreviation',
         'promotion',
-        'pricing'
+        'niveau',
+        'year',
+        'pricing',
     ];
 
     public function subjects()
     {
         return $this->belongsToMany(Subject::class, 'section_subject')
-                    ->using(SectionSubject::class)
-                    ->withTimestamps()
-                    ->withTrashed();
+            ->using(SectionSubject::class)
+            ->withTimestamps()
+            ->withTrashed();
     }
 
     public function groups()

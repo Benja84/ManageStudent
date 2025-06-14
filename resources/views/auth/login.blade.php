@@ -30,6 +30,23 @@
                     <div class="text-center pt-3 pb-3">
                         <span class="db"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" /></span>
                     </div>
+
+                    @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>misy diso fa hamarino tsara</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                     <!-- Form -->
                     <form class="form-horizontal mt-3" id="loginform" action="{{ route('login') }}" method="POST">
                         @csrf
@@ -75,7 +92,7 @@
         $("#recoverform").fadeIn();
     });
     $('#to-login').click(function(){
-        
+
         $("#recoverform").hide();
         $("#loginform").fadeIn();
     });

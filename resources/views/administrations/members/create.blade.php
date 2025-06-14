@@ -7,87 +7,90 @@
 @endsection
 
 @section('content')
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+                <div class="card-body wizard-content">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-    <div class="card">
-        <div class="card-body wizard-content">
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+                    <form id="example-form" action="{{ route('members.store') }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                        @csrf
+                        <div>
+                            <h3>Identité</h3>
+                            <section>
+                                <label for="photo">Photo </label>
+                                <div class="col-md-6">
+                                <input type="file" class="col-md-6 form-control mb-2" name="photo"  >
+                                </div>
+
+                                <label for="gender">Genre *</label>
+                                <div class="form-group d-flex row  mb-3" style="margin-left: 1px">
+                                    <div class="form-check col-md-2">
+                                        <input type="radio" class="form-check-input" id="genderHomme" name="gender" value="M" required checked>
+                                        <label class="form-check-label mb-0" for="genderHomme">Homme</label>
+                                    </div>
+                                    <div class="form-check col-md-2">
+                                        <input type="radio" class="form-check-input" id="genderFemme" name="gender" value="F" required>
+                                        <label class="form-check-label mb-0" for="genderFemme">Femme</label>
+                                    </div>
+                                </div>
+
+                                <label for="firstname">Prénom *</label>
+                                <input id="firstname" name="firstname" type="text" class="form-control mb-2" value="{{ old('firstname') }}" required>
+
+                                <label for="lastname">Nom *</label>
+                                <input id="lastname" name="lastname" type="text" class="form-control mb-2" value="{{ old('lastname') }}" required>
+
+                                <label for="email">Email *</label>
+                                <input id="email" name="email" type="email" class="form-control mb-2" value="{{ old('email') }}" required>
+
+                                <label for="phone">Téléphone *</label>
+                                <input id="phone" name="phone" type="text" class="form-control mb-2" value="{{ old('phone') }}" required>
+
+                                <div class="form-group row">
+                                <label for="role" class="mt-3">Rôles *</label>
+                                <div class="col-md-6">
+                                    <select class="select2 form-select shadow-none" name="role" id="role" style="width: 100%; height:36px;">
+                                    <option value="">Select</option>
+                                    @foreach($roles as $key => $role)
+                                        <option value="{{ $key }}" @if(old('phone') == $key) selected @endif>{{ $role }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                                </div>
+                                <p class="text-warning">(*) Champ obligatoire</p>
+                            </section>
+
+                            <h3>Information</h3>
+                            <section>
+                                <label for="birth">Date de naissance *</label>
+                                <input id="birth" name="birthdate" type="date" class="form-control" value="{{ old('birthdate') }}" required>
+
+                                <label for="lieu">Lieu de naissance : *</label>
+                                <input id="lieu" name="birthplace_city" type="txt" class="form-control" value="{{ old('birthplace_city') }}" required>
+
+                                <label for="nationality">Nationalité </label>
+                                <input id="nationality" name="nationality" type="text" class="form-control" value="{{ old('nationality') }}">
+
+                                <label for="address">Adresse</label>
+                                <input id="address" name="address_city" type="text" class="form-control" value="{{ old('address_city') }}">
+
+                                <p class="text-warning">(*) Champ obligatoire</p>
+                            </section>
+                        </div>
+                    </form>
                 </div>
-            @endif
-
-            <form id="example-form" action="{{ route('members.store') }}" method="POST" enctype="multipart/form-data" class="mt-2">
-                @csrf
-                <div>
-                    <h3>Identité</h3>
-                    <section>
-                        <label for="photo">Photo </label>
-                        <div class="col-md-6">
-                          <input type="file" class="col-md-6 form-control mb-2" name="photo"  >
-                        </div>
-
-                        <label for="gender">Genre *</label>
-                        <div class="form-group d-flex row  mb-3" style="margin-left: 1px">
-                            <div class="form-check col-md-2">
-                                <input type="radio" class="form-check-input" id="genderHomme" name="gender" value="M" required checked>
-                                <label class="form-check-label mb-0" for="genderHomme">Homme</label>
-                            </div>
-                            <div class="form-check col-md-2">
-                                <input type="radio" class="form-check-input" id="genderFemme" name="gender" value="F" required>
-                                <label class="form-check-label mb-0" for="genderFemme">Femme</label>
-                            </div>
-                        </div>
-
-                        <label for="firstname">Prénom *</label>
-                        <input id="firstname" name="firstname" type="text" class="form-control mb-2" value="{{ old('firstname') }}" required>
-
-                        <label for="lastname">Nom *</label>
-                        <input id="lastname" name="lastname" type="text" class="form-control mb-2" value="{{ old('lastname') }}" required>
-
-                        <label for="email">Email *</label>
-                        <input id="email" name="email" type="email" class="form-control mb-2" value="{{ old('email') }}" required>
-
-                        <label for="phone">Téléphone *</label>
-                        <input id="phone" name="phone" type="text" class="form-control mb-2" value="{{ old('phone') }}" required>
-                        
-                        <div class="form-group row">
-                          <label for="role" class="mt-3">Rôles *</label>
-                          <div class="col-md-6">
-                            <select class="select2 form-select shadow-none" name="role" id="role" style="width: 100%; height:36px;">
-                              <option value="">Select</option>
-                              @foreach($roles as $key => $role)
-                                <option value="{{ $key }}" @if(old('phone') == $key) selected @endif>{{ $role }}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
-                        <p class="text-warning">(*) Champ obligatoire</p>
-                    </section>
-
-                    <h3>Information</h3>
-                    <section>
-                        <label for="birth">Date de naissance *</label>
-                        <input id="birth" name="birthdate" type="date" class="form-control" value="{{ old('birthdate') }}" required>
-
-                        <label for="lieu">Lieu de naissance : *</label>
-                        <input id="lieu" name="birthplace_city" type="txt" class="form-control" value="{{ old('birthplace_city') }}" required>
-
-                        <label for="nationality">Nationalité </label>
-                        <input id="nationality" name="nationality" type="text" class="form-control" value="{{ old('nationality') }}">
-
-                        <label for="address">Adresse</label>
-                        <input id="address" name="address_city" type="text" class="form-control" value="{{ old('address_city') }}">
-
-                        <p class="text-warning">(*) Champ obligatoire</p>
-                    </section>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+</div>
 @endsection
 
 @section('scripts')

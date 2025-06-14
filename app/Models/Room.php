@@ -16,5 +16,6 @@ class Room extends Model
         'floor',
         'seating_capacity',
         'material_capacity',
+        'computer_type',
     ];
 }

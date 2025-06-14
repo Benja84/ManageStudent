@@ -15,7 +15,10 @@ class RoomsController extends Controller
      */
     public function index()
     {
-        //
+        $rooms = Room::all();
+        $title = "Listes des salles";
+        $page = "Membre";
+        return view('administrations.rooms.index', compact('rooms', 'title', 'page'));
     }
 
     /**
@@ -27,8 +30,7 @@ class RoomsController extends Controller
     {
         $title = "Ajouter une salle";
         $page = "Salle";
-
-        return view('administrations.rooms.create',compact('title','page'));
+        return view('administrations.rooms.create', compact('title', 'page'));
     }
 
     /**
@@ -39,15 +41,18 @@ class RoomsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'number' => 'required|numeric',
-            'departement' => 'required|numeric',
-            'floor' => 'required|numeric',
-            'seating_capacity' => 'required|numeric',
+        $request->validate([
+            'name' => 'required|unique:rooms',
+            'number' => 'nullable|string',
+            'department' => 'nullable|string',
+            'floor' => 'nullable|integer',
+            'seating_capacity' => 'nullable|integer',
+            'material_capacity' => 'nullable|integer',
+            'computer_type' => 'nullable|string',
         ]);
 
-        $room = Room::create($data);
+        Room::create($request->all());
+        return redirect()->route('rooms.index')->with('success', 'Salle ajoutée avec succès.');
     }
 
     /**
@@ -56,9 +61,11 @@ class RoomsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Room $room)
     {
-        //
+        $title = "Voire salles";
+        $page = "Membre";
+        return view('administrations.rooms.show', compact('room', 'title', 'page'));
     }
 
     /**
@@ -67,9 +74,11 @@ class RoomsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Room $room)
     {
-        //
+        $title = "Modifier la matiere";
+        $page = "Membre";
+        return view('administrations.rooms.edit', compact('room', 'title', 'page'));
     }
 
     /**
@@ -79,9 +88,19 @@ class RoomsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Room $room)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:rooms,name,' . $room->id,
+            'number' => 'nullable|string',
+            'department' => 'nullable|string',
+            'floor' => 'nullable|integer',
+            'seating_capacity' => 'nullable|integer',
+            'material_capacity' => 'nullable|integer',
+            'computer_type' => 'nullable|string',
+        ]);
+        $room->update($request->all());
+        return redirect()->route('rooms.index')->with('success', 'Salle modifiée avec succès.');
     }
 
     /**
@@ -90,8 +109,9 @@ class RoomsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Room $room)
     {
-        //
+        $room->delete();
+        return redirect()->route('rooms.index')->with('success', 'Salle supprimée.');
     }
 }

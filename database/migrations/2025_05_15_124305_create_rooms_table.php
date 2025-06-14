@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-	        $table->string('number')->nullable();
-	        $table->string('department')->nullable();
-	        $table->smallInteger('floor')->nullable();
-	        $table->unsignedInteger('seating_capacity')->nullable();
-	        $table->unsignedInteger('material_capacity')->nullable();
+            $table->string('number')->nullable();
+            $table->string('department')->nullable();
+            $table->smallInteger('floor')->nullable();
+            $table->unsignedInteger('seating_capacity')->nullable();
+            $table->unsignedInteger('material_capacity')->nullable();
             $table->string('computer_type')->nullable();
             $table->timestamps();
         });

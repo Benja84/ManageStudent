@@ -10,6 +10,9 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 
 class MembersController extends Controller
 {
@@ -23,7 +26,7 @@ class MembersController extends Controller
         $title = "Liste des membres du personnel";
         $page = "Membres";
         $members = Advisor::all();
-        return view('administrations.members.index',compact('members','title','page'));
+        return view('administrations.members.index', compact('members', 'title', 'page'));
     }
 
     /**
@@ -35,8 +38,8 @@ class MembersController extends Controller
     {
         $title = "Ajouter un membre du personnel";
         $page = 'Membres';
-        $roles = [User::ADMIN => 'administrateur-trice',User::ADVISOR => 'conseiller-ère',User::SECRETARY => 'secrétaire'];
-        return view('administrations.members.create',compact('roles','title','page'));
+        $roles = [User::ADMIN => 'administrateur-trice', User::ADVISOR => 'conseiller-ère', User::SECRETARY => 'secrétaire'];
+        return view('administrations.members.create', compact('roles', 'title', 'page'));
     }
 
     /**
@@ -58,17 +61,17 @@ class MembersController extends Controller
             'birthplace_city' => 'required',
         ]);
         // $fields['gender'] = $request->gender;
-        $fields['password'] = Hash::make($request->firstname.'school');
-        if($request->hasFile('photo')){
+        $fields['password'] = Hash::make($request->firstname . 'school');
+        if ($request->hasFile('photo')) {
             $request->validate([
                 'photo' => 'required|image|mimes:jpeg,png|max:2048',
             ]);
             $file = $request->file('photo');
-            $filename = str_replace(' ','',$request->firstname.$request->lasname);
+            $filename = str_replace(' ', '', $request->firstname . $request->lasname);
             $filename = iconv('UTF-8', 'ASCII//TRANSLIT', $filename);
             $filename = preg_replace('/[^a-zA-Z0-9]/', '', strtolower($filename));
             // $plus = Str::random(10);
-            $name = $file->storeAs('public/images',$filename.'.'.$file->extension());
+            $name = $file->storeAs('public/images', $filename . '.' . $file->extension());
             $fields['photo'] = $name;
         }
         $user = User::create($fields);
@@ -103,8 +106,8 @@ class MembersController extends Controller
         $title = "Editer un membre du personnel";
         $page = "Membres";
         $member = Advisor::find($id);
-        $roles = [User::ADMIN => 'administrateur-trice',User::ADVISOR => 'conseiller-ère',User::SECRETARY => 'secrétaire'];
-        return view('administrations.members.edit',compact('member','roles','title','page'));
+        $roles = [User::ADMIN => 'administrateur-trice', User::ADVISOR => 'conseiller-ère', User::SECRETARY => 'secrétaire'];
+        return view('administrations.members.edit', compact('member', 'roles', 'title', 'page'));
     }
 
     /**
@@ -121,22 +124,22 @@ class MembersController extends Controller
             'firstname' => 'required',
             'gender' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|unique:users,email,'.$request->id,
+            'email' => 'required|email|unique:users,email,' . $request->id,
             'phone' => 'required|max:10',
             'birthdate' => 'required',
             'birthplace_city' => 'required',
         ]);
 
-        if($request->hasFile('photo')){
+        if ($request->hasFile('photo')) {
             $request->validate([
                 'photo' => 'required|image|mimes:jpeg,png|max:2048',
             ]);
             $file = $request->file('photo');
-            $filename = str_replace(' ','',$request->firstname.$request->lasname);
+            $filename = str_replace(' ', '', $request->firstname . $request->lasname);
             $filename = iconv('UTF-8', 'ASCII//TRANSLIT', $filename);
             $filename = preg_replace('/[^a-zA-Z0-9]/', '', strtolower($filename));
             // $plus = Str::random(10);
-            $name = $file->storeAs('public/images',$filename.'.'.$file->extension());
+            $name = $file->storeAs('public/images', $filename . '.' . $file->extension());
             $fields['photo'] = $name;
         }
 
@@ -166,5 +169,13 @@ class MembersController extends Controller
         $user = User::find($advisor->user_id);
         $user->delete();
         return redirect()->route('members.index')->with('success', 'Conseiller supprimé avec succès.');
+    }
+
+    public function exportPDF()
+    {
+        $members = Advisor::with('user')->get();
+
+        $pdf = PDF::loadView('administrations.members.pdf', compact('members'));
+        return $pdf->download('liste_membres.pdf');
     }
 }

@@ -20,6 +20,9 @@
                         <label>Matière</label>
                         <select class="select2 form-select shadow-none" name="subject_id">
                             <option value="">Select</option>
+                            <option value="">Test Génie Logiciel</option>
+                            <option value="">IHM</option>
+                            <option value="">UML</option>
                             @foreach($subjects as $subject)
                                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                             @endforeach
@@ -29,6 +32,10 @@
                         <label>Professeur</label>
                         <select class="select2 form-select shadow-none" name="professor_id">
                             <option value="">Select</option>
+                            <option value="">Mr Zefania</option>
+                            <option value="">Mr Juslin</option>
+                            <option value="">Mm Larissa</option>
+                            <option value="">Mn Felana</option>
                             @foreach($professors as $prof)
                                 <option value="{{ $prof->id }}">{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
                             @endforeach
@@ -38,6 +45,10 @@
                         <label>Salle</label>
                         <select class="select2 form-select shadow-none" name="room_id">
                             <option value="">Select</option>
+                            <option value="">Mahazoarivo</option>
+                            <option value="">Tsaratanana</option>
+                            <option value="">Cercle Mess</option>
+                            <option value="">FOFI</option>
                             @foreach($rooms as $room)
                                 <option value="{{ $room->id }}">{{ $room->name }}</option>
                             @endforeach
@@ -47,6 +58,7 @@
                         <label>Classe</label>
                         <select class="select2 form-select shadow-none" name="subject">
                             <option value="">GL</option>
+                            <option value="">AEII</option>
                             @foreach($rooms as $room)
                                 <option value="{{ $room->id }}">{{ $room->name }}</option>
                             @endforeach
@@ -67,7 +79,7 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <input class="form-control col-md-2 js-masked-time" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)"> 
+                                <input class="form-control col-md-2 js-masked-time" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)">
                             </div>
                             <div class="col-md-2">
                                 <select class="select2 form-select shadow-none col-md-2" name="duration">
@@ -82,10 +94,10 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <input class="form-control col-md-2" type="date" name="start_date" placeholder="Date début de la période"> 
+                                <input class="form-control col-md-2" type="date" name="start_date" placeholder="Date début de la période">
                             </div>
                             <div class="col-md-2">
-                                <input class="form-control col-md-2" type="date" name="end_date" placeholder="Date fin de la période"> 
+                                <input class="form-control col-md-2" type="date" name="end_date" placeholder="Date fin de la période">
                             </div>
                         </div>
                     </div>
