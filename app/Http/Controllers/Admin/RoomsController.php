@@ -42,7 +42,7 @@ class RoomsController extends Controller
         $data = $request->validate([
             'name' => 'required',
             'number' => 'required|numeric',
-            'departement' => 'required|numeric',
+            'department' => 'required|numeric',
             'floor' => 'required|numeric',
             'seating_capacity' => 'required|numeric',
         ]);

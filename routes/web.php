@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RoomsController;
 use App\Http\Controllers\Admin\SectionsController;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Group\GroupsController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\ProfileController;
@@ -26,19 +27,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[DashboardController::class,'index']);
 // voire profile
 // Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 
 
-Route::get('/dashboard', function () {
-    $courses = Course::all();
-    $title = "Emploie du temps";
-    $page = "Tableau de bord";
-    return view('dashboard',compact('courses','title','page'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::resource('/roles',RoleController::class);

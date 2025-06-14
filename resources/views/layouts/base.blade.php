@@ -287,8 +287,8 @@
             </div>
 
             <footer class="footer text-center">
-                All Rights Reserved by Matrix-admin. Designed and Developed by <a
-                    href="https://www.wrappixel.com">WrapPixel</a>.
+
+                Gestion scolaire , <i class="mdi mdi-copyright" aria-hidden="true"></i> {{date('Y')}}.
             </footer>
         </div>
     </div>

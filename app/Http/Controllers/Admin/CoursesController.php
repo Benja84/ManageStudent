@@ -9,6 +9,8 @@ use App\Models\Professor;
 use App\Models\Room;
 use App\Models\Subject;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -39,18 +41,8 @@ class CoursesController extends Controller
         $rooms = Room::all();
         $professors = Professor::all();
         $groups = Group::all();
-        $weekdays = [];
-        $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE);
-        $formatter->setPattern('EEEE');
 
-        // Créer un tableau des jours (du lundi au dimanche)
-        $date = new DateTime('next Monday'); // Commence par lundi
-        for ($i = 0; $i < 5; $i++) {
-            $weekdays[] = $formatter->format($date);
-            $date->modify('+1 day');
-        }
-
-        return view('administrations.courses.create',compact('title','page','subjects','rooms','professors','groups','weekdays'));
+        return view('administrations.courses.create',compact('title','page','subjects','rooms','professors','groups'));
     }
 
     /**
@@ -102,11 +94,8 @@ class CoursesController extends Controller
         $duration = floatval($request->duration)*60 ."minutes";
         // Calculer l'heure fin à partir de l'heure du début choisi et la durée en minutes
         $heureFin = date('H:i', strtotime("$request->start_time + $duration"));
-        // Récupérer les dates à partir du jour , date début et date fin séléctionnés
-        // $date_start = DateTime::createFromFormat('d/m/Y', $request->start_date);
-        // $dates = $this->getDatesForDay($request);
-        $createdCourses         = [];
-        dd($inputDates);
+        $createdCourses  = [];
+
         if(count($inputDates)){
             foreach($inputDates as $date){
                 $course = new Course();
@@ -180,26 +169,23 @@ class CoursesController extends Controller
     }
 
     // Récuperer le jour choisi entre deux dates
-    private function getDatesForDay($request) {        
-        $targetDay = $request->weekday;
-        $start = new DateTime(date('d/m/Y',strtotime($request->start_date)));
-        $end = new DateTime(date('d/m/Y',strtotime($request->end_date)));
-        
-        // Trouver le premier jour cible après la date de début
-        $current = clone $start;
-        $currentDay = (int)$current->format('d');
-        
-        // Calculer le décalage nécessaire
-        $offset = ($targetDay - $currentDay + 7) % 7;
-        $current->modify("+$offset days");
-        
-        // Générer la liste des dates
-        $dates = [];
-        while ($current <= $end) {
-            $dates[] = $current->format('Y-m-d');
-            $current->modify('+7 days');
+    private function getDatesForDay($request) { 
+        $attributes = collect($request->all());
+        $started_on = Carbon::createFromFormat('d/m/Y', $attributes->pull('start_date'));
+        if (mb_strtolower($started_on->format('l')) != mb_strtolower($attributes->get('weekday'))) {
+            $started_on = date('Y-m-d', strtotime("next " . mb_strtolower($attributes->get('weekday')), strtotime($started_on->format('Y-m-d'))));
+        } else {
+            $started_on = $started_on->format('Y-m-d');
         }
         
+        $ended_on = Carbon::createFromFormat('d/m/Y', $attributes->pull('end_date'))->format('Y-m-d');
+        
+        $period   = CarbonPeriod::create($started_on, CarbonInterval::week(), $ended_on);
+        $dates    = $period->toArray();
+        foreach ($dates as $key => $date) {
+            $dates[$key] = $date->format('Y-m-d');
+        }
+
         return $dates;
     }
 
@@ -233,8 +219,8 @@ class CoursesController extends Controller
         $inputEndTime   = Carbon::createFromFormat('H:i', $request->start_time)->addHours($request->duration);
         if ($entityCourses->isNotEmpty()) {
             foreach ($entityCourses as $entityCourse) {
-                $entiDateStartTime = Carbon::createFromFormat('H:i', $entityCourse->start_time);
-                $entiDateEndTime   = Carbon::createFromFormat('H:i', $entityCourse->end_time);
+                $entiDateStartTime = Carbon::createFromFormat('H:i:s', $entityCourse->start_time);
+                $entiDateEndTime   = Carbon::createFromFormat('H:i:s', $entityCourse->end_time);
                 if (in_array($entityCourse->date, $commonDates)) {
                     if (!(($inputStartTime < $entiDateStartTime && $inputEndTime <= $entiDateStartTime) || $inputStartTime >= $entiDateEndTime)) {
                         if ($throw) {

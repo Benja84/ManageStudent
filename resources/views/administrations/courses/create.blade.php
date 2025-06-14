@@ -11,9 +11,10 @@
 
 @section('content')
     @error('start_date')
-        <span class="text-danger" role="alert">
-            {!! $message !!} <br>
-        </span>
+    <div class="alert alert-danger col-md-12 alert-block" role="alert">
+        <h4><i class="icon fa fa-warning"></i> Erreur!</h4>
+        {!! $message !!}
+    </div>
     @enderror
     <div class="row">
         <div class="col-md-12">
@@ -27,7 +28,7 @@
                             <select class="select2 form-select shadow-none" name="subject_id">
                                 <option value="" selected disabled>Séléctionner une matière</option>
                                 @foreach($subjects as $subject)
-                                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                    <option value="{{ $subject->id }}"  @if(old('subject_id') == $subject->id) selected @endif>{{ $subject->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -36,21 +37,16 @@
                             <select class="select2 form-select shadow-none" name="professor_id">
                                 <option value="" selected disabled>Séléctionner un prof</option>
                                 @foreach($professors as $prof)
-                                    <option value="{{ $prof->id }}">{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
+                                    <option value="{{ $prof->id }}" @if(old('professor_id') == $prof->id) selected @endif>{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
                                 @endforeach
                             </select>
-                            @error('weekday')
-                                <span class="text-danger" role="alert">
-                                    {{ $error('weekday') }} <br>
-                                </span>
-                            @enderror
                         </div>
                         <div class="form-group mt-3">
                             <label>Salle</label>
                             <select class="select2 form-select shadow-none" name="room_id">
                                 <option value="" selected disabled hidden>Séléctionner une salle</option>
                                 @foreach($rooms as $room)
-                                    <option value="{{ $room->id }}">{{ $room->name }}</option>
+                                    <option value="{{ $room->id }}"  @if(old('room_id') == $room->id) selected @endif>{{ $room->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -59,7 +55,7 @@
                             <select class="select2 form-select shadow-none" name="group_id">
                                 <option value="" selected hidden disabled>Séléctionner un groupe</option>
                                 @foreach($groups as $group)
-                                    <option value="{{ $group->id }}">{{ $group->abbreviation }}</option>
+                                    <option value="{{ $group->id }}"  @if(old('group_id') == $group->id) selected @endif>{{ $group->abbreviation }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -69,15 +65,15 @@
                                 <div class="col-md-2">
                                     <select class="select2 form-select shadow-none col-md-2"  name="weekday">
                                         <option value="" disabled selected hidden>Selectionner un jour de la semaine</option>
-                                        @foreach ($weekdays as $weekday => $localeWeekday)
+                                        @foreach (weekdays() as $weekday => $localeWeekday)
                                             <option class="form-control" data-tokens="{{ $localeWeekday }}"
                                                 @if(old('weekday') == $weekday) selected @endif
-                                                value="{{ $weekday+1 }}">{{ $localeWeekday }}</option>
+                                                value="{{ $weekday }}">{{ $localeWeekday }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 js-masked-time start_time" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)"> 
+                                    <input class="form-control col-md-2 js-masked-time start_time" value="@if(old('start_time')) {{old('start_time')}} @endif" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)"> 
                                 </div>
                                 <div class="col-md-2">
                                     <select class="select2 form-select shadow-none col-md-2" name="duration">
@@ -92,10 +88,10 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 start_date datepicker" type="text" name="start_date" placeholder="Date début de la période (dd/mm/yyyy)"> 
+                                    <input class="form-control col-md-2 start_date datepicker" value="{{old('start_date')}}" type="text" name="start_date" placeholder="Date début de la période (dd/mm/yyyy)"> 
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 end_date  datepicker" type="text" name="end_date" placeholder="Date fin de la période (dd/mm/yyyy)"> 
+                                    <input class="form-control col-md-2 end_date  datepicker" value="{{old('end_date')}}" type="text" name="end_date" placeholder="Date fin de la période (dd/mm/yyyy)"> 
                                 </div>
                             </div>
                         </div>
@@ -117,7 +113,7 @@
         $(document).ready(function (){
             let errors = @json($errors->all());
             errors.forEach(error => {
-                toastr.error('I do not think that word means what you think it means.', 'Inconceivable!');
+                toastr.error(error +'.', 'Erreur!');
             });
             $('.start_time').on('change',function (){
                 if(isValidTime($(this).val())){
@@ -171,8 +167,23 @@
             }
 
             $('.end_date').on('change',function(){
-                const start = new Date($('.start_date').val());
-                const end = new Date($(this).val());
+                const startVal = $('.start_date').val();
+                const endVal = $(this).val();
+                const startParts = startVal.split('/');
+                const endParts = endVal.split('/');
+                
+                // Créer des dates correctes (new Date(année, mois-1, jour))
+                const start = new Date(
+                    parseInt(startParts[2]), 
+                    parseInt(startParts[1]) - 1, 
+                    parseInt(startParts[0])
+                );
+                
+                const end = new Date(
+                    parseInt(endParts[2]), 
+                    parseInt(endParts[1]) - 1, 
+                    parseInt(endParts[0])
+                );
                 if(start != ""){
                     if( start > end){
                         toastr.error('La date début doit inférieur ou égal à la date fin','Erreur date!')

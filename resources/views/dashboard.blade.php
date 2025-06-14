@@ -40,47 +40,50 @@
             </div>
         </div>
     </div>
-    <!-- Modal Add Category -->
-    <div class="modal fade none-border" id="add-new-event">
-        <div class="modal-dialog">
+    {{-- New modal --}}
+    <div class="modal fade" id="eventModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title"><strong>Add</strong> a category</h4>
-                    <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">&times;</button>
+            <div class="modal-header">
+                <h3 class="modal-title fw-bold text-white text-center fw-bold" id="eventHeader"></h3>
+                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> --}}
+            </div>
+            <div class="modal-body">
+                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-book-open-page-variant "></i></div>
+                    <div class="text-white mt-2" id="eventCourse" style="font-size: 20px"></div>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="control-label">Category Name</label>
-                                <input class="form-control form-white" placeholder="Enter name" type="text"
-                                    name="category-name" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="control-label">Choose Category Color</label>
-                                <select class="form-select shadow-none form-white" data-placeholder="Choose a color..."
-                                    name="category-color">
-                                    <option value="success">Success</option>
-                                    <option value="danger">Danger</option>
-                                    <option value="info">Info</option>
-                                    <option value="primary">Primary</option>
-                                    <option value="warning">Warning</option>
-                                    <option value="inverse">Inverse</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
+                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-clipboard-account"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventTeacher" style="font-size: 20px"></div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger waves-effect waves-light save-category"
-                        data-dismiss="modal">Save</button>
-                    <button type="button" class="btn btn-secondary waves-effect"
-                        data-dismiss="modal">Close</button>
+                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-calendar"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventDate" style="font-size: 20px"></div>
+                </div>
+                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-timer"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventTime" style="font-size: 20px"></div>
+                </div>
+                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-account-switch"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventClass" style="font-size: 20px"></div>
+                </div>
+                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-home-modern"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventLocation" style="font-size: 20px"></div>
+                </div>
+                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: rgb(19, 150, 41); ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-bookmark"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventLocation" style="font-size: 20px">Appel</div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+            </div>
         </div>
-    </div>
+        </div>
     <!-- END MODAL -->
 @endsection
 @section('scripts')
@@ -88,13 +91,51 @@
     <script src="{{ asset('assets/libs/fullcalendar/dist/locale/fr.js') }}"></script>
     <script>
         $(document).ready(function (){
-            let cr = @json($courses);
-            console.log('ici',cr)
-            var courses = [
-                {'_id':1,'title':'Birthday for school','start':'2025-05-12 08:30:00','end':'2025-05-13 10:30:00'},
-                {'_id':2,'title':'Math 103','start':'2025-05-13 08:30:00','end':'2025-05-13 10:30:00'},
-                {'_id':3,'title':'Anglais','start':'2025-05-14 08:30:00','end':'2025-05-14 10:30:00'},
-            ];
+            function hslToHex(h, s, l) {
+                l /= 100;
+                const a = s * Math.min(l, 1 - l) / 100;
+                const f = n => {
+                    const k = (n + h / 30) % 12;
+                    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                    return Math.round(255 * color).toString(16).padStart(2, '0');
+                };
+                return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+            }
+
+            function generateColorPalette(count) {
+                const colors = [];
+                const goldenRatio = 137.508; // Angle d'or pour répartition optimale
+                
+                for (let i = 0; i < count; i++) {
+                    const hue = (i * goldenRatio) % 360;
+                    const saturation = 65 + Math.sin(i) * 15; // Variation entre 50-80%
+                    const lightness = 45 + Math.cos(i * 0.8) * 10; // Variation entre 35-55%
+                    
+                    colors.push(hslToHex(hue, saturation, lightness));
+                }
+                return colors;
+            }
+            let datas = @json($courses);
+            
+            let courses = [];
+            let colors = generateColorPalette(100);
+            datas.forEach(element => {
+                courses.push({
+                    '_id':element.id,
+                    'title':element.subject.abbreviation+' - '+element.professor.user.firstname+' '+element.professor.user.lastname+ ' - '+element.group.abbreviation,
+                    'start':element.date+' '+element.start_time,
+                    'end':element.date+' '+element.end_time,
+                    'color':colors[element.id],
+                    extendedProps: {
+                        course: element.subject.abbreviation,
+                        startHour: element.start_time,
+                        endHour: element.end_time,
+                        teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
+                        class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
+                        location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
+                    }
+                } )
+            });
             
             $('#calendar').fullCalendar({
                 locale: 'fr',
@@ -103,26 +144,33 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                monthNames: [
-                    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
-                    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
-                ],
-                monthShortNames: [
-                    'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun',
-                    'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'
-                ],
-                dayNames: [
-                    'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 
-                    'Jeudi', 'Vendredi', 'Samedi'
-                ],
-                dayShortNames: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
                 
                 events: courses,
                 selectable: true,
                 selectHelper: true,
                 eventClick: function(info){
-                    console.log('info',info)
-                    $('#add-new-event').modal('toggle');
+                    const event = info;
+                    const start = new Date(event.start);
+                    const end = new Date(event.end);
+                    
+                    // Formater la date en français
+                    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+                    const dateString = start.toLocaleDateString('fr-FR', options);
+                    const dateendString = end.toLocaleDateString('fr-FR', options);
+                    
+                    // Remplir le modal
+                    // $('#eventModal').find('.modal-header').style.backgroundColor =event.color;
+                    $('#eventModal').find('.modal-header').css('background-color', event.color+'!important');;
+                    $('#eventHeader').text(event.title);
+                    $('#eventCourse').text(event.extendedProps.course);
+                    $('#eventTeacher').text(event.extendedProps.teacher);
+                    $('#eventDate').text(dateString);
+                    $('#eventTime').text(`De ${event.extendedProps.startHour.split(':').slice(0, 2).join(':')} à ${event.extendedProps.endHour.split(':').slice(0, 2).join(':')}`);
+                    $('#eventClass').text(event.extendedProps.class);
+                    $('#eventLocation').text(event.extendedProps.location);
+                    
+                    // Afficher le modal
+                    $('#eventModal').modal('toggle');
                 },
             });
         })

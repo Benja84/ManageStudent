@@ -27,7 +27,7 @@
                             <label>Période</label>
                             <div class="d-flex justify-content-between">
                                 <div class="col-md-3">
-                                    <select class="select2 form-select shadow-none col-md-2" name="type">
+                                    <select class="select2 form-select shadow-none col-md-2" name="type" required>
                                         <option value="" disabled selected >Selectionner le type de jour fermé</option>
                                         @foreach (closed_day_types() as $closeddaytype => $localeWeekday)
                                             <option class="form-control" data-tokens="{{ $localeWeekday }}"
@@ -40,10 +40,10 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 start_date datepicker" type="text" name="start_date" placeholder="Date début (dd/mm/yyyy)"> 
+                                    <input class="form-control col-md-2 start_date datepicker" type="text" name="start_date" placeholder="Date début (dd/mm/yyyy)" required> 
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 end_date  datepicker" type="text" name="end_date" placeholder="Date fin (dd/mm/yyyy)"> 
+                                    <input class="form-control col-md-2 end_date  datepicker" type="text" name="end_date" placeholder="Date fin (dd/mm/yyyy)" required> 
                                 </div>
                                 <div class="col-md-5">
                                     <input class="form-control col-md-2 " type="text" name="description" placeholder="Déscription"> 

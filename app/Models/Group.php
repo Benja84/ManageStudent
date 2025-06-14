@@ -18,7 +18,7 @@ class Group extends Model
 
     public function section()
     {
-        return $this->belongsTo(Section::class)->with('subjects');
+        return $this->belongsTo(Section::class);
     }
 
     public function courses()

@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group mt-3">
                             <label>Batiment</label>
-                            <input class="form-control" type="text" name="departement" placeholder="ex: 1" required>
+                            <input class="form-control" type="text" name="department" placeholder="ex: info" required>
                         </div>
                         <div class="form-group mt-3">
                             <label>Etage</label>

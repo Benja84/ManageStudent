@@ -38,4 +38,17 @@ use Illuminate\Support\Carbon;
       return Carbon::parse($date)->format('Y-m-d');
     }
   }
+
+  if (!function_exists('weekdays')) {
+    function weekdays()
+    {        
+      return [
+          'monday'    => 'lundi',
+          'tuesday'   => 'mardi',
+          'wednesday' => 'mercredi',
+          'thursday'  => 'jeudi',
+          'friday'    => 'vendredi'
+      ];
+    }
+}
 ?>
