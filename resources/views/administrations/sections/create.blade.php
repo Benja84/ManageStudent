@@ -44,6 +44,21 @@
                                 @endfor
                             </select>
                         </div>
+                        
+                        <div class="form-group mt-3">
+                            <label>Matières</label>
+                            <div class="col-md-12">
+                                <select name="subject_id[]" class="select2 form-select" multiple
+                                title="Sélectionner les matières">
+                                @foreach($subjects as $subject)
+                                    <option data-tokens="{{ $subject->name }}"
+                                    @if(old('subject_id') && in_array($subject->id, old('subject_id'))) selected @php($selected = TRUE) @endif
+                                    value="{{$subject->id}}">{{ $subject->name }} ( {{ $subject->abbreviation }} )
+                                    </option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group mt-3">
                             <label>Prix année scolaire</label>
                             <input class="form-control" type="text" name="pricing" placeholder="ex: 200 000" required>
@@ -62,6 +77,4 @@
 
 @section('scripts')
     <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
-    <script>
-    </script>
 @endsection

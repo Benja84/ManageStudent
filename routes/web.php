@@ -45,6 +45,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/sections',SectionsController::class);
     Route::resource('/rooms',RoomsController::class);
     Route::resource('/closedays',CloseDayController::class);
+    Route::get('/subject/{id}',[SectionsController::class,'getSubject'])->name('subject');
 });
 
 Route::middleware(['auth'])->group(function () {

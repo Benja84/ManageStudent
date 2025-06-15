@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Models\SectionSubject;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class SectionsController extends Controller
@@ -27,8 +29,9 @@ class SectionsController extends Controller
     {
         $title = "Ajouter une section";
         $page = "Sections";
+        $subjects = Subject::all();
 
-        return view('administrations.sections.create',compact('title','page'));
+        return view('administrations.sections.create',compact('title','page','subjects'));
     }
 
     /**
@@ -43,9 +46,18 @@ class SectionsController extends Controller
             'name' => 'required',
             'abbreviation' => 'required',
             'promotion' => 'required',
+            'subject_id' => 'required'
         ]);
 
         $section = Section::create($request->all());
+        foreach ($request->subject_id as $key => $subject) {
+            SectionSubject::create([
+                'section_id' => $section->id,
+                'subject_id' => $subject,
+            ]);
+        }
+
+        return redirect()->route('sections.create')->with('success','Section créé avec succés');
     }
 
     /**
@@ -91,5 +103,10 @@ class SectionsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getSubject($id){
+        $subjects = SectionSubject::with('subject')->where('section_id',$id)->get();
+        return $subjects;
     }
 }
