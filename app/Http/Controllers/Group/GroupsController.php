@@ -66,10 +66,11 @@ class GroupsController extends Controller
             $groupsubject->subject_id = $subject;
             $groupsubject->save();
         }
-
-        foreach ($request->coordinator_id as $prof_id){
-            $prof = Professor::find($prof_id);
-            $prof->user->assignRole('coordinator');
+        if($request->coordinator_id){
+            foreach ($request->coordinator_id as $prof_id){
+                $prof = Professor::find($prof_id);
+                $prof->user->assignRole('coordinator');
+            }
         }
         
         return redirect()->route('groups.index')->with('success','Le groupe <a href="' . route('groups.show', $group->id) . '">' . $group->abbreviation . '</a> a bien été ajouté');

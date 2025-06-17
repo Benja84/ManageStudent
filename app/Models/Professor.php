@@ -24,8 +24,31 @@ class Professor extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
     public function groups()
     {
-        return $this->morphToMany(Group::class, 'groupable');
+        return $this->morphToMany(Group::class, 'groupable')
+                    ->withPivot('status')
+                    ->wherePivot('status', NULL)
+                    ->with('section');
     }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'professor_subject')
+                    ->using(ProfessorSubject::class)
+                    ->withTimestamps()
+                    ->withTrashed();
+    }
+
+    
 }

@@ -117,7 +117,7 @@
                                     </div>
                                     <div>
                                         <label class="block text-gray-700">Matières pouvant être enseignées</label>
-                                        <select name="subjec_id[]" class="select2 form-select" multiple placeholder="Selectionner les matières">
+                                        <select name="subject_id[]" class="select2 form-select" multiple placeholder="Selectionner les matières">
                                             <option value=""  disabled>Selectionner les matières</option>
                                             @foreach($subjects as $subject)
                                             <option value="{{$subject->id}}" data-token="{{$subject->name}} ({{$subject->abbreviation}})">{{$subject->name}} ({{$subject->abbreviation}})</option>
@@ -130,7 +130,7 @@
                                         <select name="group_id[]" class="select2 form-select selectpicker" multiple placeholder="Selectionner les groupes" title="Sélectionner les groupes">
                                             <option value=""  disabled>Selectionner les groupes</option>
                                             @foreach($groups as $group)
-                                            <option value="{{$group->id}}" data-token="{{$group->abbreviation}} ({{$group->school_year}})">{{$group->abbreviation}} ({{$group->school_year}})</option>
+                                            <option value="{{$group->id}}" data-token="{{$group->fullname}}">{{$group->fullname}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -187,8 +187,8 @@
                             </div>
                         </div>
                         <div class="flex justify-between mt-6">
-                            <button type="button" id="prevBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Précédent</button>
-                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Enregistrer</button>
+                            <button type="button" id="prevBtn" class="bg-gray-500 text-white px-4 py-2 ">Précédent</button>
+                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 ">Enregistrer</button>
                         </div>
                     </form>
                 </div>
@@ -258,9 +258,8 @@
                     const phone = step1.querySelector('input[name="phone"]').value.trim();
                     const email = step1.querySelector('input[name="email"]').value.trim();
                     const gender = step1.querySelector('input[name="gender"]:checked');
-                    const phoneCountry = step1.querySelector('select[name="phone_country"]').value;
-                    const role = step1.querySelector('select[name="role"]').value;
                     const photo = photoUpload.files[0];
+                    
 
                     // Check for missing fields
                     if (!lastName) {
@@ -281,14 +280,6 @@
                     }
                     if (!gender) {
                         alert("Le champ 'Genre' est requis.");
-                        return false;
-                    }
-                    if (!phoneCountry) {
-                        alert("Le champ 'Code pays pour le téléphone' est requis.");
-                        return false;
-                    }
-                    if (!role) {
-                        alert("Le champ 'Rôle' est requis.");
                         return false;
                     }
                     if (!photo) {
@@ -328,7 +319,6 @@
                     const city = step2.querySelector('input[name="city"]').value.trim();
                     const zipCode = step2.querySelector('input[name="zip_code"]').value.trim();
                     const country = step2.querySelector('select[name="country"]').value;
-
                     // Check for missing fields
                     if (!birthDate) {
                         alert("Le champ 'Naissance' est requis.");
@@ -397,8 +387,16 @@
                     const phone = step1.querySelector('input[name="phone"]').value;
                     const email = step1.querySelector('input[name="email"]').value;
                     const gender = step1.querySelector('input[name="gender"]:checked')?.value;
-                    const phoneCountry = step1.querySelector('select[name="phone_country"]').value;
-                    const role = step1.querySelector('select[name="role"]').value;
+                    // Récupérer l'élément <select> pour subject_id
+                    const subjectSelect = step1.querySelector('select[name="subject_id[]"]');
+                    // Extraire TOUTES les valeurs sélectionnées
+                    const subject_ids = Array.from(subjectSelect.selectedOptions).flatMap(option => option.value.split(',').map(v => v.trim()));
+
+                    // Récupérer l'élément <select> pour group_id
+                    const groupSelect = step1.querySelector('select[name="group_id[]"]');
+                    // Extraire TOUTES les valeurs sélectionnées
+                    const group_ids = Array.from(groupSelect.selectedOptions).map(option => option.value);
+                    
 
                     // Step2
                     const birthDate = step2.querySelector('input[name="birth_date"]').value;
@@ -414,8 +412,8 @@
                     formData.append('phone', phone);
                     formData.append('email', email);
                     formData.append('gender', gender);
-                    formData.append('phone_country', phoneCountry);
-                    formData.append('role', role);
+                    formData.append('subject_id[]', subject_ids);
+                    formData.append('group_id[]', group_ids);
 
                     // Add photo (already validated as required in Step 1)
                     formData.append('photo', photoUpload.files[0]);
@@ -424,7 +422,7 @@
                         method: 'POST',
                         body: formData,
                         headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                         }
                     })
                     .then(response => response)

@@ -44,22 +44,18 @@ class ProfessorsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {dd($request);
         try {
             // Valide les données du formulaire
             $validated = $request->validate([
-                'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'gender' => 'required|in:M,F',
                 'last_name' => 'required|string|max:255',
                 'first_name' => 'required|string|max:255',
-                'phone_country' => 'required|string',
                 'phone' => 'required|string|max:20',
                 'email' => 'required|email|unique:users,email',
-                'subject_id' => 'required',
-                // 'role' => 'required|string|max:255',
                 'birth_date' => 'required|date',
                 'birth_place' => 'required|string|max:255',
-                // 'nationality' => 'required|string|max:100',
+                'nationality' => 'required|string|max:100',
                 'address' => 'required|string|max:255',
                 'city' => 'required|string|max:100',
                 'zip_code' => 'required|string|max:20',
@@ -67,7 +63,6 @@ class ProfessorsController extends Controller
             ]);
 
             // Prépare les données validées
-            // $data = $validated;
             $user = new User();
             $user->gender = $validated['gender'];
             $user->firstname = $validated['first_name'];
@@ -101,7 +96,12 @@ class ProfessorsController extends Controller
 
             // Crée un nouveau professeur avec les données
             $prof = Professor::create($data);
-
+            if($request->group_id){
+                $prof->groups()->attach($request->group_id);
+            }
+            if($request->subject_id){
+                $prof->subjects()->syncWithoutDetaching($prof->id, 'subjects', $request->subject_id);
+            }
             // Redirige vers la liste des professeurs avec un message de succès
             // return redirect()->route('professors.index')->with('success', 'Professeur ajouté avec succès');
             return $prof;

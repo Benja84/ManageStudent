@@ -33,4 +33,42 @@ class Group extends Model
                     ->withTimestamps()
                     ->withTrashed();
     }
+
+    public function students()
+    {
+        return $this
+            ->morphedByMany(Student::class, 'groupable')
+            ->withPivot('status')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->orderBy('users.lastname')
+            ->select('students.*');
+    }
+
+    public function professors()
+    {
+        return $this->morphedByMany(Professor::class, 'groupable')
+                    ->withPivot('status')
+                    ->wherePivot('status', NULL)
+                    ->with('user')
+                    ->join('users', 'users.id', '=', 'user_id')
+                    ->orderBy('users.lastname')
+                    ->select('professors.*');
+    }
+
+    public function coordinators()
+    {
+        return $this->morphedByMany(Professor::class, 'groupable')
+            ->withPivot('status')
+            ->wherePivot('status', 'Coordinateur')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->orderBy('users.lastname')
+            ->select('professors.*');
+    }
+
+    public function getFullnameAttribute()
+    {
+        return "$this->abbreviation $this->school_year (Section {$this->section->abbreviation})";
+    }
 }
