@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Group;
 use App\Models\Professor;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -30,7 +32,9 @@ class ProfessorsController extends Controller
     {
         $title = "Ajouter un prof";
         $page = "Prof";
-        return view('administrations.professors.create',compact('title','page'));
+        $subjects = Subject::all();
+        $groups = Group::with('section')->where('school_year', 'LIKE', '%' . date('Y') . '%')->get();
+        return view('administrations.professors.create',compact('title','page','subjects','groups'));
     }
 
     /**
@@ -51,6 +55,7 @@ class ProfessorsController extends Controller
                 'phone_country' => 'required|string',
                 'phone' => 'required|string|max:20',
                 'email' => 'required|email|unique:users,email',
+                'subject_id' => 'required',
                 // 'role' => 'required|string|max:255',
                 'birth_date' => 'required|date',
                 'birth_place' => 'required|string|max:255',
