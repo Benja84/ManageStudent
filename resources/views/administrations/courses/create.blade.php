@@ -73,7 +73,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 js-masked-time start_time" value="@if(old('start_time')) {{old('start_time')}} @endif" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)"> 
+                                    <input class="form-control col-md-2 js-masked-time start_time" value="@if(old('start_time')) {{old('start_time')}} @endif" type="text" name="start_time" placeholder="Heure de debut du cours (HH:MM)">
                                 </div>
                                 <div class="col-md-2">
                                     <select class="select2 form-select shadow-none col-md-2" name="duration">
@@ -88,10 +88,10 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 start_date datepicker" value="{{old('start_date')}}" type="text" name="start_date" placeholder="Date début de la période (dd/mm/yyyy)"> 
+                                    <input class="form-control col-md-2 start_date datepicker" value="{{old('start_date')}}" type="text" name="start_date" placeholder="Date début de la période (dd/mm/yyyy)">
                                 </div>
                                 <div class="col-md-2">
-                                    <input class="form-control col-md-2 end_date  datepicker" value="{{old('end_date')}}" type="text" name="end_date" placeholder="Date fin de la période (dd/mm/yyyy)"> 
+                                    <input class="form-control col-md-2 end_date  datepicker" value="{{old('end_date')}}" type="text" name="end_date" placeholder="Date fin de la période (dd/mm/yyyy)">
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
 
 @section('scripts')
     <script>
-        
+
         $(document).ready(function (){
             let errors = @json($errors->all());
             errors.forEach(error => {
@@ -151,13 +151,13 @@
                 return regex.test(timeString);
             }
             function checkTimeWithDetails(timeString) {
-                
+
                 const [hours, minutes] = timeString.split(':').map(Number);
-                
+
                 // Vérification plages standards
                 if (hours < 0 || hours > 23) return "hours";
                 if (minutes < 0 || minutes > 59) return "minutes";
-                
+
                 // Vérification plage 06:00-19:00
                 const totalMinutes = hours * 60 + minutes;
                 if (totalMinutes < 360) return "tot";
@@ -171,17 +171,17 @@
                 const endVal = $(this).val();
                 const startParts = startVal.split('/');
                 const endParts = endVal.split('/');
-                
+
                 // Créer des dates correctes (new Date(année, mois-1, jour))
                 const start = new Date(
-                    parseInt(startParts[2]), 
-                    parseInt(startParts[1]) - 1, 
+                    parseInt(startParts[2]),
+                    parseInt(startParts[1]) - 1,
                     parseInt(startParts[0])
                 );
-                
+
                 const end = new Date(
-                    parseInt(endParts[2]), 
-                    parseInt(endParts[1]) - 1, 
+                    parseInt(endParts[2]),
+                    parseInt(endParts[1]) - 1,
                     parseInt(endParts[0])
                 );
                 if(start != ""){

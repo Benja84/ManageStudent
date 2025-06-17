@@ -4,6 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords"
@@ -52,7 +57,7 @@
                             <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a>
                         </li>
                     </ul>
-                    
+
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -81,13 +86,13 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="pt-4">
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('dashboard') }}" aria-expanded="false">
                                 <i class="mdi mdi-view-dashboard"></i>
                                 <span class="hide-menu">Tableaux de bord</span>
                             </a>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-account-multiple"></i>
                                 <span class="hide-menu">Membres du personnel </span>
@@ -107,7 +112,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-school"></i>
                                 <span class="hide-menu">Etudiants </span>
@@ -127,7 +132,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="mdi mdi-clipboard-account"></i>
                                 <span class="hide-menu">Proffesseurs </span>
@@ -140,14 +145,14 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="form-wizard.html" class="sidebar-link">
+                                    <a href="{{ route('professors.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des étudiants </span>
+                                        <span class="hide-menu"> Liste des Professors </span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="fas fa-bookmark"></i>
                                 <span class="hide-menu">Groupes </span>
@@ -160,15 +165,15 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="form-wizard.html" class="sidebar-link">
+                                    <a href="{{ route('groups.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des étudiants </span>
+                                        <span class="hide-menu"> Liste des Goupes </span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="fas fa-bookmark"></i>
                                 <span class="hide-menu">Sections </span>
@@ -181,14 +186,14 @@
                                     </a>
                                 </li>
                                 <li class="sidebar-item">
-                                    <a href="form-wizard.html" class="sidebar-link">
+                                    <a href="{{ route('sections.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des étudiants </span>
+                                        <span class="hide-menu"> Liste des sections </span>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="fas fa-calendar"></i>
                                 <span class="hide-menu">Cours </span>
@@ -214,7 +219,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="fas fa-book"></i>
                                 <span class="hide-menu">Matières </span>
@@ -234,7 +239,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="sidebar-item"> 
+                        <li class="sidebar-item">
                             <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                                 <i class="fas fa-building"></i>
                                 <span class="hide-menu">Salle </span>
@@ -249,7 +254,7 @@
                                 <li class="sidebar-item">
                                     <a href="{{ route('rooms.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des matières </span>
+                                        <span class="hide-menu"> Liste des salles </span>
                                     </a>
                                 </li>
                             </ul>
@@ -276,7 +281,7 @@
             </div>
 
             <div class="container-fluid">
-                
+
                 {{-- @if ($errors->any())
                     <div class="alert alert-danger col-md-12" role="alert">
                         @foreach ($errors->all() as $error)
@@ -295,7 +300,7 @@
     </div>
     <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/js/jquery.ui.touch-punch-improved.js') }}"></script>
-    
+
     <script src="{{ asset('assets/libs/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('dist/js/jquery-ui.min.js') }}"></script>
     <!-- Bootstrap tether Core JavaScript -->
@@ -310,7 +315,18 @@
     <!--Custom JavaScript -->
     <script src="{{ asset('dist/js/custom.min.js') }}"></script>
     <!-- this page js -->
-    
+
+    <script>
+        if (window.performance) {
+          if (performance.navigation.type === 2) {
+            // Type 2 = navigateur back/forward
+            location.href = "{{ route('login') }}";
+          }
+        }
+      </script>
+
+
+
     <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
     <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
     <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>

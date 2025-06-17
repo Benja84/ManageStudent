@@ -1,8 +1,8 @@
 @extends('layouts.base')
 @section('additional_css')
-  <link rel="stylesheet" type="text/css" href="{{ asset('assets/extra-libs/multicheck/multicheck.css') }}">
-  <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet') }}">
-  <style>
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/extra-libs/multicheck/multicheck.css') }}">
+<link  rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
+<style>
     .dataTables_filter {
         float: right !important;
         text-align: right;
@@ -15,6 +15,9 @@
     .dataTables_paginate {
         float: right !important;
     }
+    .dt-buttons {
+        margin-bottom: 15px;
+    }
     </style>
 @endsection
 @section('content')
@@ -23,7 +26,11 @@
       <div class="card">
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center">
-            <h3 ></h3>
+            <h7></h7>
+            <a href="{{ route('members.export.pdf') }}" class="btn btn-danger mb-3">
+                <i class="fas fa-file-pdf"></i> Exporter en PDF
+            </a>
+
             <a href="{{ route('members.create') }}" class="btn btn-success mb-3">
               <i class="fas fa-plus-circle"></i> Ajouter un membre
             </a>
@@ -47,12 +54,13 @@
                   <tr>
                     <td>{{ $member->id }}</td>
                     <td>
-                      @if ($member->photo)
-                        <img src="{{ asset('storage/' . $member->photo) }}" alt="Photo de {{ $member->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
-                      @else
-                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px; font-size: 14px; margin-top:-0.5rem">N/A</div>
-                      @endif
-                    </td>
+                        @if ($member->photo && file_exists(public_path('storage/' . $member->photo)))
+                          <img src="{{ asset('storage/' . $member->photo) }}" alt="Photo de {{ $member->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
+                        @else
+                          <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px; font-size: 14px; margin-top:-0.5rem">N/A</div>
+                        @endif
+                      </td>
+
                     <td>
                       <div class="item-center" style="margin-top:-1.3rem">
                         <i style="font-size: 3em" class="mdi {{ $member->user->gender === 'F' ? 'mdi-gender-female' : 'mdi-gender-male'}}"></i>
@@ -94,42 +102,22 @@
   </div>
 @endsection
 @section('scripts')
-  <script src="{{ asset('assets/extra-libs/multicheck/datatable-checkbox-init.js') }}"></script>
-  <script src="{{ asset('assets/extra-libs/multicheck/jquery.multicheck.js') }}"></script>
-  <script src="{{ asset('assets/extra-libs/DataTables/datatables.min.js') }}"></script>
-  <script>
-    $('#liste_member').DataTable({
-        "language": {
-            "decimal":        "",
-            "emptyTable":     "Aucune donnée disponible dans le tableau",
-            "info":           "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
-            "infoEmpty":      "Affichage de 0 à 0 sur 0 entrées",
-            "infoFiltered":   "(filtrées depuis _MAX_ entrées totales)",
-            "infoPostFix":    "",
-            "thousands":      ",",
-            "lengthMenu":    "Afficher _MENU_ entrées",
-            "loadingRecords": "Chargement...",
-            "processing":    "Traitement...",
-            "search":         "Recherche:",
-            "zeroRecords":    "Aucun résultat trouvé",
-            "paginate": {
-                "first":      "Premier",
-                "last":       "Dernier",
-                "next":       "Suivant",
-                "previous":   "Précédent"
+<!-- jQuery et DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+<!-- Initialisation -->
+<script>
+    $(document).ready(function () {
+        $('#liste_member').DataTable({
+            responsive: true,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
             }
-        },
-        "dom": "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
-               "<'row'<'col-sm-12'tr>>" +
-               "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-        "columnDefs": [
-            {
-                "targets": 5,
-                "render": function(data) {
-                    return data.replace(/(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, "$1 $2 $3 $4 $5");
-                }
-            }
-        ]
+        });
     });
-  </script>
+</script>
 @endsection
+

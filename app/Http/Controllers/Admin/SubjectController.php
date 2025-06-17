@@ -13,9 +13,13 @@ class SubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // Affiche la liste des matières
     public function index()
     {
-        //
+        $subjects = Subject::all(); // Récupère toutes les matières
+        $title = "Liste des matières";
+        $page = "Membre";
+        return view('administrations.subjects.index', compact('subjects', 'title', 'page'));
     }
 
     /**
@@ -23,12 +27,12 @@ class SubjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // Affiche le formulaire de création
     public function create()
     {
-        $title = "Créer une matière";
-        $page = "Matières";
-
-        return view('administrations.subjects.create',compact('title','page'));
+        $title = "Ajouter un matiere";
+        $page = "Membre";
+        return view('administrations.subjects.create', compact('title', 'page'));
     }
 
     /**
@@ -37,14 +41,20 @@ class SubjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    // Enregistre une nouvelle matière
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'abbreviation' => 'required',
+        // Validation
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'abbreviation' => 'required|string|max:255',
         ]);
 
-        $subject = Subject::create($data);
+        // Enregistrement
+        Subject::create($request->all());
+
+        return redirect()->route('subjects.index')->with('success', 'Matière ajoutée avec succès.');
     }
 
     /**
@@ -64,9 +74,13 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+
+    // Affiche le formulaire d'édition
+    public function edit(Subject $subject)
     {
-        //
+        $title = "Modifier la matiere";
+        $page = "Membre";
+        return view('administrations.subjects.edit', compact('subject', 'title', 'page'));
     }
 
     /**
@@ -76,9 +90,19 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    // Met à jour une matière
+    public function update(Request $request, Subject $subject)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'abbreviation' => 'required|string|max:255',
+        ]);
+
+
+        $subject->update($request->all());
+
+        return redirect()->route('subjects.index')->with('success', 'Matière mise à jour avec succès.');
     }
 
     /**
@@ -87,8 +111,11 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // Supprime une matière
+    public function destroy(Subject $subject)
     {
-        //
+        $subject->delete();
+
+        return redirect()->route('subjects.index')->with('success', 'Matière supprimée avec succès.');
     }
 }

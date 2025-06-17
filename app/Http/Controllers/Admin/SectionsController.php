@@ -17,7 +17,10 @@ class SectionsController extends Controller
      */
     public function index()
     {
-        //
+        $sections = Section::all();
+        $title = "Ajouter du sections";
+        $page = "Membre";
+        return view('administrations.sections.index', compact('sections', 'title', 'page'));
     }
 
     /**
@@ -77,9 +80,20 @@ class SectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Section $section)
     {
-        //
+        $attitudes = [
+            'Montage Video',
+            'SCIENCES ',
+            ' LETTRES ',
+            ' TECHNIQUE ',
+            ' GESTION ',
+            ' DROIT',
+        ];
+        $title = "Editer setion";
+        $page = "Membre";
+
+        return view('administrations.sections.edit', compact('section', 'attitudes', 'title', 'page'));
     }
 
     /**
@@ -89,9 +103,20 @@ class SectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Section $section)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'abbreviation' => 'required|string|max:50',
+            'promotion' => 'required|string|max:255',
+            'year' => 'required|string|max:50',
+            'niveau' => 'required|string|max:255',
+            'pricing' => 'required|numeric|min:0',
+        ]);
+
+        $section->update($validated);
+
+        return redirect()->route('sections.index')->with('success', 'Section mise à jour avec succès');
     }
 
     /**
@@ -100,9 +125,10 @@ class SectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Section $section)
     {
-        //
+        $section->delete();
+        return redirect()->route('sections.index')->with('success', 'Section supprimée avec succès');
     }
 
     public function getSubject($id){

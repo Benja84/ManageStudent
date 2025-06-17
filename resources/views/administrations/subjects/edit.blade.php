@@ -5,23 +5,24 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <form action="{{ route('subjects.store') }}" method="POST">
+                <form action="{{ route('subjects.update', $subject) }}" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="card-body">
                         <div class="form-group">
                             <label>Intitulé :</label>
-                            <input type="text" name="name" class="form-control" placeholder="ex: Histoire de l’art" required>
+                            <input type="text" name="name" class="form-control" value="{{ $subject->name }}" required>
                         </div>
 
                         <div class="form-group">
                             <label>Abréviation :</label>
-                            <input type="text" name="abbreviation" class="form-control" placeholder="ex: HDLA" required>
+                            <input type="text" name="abbreviation" class="form-control" value="{{ $subject->abbreviation }}" required>
                         </div>
 
                         <div class="card-footer">
                             <div class="mt-6 d-flex justify-content-between">
-                                <a href="{{ route('subjects.index') }}" class="btn btn-secondary btn-rounded">Annuler</a>
-                                <button type="submit" class="btn btn-success btn-rounded">Ajouter</button>
+                                <a href="{{ route('sections.index') }}" class="btn btn-secondary btn-rounded">Annuler</a>
+                                <button type="submit" class="btn btn-success btn-rounded">Mettre à jours</button>
                             </div>
                         </div>
                     </div>
@@ -30,10 +31,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
-    <script>
-    </script>
 @endsection
