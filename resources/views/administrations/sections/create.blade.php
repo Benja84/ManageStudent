@@ -16,6 +16,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Abréviation</label>
+                            <input type="text" class="form-control" name="abbreviation" placeholder="Ex: GL">
+                        </div>
                         
                         <div class="form-group mt-3">
                             <label>Matières</label>

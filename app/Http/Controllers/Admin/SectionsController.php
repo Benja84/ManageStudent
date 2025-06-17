@@ -33,8 +33,16 @@ class SectionsController extends Controller
         $title = "Ajouter une section";
         $page = "Sections";
         $subjects = Subject::all();
+        $attitudes = $attitudes = [
+            'Montage Video',
+            'SCIENCES ',
+            ' LETTRES ',
+            ' TECHNIQUE ',
+            ' GESTION ',
+            ' DROIT',
+        ];
 
-        return view('administrations.sections.create',compact('title','page','subjects'));
+        return view('administrations.sections.create',compact('title','page','subjects','attitudes'));
     }
 
     /**
