@@ -61,7 +61,7 @@
                           <label>Professeurs coordinateurs</label>
                           <select name="coordinator_id[]" class="select2 form-select shadow-none mt-3" multiple="multiple"
                           title="Sélectionner les professeurs coordinateurs">
-                            <option value="" selected hidden disabled>Séléctionner les professeurs coordinateurs</option>
+                            <option value="" hidden disabled>Séléctionner les professeurs coordinateurs</option>
                             @foreach($professors as $coordinator)
                               <option data-tokens="{{ $coordinator->user->firstname }} {{ $coordinator->user->lastname }}"
                                 @if(old('coordinator_id') && in_array($coordinator->id, old('coordinator_id'))) selected @php($selected = TRUE) @endif
@@ -76,7 +76,7 @@
                           <div class="col-md-12">
                             <select id="subject" name="subject_id[]" class="select2 form-select shadow-none" multiple="multiple"
                             title="Sélectionner les matières">
-                              <option value="" selected hidden disabled>Séléctionner les matières</option>
+                              <option value=""  hidden disabled>Séléctionner les matières</option>
                               @foreach($subjects as $subject)
                                 <option data-tokens="{{ $subject->name }}"
                                   @if(old('subject_id') && in_array($subject->id, old('subject_id'))) selected @php($selected = TRUE) @endif
@@ -111,7 +111,6 @@
           url: url,
           method: 'GET',
           success: function(response){
-            console.log('response',response);
             if(response.length){
               $('#subject').html('<option value="" disabled>Séléctionner les matières</option>');
               response.forEach(element => {

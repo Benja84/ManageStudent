@@ -44,7 +44,7 @@ class Professor extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'professor_subject')
+        return $this->belongsToMany(Subject::class, 'professor_subject','professor_id', 'subject_id')
                     ->using(ProfessorSubject::class)
                     ->withTimestamps()
                     ->withTrashed();

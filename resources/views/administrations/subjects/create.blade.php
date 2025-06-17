@@ -1,7 +1,6 @@
 @extends('layouts.base')
 
 @section('content')
-<div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -17,19 +16,17 @@
                             <label>Abréviation :</label>
                             <input type="text" name="abbreviation" class="form-control" placeholder="ex: HDLA" required>
                         </div>
-
-                        <div class="card-footer">
-                            <div class="mt-6 d-flex justify-content-between">
-                                <a href="{{ route('subjects.index') }}" class="btn btn-secondary btn-rounded">Annuler</a>
-                                <button type="submit" class="btn btn-success btn-rounded">Ajouter</button>
-                            </div>
+                    </div>
+                    <div class="card-footer mt-2">
+                        <div class="mt-6 d-flex justify-content-between">
+                            <a href="{{ route('subjects.index') }}" class="btn btn-secondary">Annuler</a>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @section('scripts')

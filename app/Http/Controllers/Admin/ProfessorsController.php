@@ -44,7 +44,7 @@ class ProfessorsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {dd($request);
+    {
         try {
             // Valide les données du formulaire
             $validated = $request->validate([
@@ -61,6 +61,7 @@ class ProfessorsController extends Controller
                 'zip_code' => 'required|string|max:20',
                 // 'country' => 'required|string|max:100',
             ]);
+            // dd($request);
 
             // Prépare les données validées
             $user = new User();
@@ -100,7 +101,7 @@ class ProfessorsController extends Controller
                 $prof->groups()->attach($request->group_id);
             }
             if($request->subject_id){
-                $prof->subjects()->syncWithoutDetaching($prof->id, 'subjects', $request->subject_id);
+                $prof->subjects()->syncWithoutDetaching($request->subject_id);
             }
             // Redirige vers la liste des professeurs avec un message de succès
             // return redirect()->route('professors.index')->with('success', 'Professeur ajouté avec succès');
@@ -156,5 +157,9 @@ class ProfessorsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getProfessorBySection(){
+        
     }
 }

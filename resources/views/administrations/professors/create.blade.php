@@ -396,7 +396,6 @@
                     const groupSelect = step1.querySelector('select[name="group_id[]"]');
                     // Extraire TOUTES les valeurs sélectionnées
                     const group_ids = Array.from(groupSelect.selectedOptions).map(option => option.value);
-                    
 
                     // Step2
                     const birthDate = step2.querySelector('input[name="birth_date"]').value;
@@ -412,8 +411,8 @@
                     formData.append('phone', phone);
                     formData.append('email', email);
                     formData.append('gender', gender);
-                    formData.append('subject_id[]', subject_ids);
-                    formData.append('group_id[]', group_ids);
+                    subject_ids.forEach(id => formData.append('subject_id[]', id));
+                    group_ids.forEach(id => formData.append('group_id[]', id));
 
                     // Add photo (already validated as required in Step 1)
                     formData.append('photo', photoUpload.files[0]);
@@ -427,14 +426,14 @@
                     })
                     .then(response => response)
                     .then(data => {
-                        if (data.success) {
+                        if (data.status === 201) {
                             window.location.href = data.redirect || '{{ route('professors.index') }}';
                         } else {
                             alert(data.message || 'Erreur lors de l\'enregistrement.');
                         }
                     })
                     .catch(error => {
-                        console.error('Erreur lors de la soumission:', error);
+                        console.log('Erreur lors de la soumission:', error);
                         alert('Une erreur est survenue lors de l\'enregistrement. Vérifiez la console.');
                     });
                 }
