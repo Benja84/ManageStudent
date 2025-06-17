@@ -105,17 +105,21 @@
       $("#section").on('change',function(){
         const value = $(this).val();
         const url = "{{ route('subject', ':value') }}".replace(':value', value);
-        $('#subject').html('<option value="" selected hidden disabled>Séléctionner les matières</option>');
+        
         console.log('url',url)
         $.ajax({
           url: url,
           method: 'GET',
           success: function(response){
             console.log('response',response);
-            response.forEach(element => {
-              $('#subject').append('<option data-tokens="'+element.subject.name+'" value="'+element.subject_id+'">'+element.subject.name+' ( '+element.subject.abbreviation+' )</option>');
-            });
-            
+            if(response.length){
+              $('#subject').html('<option value="" disabled>Séléctionner les matières</option>');
+              response.forEach(element => {
+                $('#subject').append('<option data-tokens="'+element.subject.name+'" value="'+element.subject_id+'">'+element.subject.name+' ( '+element.subject.abbreviation+' )</option>');
+              });
+            }else{
+              $('#subject').html('<option value="" disabled>Aucun matières trouvés</option>');
+            }
           }
         })
       });
