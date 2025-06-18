@@ -2,23 +2,6 @@
 @section('additional_css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/extra-libs/multicheck/multicheck.css') }}">
 <link  rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<style>
-    .dataTables_filter {
-        float: right !important;
-        text-align: right;
-    }
-
-    .dataTables_length {
-        float: left;
-    }
-
-    .dataTables_paginate {
-        float: right !important;
-    }
-    .dt-buttons {
-        margin-bottom: 15px;
-    }
-    </style>
 @endsection
 @section('content')
   <div class="row">
@@ -39,20 +22,20 @@
             <table id="liste_member" class="table table-striped table-bordered">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">PHOTO</th>
-                  <th scope="col">GENRE</th>
+                  {{-- <th scope="col">#</th> --}}
+                  <th class="sorting_disabled" scope="col">PHOTO</th>
+                  <th class="sorting_disabled" scope="col">GENRE</th>
                   <th scope="col">NOM</th>
                   <th scope="col">PRÉNOM</th>
                   <th scope="col">EMAIL</th>
                   <th scope="col">TELEPHONE</th>
-                  <th scope="col">ACTIONS</th>
+                  <th class="sorting_disabled" scope="col">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
                 @forelse ($members as $index => $member)
                   <tr>
-                    <td>{{ $member->id }}</td>
+                    {{-- <td>{{ $member->id }}</td> --}}
                     <td>
                         @if ($member->photo && file_exists(public_path('storage/' . $member->photo)))
                           <img src="{{ asset('storage/' . $member->photo) }}" alt="Photo de {{ $member->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
@@ -103,19 +86,25 @@
 @endsection
 @section('scripts')
 <!-- jQuery et DataTables -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>
 
 <!-- Initialisation -->
 <script>
     $(document).ready(function () {
+      const ulr_json = "{{asset('dist/fr-FR.json')}}";
         $('#liste_member').DataTable({
-            responsive: true,
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json"
+          responsive: true,
+          language: {
+              url: ulr_json
+          },
+          columnDefs: [
+            {
+              // Colonne photo (première colonne) non triable et non filtrable
+              targets: [0, 1, 6],
+              orderable: false,
+              searchable: false
             }
+          ],
         });
     });
 </script>

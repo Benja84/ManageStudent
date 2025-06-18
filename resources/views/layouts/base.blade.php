@@ -21,6 +21,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
     
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
+    <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/libs/toastr/build/toastr.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
@@ -327,12 +328,13 @@
 
 
 
-    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
-    <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
+    
+    {{-- <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script> --}}
     <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
     <script src="{{asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
     <script src="{{ asset('assets/libs/toastr/build/toastr.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
     <script>
         $('.datepicker').datepicker({
             autoclose: true,

@@ -97,6 +97,11 @@
 <script src="{{ asset('assets/libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
 <script src="{{ asset('assets/libs/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 <script>
+    $(document).ready(function(){
+        $('a[href="#previous"]').text('Precedent');
+        $('a[href="#next"]').text('Suivant');
+        $('a[href="#finish"]').text('Valider');
+    })
     var form = $("#example-form");
     form.validate({
         errorPlacement: function errorPlacement(error, element) {
