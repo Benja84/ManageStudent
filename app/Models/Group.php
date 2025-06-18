@@ -28,7 +28,7 @@ class Group extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)
+        return $this->belongsToMany(Subject::class,'group_subject','group_id','subject_id')
                     ->using(GroupSubject::class)
                     ->withTimestamps()
                     ->withTrashed();

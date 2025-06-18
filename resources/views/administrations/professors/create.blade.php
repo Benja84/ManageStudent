@@ -427,6 +427,7 @@
                     .then(response => response)
                     .then(data => {
                         if (data.status === 201) {
+                            toastr.success('Professeur enregistré avec succés','Success!');
                             window.location.href = data.redirect || '{{ route('professors.index') }}';
                         } else {
                             alert(data.message || 'Erreur lors de l\'enregistrement.');

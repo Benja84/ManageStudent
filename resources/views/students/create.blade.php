@@ -83,12 +83,13 @@
                         </div>
                         <div class="form-group mt-3">
                           <label>Groupe</label>
-                          <select name="group_id" class="select2 form-select shadow-none mt-3"
+                          <select name="group_id" class="form-select shadow-none mt-3 selectpicker"
                           title="Sélectionner le groupe">
+                          <option value="" selected disabled>Sélectionner le groupe</option>
                             @foreach($groups as $group)
-                              <option data-tokens="{{ $group->abbreviation }}"
+                              <option data-tokens="{{ $group->fullname }}"
                                 @if(old('group_id')) selected @php($selected = TRUE) @endif
-                                value="{{$group->id}}">{{ $group->abbreviation }}
+                                value="{{$group->id}}">{{ $group->fullname }}
                               </option>
                               @php($selected = FALSE)
                             @endforeach

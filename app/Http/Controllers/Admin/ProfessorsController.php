@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Group;
 use App\Models\Professor;
+use App\Models\ProfessorSubject;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -159,7 +160,8 @@ class ProfessorsController extends Controller
         //
     }
 
-    public function getProfessorBySection(){
-        
+    public function getProfSubject($id){
+        $subjects = ProfessorSubject::with('professor','subject.groups.section')->where('subject_id',$id)->get();
+        return $subjects;
     }
 }

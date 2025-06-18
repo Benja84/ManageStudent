@@ -118,4 +118,8 @@ class SubjectController extends Controller
 
         return redirect()->route('subjects.index')->with('success', 'Matière supprimée avec succès.');
     }
+
+    public function getProf($id){
+        return Subject::with('professors','groups.section')->find($id);
+    }
 }

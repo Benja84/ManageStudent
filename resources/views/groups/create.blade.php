@@ -76,14 +76,14 @@
                           <div class="col-md-12">
                             <select id="subject" name="subject_id[]" class="select2 form-select shadow-none" multiple="multiple"
                             title="Sélectionner les matières">
-                              <option value=""  hidden disabled>Séléctionner les matières</option>
+                              {{-- <option value=""  hidden disabled>Séléctionner les matières</option>
                               @foreach($subjects as $subject)
                                 <option data-tokens="{{ $subject->name }}"
                                   @if(old('subject_id') && in_array($subject->id, old('subject_id'))) selected @php($selected = TRUE) @endif
                                   value="{{$subject->id}}">{{ $subject->name }} ( {{ $subject->abbreviation }} )
                                 </option>
                                 @php($selected = FALSE)
-                              @endforeach
+                              @endforeach --}}
                             </select>
                           </div>
                         </div>

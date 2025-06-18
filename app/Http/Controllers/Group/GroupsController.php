@@ -60,13 +60,12 @@ class GroupsController extends Controller
         }
         
         $group = Group::create($data);
-        foreach ($request->subject_id as $key => $subject) {
-            $groupsubject = new GroupSubject();
-            $groupsubject->group_id = $group->id;
-            $groupsubject->subject_id = $subject;
-            $groupsubject->save();
+        if($request->subject_id ){
+            $group->subjects()->syncWithoutDetaching($request->subject_id);
+                
         }
         if($request->coordinator_id){
+            $group->coordinators()->attach($request->coordinator_id, ['status' => 'Coordinateur']);
             foreach ($request->coordinator_id as $prof_id){
                 $prof = Professor::find($prof_id);
                 $prof->user->assignRole('coordinator');
