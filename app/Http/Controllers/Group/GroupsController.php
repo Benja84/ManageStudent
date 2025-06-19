@@ -86,7 +86,12 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = "Editer un groupe";
+        $page = "Editer un groupe";
+        $sections = Section::all();
+        $group = Group::find($id);
+        dd($group);
+        return view('groups.edit',compact('title','page','sections','group'));
     }
 
     /**
@@ -97,7 +102,12 @@ class GroupsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = "Editer un groupe";
+        $page = "Editer un groupe";
+        $sections = Section::all();
+        $group = Group::find($id);
+        dd($group);
+        return view('groups.edit',compact('title','page','sections','group'));
     }
 
     /**
