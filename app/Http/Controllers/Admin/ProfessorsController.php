@@ -21,7 +21,10 @@ class ProfessorsController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Liste des professeurs";
+        $page = "Professeurs";
+        $profs = Professor::all();
+        return view('administrations.professors.index',compact('title','page','profs'));
     }
 
     /**

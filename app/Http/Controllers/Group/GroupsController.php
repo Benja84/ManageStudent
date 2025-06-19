@@ -20,7 +20,10 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Liste groupe";
+        $page = "Liste des groupes";
+        $groups = Group::with('section')->get();
+        return view('groups.index',compact('title','page','groups'));
     }
 
     /**

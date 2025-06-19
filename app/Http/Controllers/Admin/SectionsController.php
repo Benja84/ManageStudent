@@ -18,8 +18,8 @@ class SectionsController extends Controller
     public function index()
     {
         $sections = Section::all();
-        $title = "Ajouter du sections";
-        $page = "Membre";
+        $title = "Liste des sections";
+        $page = "Liste des sections";
         return view('administrations.sections.index', compact('sections', 'title', 'page'));
     }
 

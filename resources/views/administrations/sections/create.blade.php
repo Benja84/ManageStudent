@@ -1,18 +1,6 @@
 @extends('layouts.base')
 
 @section('content')
-    <?php
-        function yearth(int $number): string {
-            return match($number) {
-                1 => '1ère année',
-                2 => '2ème année',
-                3 => '3ème année',
-                4 => '4ème année',
-                5 => '5ème année',
-                default => $number . 'ème'
-            };
-        }
-    ?>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
