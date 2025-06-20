@@ -17,14 +17,14 @@
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label>Abréviation</label>
-                            <input class="form-control" type="text" value="{{ old('section_id') ?? '' }}" name="abbreviation" placeholder="ex: GL" required>
+                            <input class="form-control" type="text" value="{{ old('abbreviation') ?? '' }}" name="abbreviation" placeholder="ex: GL" required>
                         </div>
                         <div class="form-group mt-3">
                             <label>Section</label>
                             <select class="select2 form-select shadow-none" id="section" name="section_id" id="role" style="width: 100%; height:36px;">
                               <option value="" selected hidden disabled>Séléctionner la section</option>
                               @foreach($sections as $key => $section)
-                                <option value="{{ $section->id }}" @if(old('section_id') == $key) selected @endif>{{ $section->name }}</option>
+                                <option value="{{ $section->id }}" @if(old('section_id') == $section->id) selected @endif>{{ $section->name }}</option>
                               @endforeach
                             </select>
                         </div>
@@ -62,13 +62,13 @@
                           <select name="coordinator_id[]" class="select2 form-select shadow-none mt-3" multiple="multiple"
                           title="Sélectionner les professeurs coordinateurs">
                             <option value="" hidden disabled>Séléctionner les professeurs coordinateurs</option>
-                            {{-- @foreach($professors as $coordinator)
+                            @foreach($professors as $coordinator)
                               <option data-tokens="{{ $coordinator->user->firstname }} {{ $coordinator->user->lastname }}"
                                 @if(old('coordinator_id') && in_array($coordinator->id, old('coordinator_id'))) selected @php($selected = TRUE) @endif
                                 value="{{$coordinator->id}}">{{ $coordinator->user->firstname }} {{ $coordinator->user->lastname }}
                               </option>
                               @php($selected = FALSE)
-                            @endforeach --}}
+                            @endforeach
                           </select>
                         </div>
                         <div class="form-group mt-3">

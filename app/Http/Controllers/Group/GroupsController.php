@@ -8,6 +8,7 @@ use App\Models\GroupSubject;
 use App\Models\Professor;
 use App\Models\Section;
 use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -51,10 +52,10 @@ class GroupsController extends Controller
     {
         
         $data = $request->validate([
-            'abbreviation' => 'required',
-            'section_id' => 'required',
-            'school_year' => 'required',
-            'period_type' => 'required',
+            'abbreviation' => 'min:1|max:50|string|unique:groups,abbreviation',
+            'section_id'   => 'required|integer',
+            'school_year'  => 'required|min:9|max:9',
+            'period_type'  => 'required|in:trimestre,semestre',
         ]);
 
         $yearAbbreviations = $this->getYearAbreviation($request->school_year);
@@ -90,7 +91,6 @@ class GroupsController extends Controller
         $page = "Editer un groupe";
         $sections = Section::all();
         $group = Group::find($id);
-        dd($group);
         return view('groups.edit',compact('title','page','sections','group'));
     }
 
@@ -104,10 +104,11 @@ class GroupsController extends Controller
     {
         $title = "Editer un groupe";
         $page = "Editer un groupe";
-        $sections = Section::all();
-        $group = Group::find($id);
-        dd($group);
-        return view('groups.edit',compact('title','page','sections','group'));
+        $sections = Section::with('subjects')->get();
+        $professors = Professor::all();
+        $group = Group::with('coordinators','subjects')->find($id);
+    
+        return view('groups.edit',compact('title','page','sections','professors','group'));
     }
 
     /**
@@ -119,7 +120,37 @@ class GroupsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'abbreviation' => ['min:1','max:50','string',Rule::unique('groups')->ignore($id)],
+            'section_id'   => 'required|integer',
+            'school_year'  => 'required|min:9|max:9',
+            'period_type'  => 'required|in:trimestre,semestre',
+        ]);
+
+        $group = Group::find($id);
+        $group->update($data);
+        GroupSubject::where('group_id',$id)->delete();
+        if ($request->subject_id && is_array($request->subject_id)) {
+            $group->subjects()->syncWithoutDetaching($request->subject_id);
+        }
+
+        $coordinators = $group->coordinators();
+        if ($coordinators->count() > 0) {
+            foreach ($coordinators as $coordinator) {
+                User::getById($coordinator->user_id)->revokeGroup('coordinators');
+            }
+        }
+        $group->coordinators()->detach();
+
+        if($request->coordinator_id){
+            $group->coordinators()->attach($request->coordinator_id, ['status' => 'Coordinateur']);
+            foreach ($request->coordinator_id as $prof_id){
+                $prof = Professor::find($prof_id);
+                $prof->user->assignRole('coordinator');
+            }
+        }
+
+        return redirect()->route('groups.index')->with('success','Goupe modifié avec succés!');
     }
 
     /**
