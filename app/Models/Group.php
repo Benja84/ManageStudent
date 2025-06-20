@@ -34,6 +34,9 @@ class Group extends Model
                     ->withTrashed();
     }
 
+    /**
+     * Get all of the students that are assigned this group.
+     */
     public function students()
     {
         return $this
@@ -45,6 +48,9 @@ class Group extends Model
             ->select('students.*');
     }
 
+    /**
+     * Get all of the professors that are assigned to this group and are not coordinators.
+     */
     public function professors()
     {
         return $this->morphedByMany(Professor::class, 'groupable')

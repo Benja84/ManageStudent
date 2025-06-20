@@ -12,8 +12,9 @@
             <div class="alert alert-danger" role="alert">{{session('error')}}</div>
           @endif
             <div class="card">
-                <form action="{{ route('groups.update',$group->id) }}" method="PUT">
+                <form action="{{ route('groups.update',$group->id) }}" method="POST">
                     @csrf
+                    @method('PUT') 
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label>Abréviation</label>

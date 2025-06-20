@@ -42,6 +42,14 @@ class Professor extends Model
                     ->with('section');
     }
 
+    public function groupsCoordinator()
+    {
+        return $this->morphToMany(Group::class, 'groupable')
+                    ->withPivot('status')
+                    ->wherePivot('status', 'Coordinateur')
+                    ->with('section');
+    }
+
     public function subjects()
     {
         return $this->belongsToMany(Subject::class, 'professor_subject','professor_id', 'subject_id')

@@ -10,6 +10,7 @@ use App\Models\Section;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class GroupsController extends Controller
@@ -91,6 +92,7 @@ class GroupsController extends Controller
         $page = "Editer un groupe";
         $sections = Section::all();
         $group = Group::find($id);
+        dd($group);
         return view('groups.edit',compact('title','page','sections','group'));
     }
 
@@ -134,13 +136,31 @@ class GroupsController extends Controller
             $group->subjects()->syncWithoutDetaching($request->subject_id);
         }
 
-        $coordinators = $group->coordinators();
-        if ($coordinators->count() > 0) {
-            foreach ($coordinators as $coordinator) {
-                User::getById($coordinator->user_id)->revokeGroup('coordinators');
-            }
-        }
+        $oldUserIds = $group->coordinators->pluck('user_id')->filter()->toArray();
         $group->coordinators()->detach();
+        // Révoque les rôles des anciens coordinateurs
+
+        if (!empty($oldUserIds)) {
+            // 1. Trouver les users qui sont encore coordinateurs dans d'autres groupes
+            $usersStillCoordinators = DB::table('groupables')
+                ->join('professors', 'professors.id', '=', 'groupables.groupable_id')
+                ->where('groupables.groupable_type', Professor::class)
+                ->where('groupables.status', 'Coordinateur')
+                ->where('groupables.group_id', '<>', $group->id)
+                ->whereIn('professors.user_id', $oldUserIds)
+                ->pluck('professors.user_id')
+                ->unique()
+                ->toArray();
+
+            // 2. Calculer les users à qui retirer le rôle
+            $usersToRevoke = array_diff($oldUserIds, $usersStillCoordinators);
+
+            // 3. Retirer le rôle uniquement à ceux qui ne sont plus coordinateurs ailleurs
+            User::whereIn('id', $usersToRevoke)
+                ->each(function ($user) {
+                    $user->removeRole('coordinator');
+                });
+        }
 
         if($request->coordinator_id){
             $group->coordinators()->attach($request->coordinator_id, ['status' => 'Coordinateur']);
