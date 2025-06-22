@@ -13,10 +13,22 @@ class Section extends Model
         'name',
         'abbreviation',
         'promotion',
-        'niveau',
-        'year',
         'pricing',
+        'niveau',
     ];
+
+    // Ajoute un accessor pour obtenir la promotion en texte
+    public function getPromotionTextAttribute()
+    {
+        return match ($this->promotion) {
+            1 => '1ère année',
+            2 => '2ème année',
+            3 => '3ème année',
+            4 => '4ème année',
+            5 => '5ème année',
+            default => $this->promotion . 'ème année',
+        };
+    }
 
     public function subjects()
     {

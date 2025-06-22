@@ -42,7 +42,7 @@ class CoursesController extends Controller
         $professors = Professor::all();
         $groups = Group::all();
 
-        return view('administrations.courses.create',compact('title','page','subjects','rooms','professors','groups'));
+        return view('administrations.courses.create', compact('title', 'page', 'subjects', 'rooms', 'professors', 'groups'));
     }
 
     /**
@@ -83,21 +83,21 @@ class CoursesController extends Controller
             $messagesErrors['start_date'] .= 'Le groupe est déjà en cours dans cette période <br>';
         }
 
-        
+
         $inputDates = $this->avoidClosedDays($request);
 
         if (!empty($messagesErrors['start_date'])) {
             throw ValidationException::withMessages($messagesErrors);
         }
-        
+
         // Modifier la durée choisi en minutes
-        $duration = floatval($request->duration)*60 ."minutes";
+        $duration = floatval($request->duration) * 60 . "minutes";
         // Calculer l'heure fin à partir de l'heure du début choisi et la durée en minutes
         $heureFin = date('H:i', strtotime("$request->start_time + $duration"));
         $createdCourses  = [];
 
-        if(count($inputDates)){
-            foreach($inputDates as $date){
+        if (count($inputDates)) {
+            foreach ($inputDates as $date) {
                 $course = new Course();
                 $course->subject_id = $request->subject_id;
                 $course->professor_id = $request->professor_id;
@@ -169,7 +169,8 @@ class CoursesController extends Controller
     }
 
     // Récuperer le jour choisi entre deux dates
-    private function getDatesForDay($request) { 
+    private function getDatesForDay($request)
+    {
         $attributes = collect($request->all());
         $started_on = Carbon::createFromFormat('d/m/Y', $attributes->pull('start_date'));
         if (mb_strtolower($started_on->format('l')) != mb_strtolower($attributes->get('weekday'))) {
@@ -177,9 +178,9 @@ class CoursesController extends Controller
         } else {
             $started_on = $started_on->format('Y-m-d');
         }
-        
+
         $ended_on = Carbon::createFromFormat('d/m/Y', $attributes->pull('end_date'))->format('Y-m-d');
-        
+
         $period   = CarbonPeriod::create($started_on, CarbonInterval::week(), $ended_on);
         $dates    = $period->toArray();
         foreach ($dates as $key => $date) {
@@ -210,7 +211,7 @@ class CoursesController extends Controller
 
     public function getCoursesOfProfessor($professor_id)
     {
-        return Course::where('professor_id',$professor_id)->get();
+        return Course::where('professor_id', $professor_id)->get();
     }
     // Vérifier l'heure
     public function checkHours($request, $entityCourses, $commonDates, $message, $throw = TRUE)
@@ -239,7 +240,7 @@ class CoursesController extends Controller
     public function checkDatesRoom($request, $throw = TRUE)
     {
         $inputDates  = $this->getDatesForDay($request);
-        $roomCourses = Course::where('room_id',$request->get('room_id'))->get();
+        $roomCourses = Course::where('room_id', $request->get('room_id'))->get();
         $roomDates   = [];
         foreach ($roomCourses as $value) {
             $roomDates[] = $value->date;
@@ -256,7 +257,7 @@ class CoursesController extends Controller
     public function checkDatesGroup($request, $throw = TRUE)
     {
         $inputDates   = $this->getDatesForDay($request);
-        $groupCourses = Course::where('group_id',$request->get('group_id'))->get();
+        $groupCourses = Course::where('group_id', $request->get('group_id'))->get();
         $groupDates   = [];
         foreach ($groupCourses as $value) {
             $groupDates[] = $value->date;
@@ -304,7 +305,6 @@ class CoursesController extends Controller
         }
 
         $inputDates = array_flip($switchedInputdates);
-
 
         return $inputDates;
     }

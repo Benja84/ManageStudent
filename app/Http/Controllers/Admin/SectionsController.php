@@ -53,10 +53,9 @@ class SectionsController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'abbreviation' => 'required|string|max:50',
-            'promotion' => 'required|string|max:255',
-            'niveau' => 'required|string|max:255',
-            'year' => 'required|string|max:50',
+            'promotion' => 'required|integer|min:1|max:5',
             'pricing' => 'required|numeric|min:0',
+            'niveau' => 'required|string|max:100',
         ]);
 
         Section::create($validated);
@@ -109,9 +108,7 @@ class SectionsController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'abbreviation' => 'required|string|max:50',
-            'promotion' => 'required|string|max:255',
-            'year' => 'required|string|max:50',
-            'niveau' => 'required|string|max:255',
+            'promotion' => 'required|integer|min:1|max:5',
             'pricing' => 'required|numeric|min:0',
         ]);
 
@@ -128,7 +125,27 @@ class SectionsController extends Controller
      */
     public function destroy(Section $section)
     {
+        // Mamafa aloha ny groups (sy ireo dépendance)
+        foreach ($section->groups as $group) {
+            // mamafa ny courses an'ilay group
+            $group->courses()->delete();
+
+            // mamafa ny relation @ subjects amin'ny pivot group_subject
+            $group->subjects()->detach(); // Fa tsy delete()
+
+            // mamafa ilay group
+            $group->delete();
+        }
+
+        //mamafa ilay section
         $section->delete();
         return redirect()->route('sections.index')->with('success', 'Section supprimée avec succès');
     }
 }
+
+// // Supprimer tous les groups liés à cette section
+// foreach ($section->groups as $group) {
+//     // Supprimer tous les group_subjects liés à ce groupe
+//     $group->subjects()->detach(); // si many-to-many
+//     $group->delete();
+// }
