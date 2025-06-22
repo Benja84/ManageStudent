@@ -19,7 +19,9 @@
     <title>Student management</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
-
+    
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
+    <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/libs/toastr/build/toastr.min.css')}}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}">
@@ -40,10 +42,10 @@
                 <div class="navbar-header" data-logobg="skin5">
                     <a class="navbar-brand" href="index.html">
                         <b class="logo-icon ps-2">
-                            <img src="../../assets/images/logo-icon.png" alt="homepage" class="light-logo" />
+                            <img src="{{asset('assets/images/logo-icon.png')}}" alt="homepage" class="light-logo" />
                         </b>
                         <span class="logo-text">
-                            <img src="../../assets/images/logo-text.png" alt="homepage" class="light-logo" />
+                            <img src="{{asset('assets/images/logo-text.png')}}" alt="homepage" class="light-logo" />
                         </span>
                     </a>
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
@@ -60,7 +62,7 @@
                     <ul class="navbar-nav float-end">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="../../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31">
+                                <img src="{{asset('assets/images/users/1.jpg')}}" alt="user" class="rounded-circle" width="31">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('profile.edit') }}">
@@ -326,14 +328,13 @@
 
 
 
-    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
-    <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script>
-    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
+    
+    {{-- <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script> --}}
     <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
     <script src="{{asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
     <script src="{{ asset('assets/libs/toastr/build/toastr.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
     <script>
         $('.datepicker').datepicker({
             autoclose: true,

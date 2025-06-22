@@ -28,9 +28,53 @@ class Group extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)
+        return $this->belongsToMany(Subject::class, 'group_subject', 'group_id', 'subject_id')
             ->using(GroupSubject::class)
-            ->withTimestamps();
-        // ->withTrashed();
+            ->withTimestamps()
+            ->withTrashed();
+    }
+
+    /**
+     * Get all of the students that are assigned this group.
+     */
+    public function students()
+    {
+        return $this
+            ->morphedByMany(Student::class, 'groupable')
+            ->withPivot('status')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->orderBy('users.lastname')
+            ->select('students.*');
+    }
+
+    /**
+     * Get all of the professors that are assigned to this group and are not coordinators.
+     */
+    public function professors()
+    {
+        return $this->morphedByMany(Professor::class, 'groupable')
+            ->withPivot('status')
+            ->wherePivot('status', NULL)
+            ->with('user')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->orderBy('users.lastname')
+            ->select('professors.*');
+    }
+
+    public function coordinators()
+    {
+        return $this->morphedByMany(Professor::class, 'groupable')
+            ->withPivot('status')
+            ->wherePivot('status', 'Coordinateur')
+            ->with('user')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->orderBy('users.lastname')
+            ->select('professors.*');
+    }
+
+    public function getFullnameAttribute()
+    {
+        return "$this->abbreviation $this->school_year (Section {$this->section->abbreviation})";
     }
 }

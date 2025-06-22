@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Group;
 use App\Models\Professor;
+use App\Models\ProfessorSubject;
+use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +21,10 @@ class ProfessorsController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Liste des professeurs";
+        $page = "Professeurs";
+        $profs = Professor::all();
+        return view('administrations.professors.index',compact('title','page','profs'));
     }
 
     /**
@@ -30,7 +36,9 @@ class ProfessorsController extends Controller
     {
         $title = "Ajouter un prof";
         $page = "Prof";
-        return view('administrations.professors.create',compact('title','page'));
+        $subjects = Subject::all();
+        $groups = Group::with('section')->where('school_year', 'LIKE', '%' . date('Y') . '%')->get();
+        return view('administrations.professors.create',compact('title','page','subjects','groups'));
     }
 
     /**
@@ -44,25 +52,22 @@ class ProfessorsController extends Controller
         try {
             // Valide les données du formulaire
             $validated = $request->validate([
-                'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
                 'gender' => 'required|in:M,F',
                 'last_name' => 'required|string|max:255',
                 'first_name' => 'required|string|max:255',
-                'phone_country' => 'required|string',
                 'phone' => 'required|string|max:20',
                 'email' => 'required|email|unique:users,email',
-                // 'role' => 'required|string|max:255',
                 'birth_date' => 'required|date',
                 'birth_place' => 'required|string|max:255',
-                // 'nationality' => 'required|string|max:100',
+                'nationality' => 'required|string|max:100',
                 'address' => 'required|string|max:255',
                 'city' => 'required|string|max:100',
                 'zip_code' => 'required|string|max:20',
                 // 'country' => 'required|string|max:100',
             ]);
+            // dd($request);
 
             // Prépare les données validées
-            // $data = $validated;
             $user = new User();
             $user->gender = $validated['gender'];
             $user->firstname = $validated['first_name'];
@@ -96,7 +101,12 @@ class ProfessorsController extends Controller
 
             // Crée un nouveau professeur avec les données
             $prof = Professor::create($data);
-
+            if($request->group_id){
+                $prof->groups()->attach($request->group_id);
+            }
+            if($request->subject_id){
+                $prof->subjects()->syncWithoutDetaching($request->subject_id);
+            }
             // Redirige vers la liste des professeurs avec un message de succès
             // return redirect()->route('professors.index')->with('success', 'Professeur ajouté avec succès');
             return $prof;
@@ -151,5 +161,10 @@ class ProfessorsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getProfSubject($id){
+        $subjects = ProfessorSubject::with('professor','subject.groups.section')->where('subject_id',$id)->get();
+        return $subjects;
     }
 }

@@ -45,37 +45,37 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title fw-bold text-white text-center fw-bold" id="eventHeader"></h3>
+                <h4 class="modal-title fw-bold text-white text-center" id="eventHeader"></h4>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> --}}
             </div>
             <div class="modal-body">
-                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
-                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-book-open-page-variant "></i></div>
-                    <div class="text-white mt-2" id="eventCourse" style="font-size: 20px"></div>
+                <div class=" mb-3 d-flex" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 25px"><i class="mdi mdi-book-open-page-variant "></i></div>
+                    <div class="text-white mt-2" id="eventCourse" style="font-size: 15px"></div>
                 </div>
-                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
-                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-clipboard-account"></i></div>
-                    <div class="col-10 text-white mt-2" id="eventTeacher" style="font-size: 20px"></div>
+                <div class=" mb-3 d-flex " style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 25px"><i class="mdi mdi-clipboard-account"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventTeacher" style="font-size: 15px"></div>
                 </div>
-                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
-                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-calendar"></i></div>
-                    <div class="col-10 text-white mt-2" id="eventDate" style="font-size: 20px"></div>
+                <div class=" mb-3 d-flex" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 25px"><i class="mdi mdi-calendar"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventDate" style="font-size: 15px"></div>
                 </div>
-                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
-                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-timer"></i></div>
-                    <div class="col-10 text-white mt-2" id="eventTime" style="font-size: 20px"></div>
+                <div class=" mb-3 d-flex" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 25px"><i class="mdi mdi-timer"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventTime" style="font-size: 15px"></div>
                 </div>
-                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
-                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-account-switch"></i></div>
-                    <div class="col-10 text-white mt-2" id="eventClass" style="font-size: 20px"></div>
+                <div class=" mb-3 d-flex" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 25px"><i class="mdi mdi-account-switch"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventClass" style="font-size: 15px"></div>
                 </div>
-                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: blue; ">
-                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-home-modern"></i></div>
-                    <div class="col-10 text-white mt-2" id="eventLocation" style="font-size: 20px"></div>
+                <div class=" mb-3 d-flex" style="border-radius: 5px;background-color: blue; ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 25px"><i class="mdi mdi-home-modern"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventLocation" style="font-size: 15px"></div>
                 </div>
-                <div class=" mb-3 d-flex p-2" style="border-radius: 5px;background-color: rgb(19, 150, 41); ">
-                    <div class="text-end fw-bold text-white px-3" style="font-size: 30px"><i class="mdi mdi-bookmark"></i></div>
-                    <div class="col-10 text-white mt-2" id="eventLocation" style="font-size: 20px">Appel</div>
+                <div class=" mb-3 d-flex" style="border-radius: 5px;background-color: rgb(19, 150, 41); ">
+                    <div class="text-end fw-bold text-white px-3" style="font-size: 25px"><i class="mdi mdi-bookmark"></i></div>
+                    <div class="col-10 text-white mt-2" id="eventLocation" style="font-size: 15px">Appel</div>
                 </div>
             </div>
             <div class="modal-footer">

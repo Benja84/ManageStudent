@@ -30,12 +30,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 // voire profile
 // Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::resource('/roles',RoleController::class);
@@ -45,10 +43,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/members/export/pdf', [MembersController::class, 'exportPDF'])->name('members.export.pdf');
     Route::resource('/professors', ProfessorsController::class);
     Route::resource('/courses', CoursesController::class);
-    Route::resource('/subjects', SubjectController::class);
-    Route::resource('/sections', SectionsController::class);
-    Route::resource('/rooms', RoomsController::class);
-    Route::resource('/closedays', CloseDayController::class);
+    Route::resource('/subjects',SubjectController::class);
+    Route::resource('/sections',SectionsController::class);
+    Route::resource('/rooms',RoomsController::class);
+    Route::resource('/closedays',CloseDayController::class);
+    Route::get('/subject/{id}',[SectionsController::class,'getSubject'])->name('subject');
+    // Route::get('/professorSubject/{subject_id}',[ProfessorsController::class,'getProfSubject'])->name('professorSubject');
+    Route::get('/professorSubject/{subject_id}',[SubjectController::class,'getProf'])->name('professorSubject');
 });
 
 Route::middleware(['auth'])->group(function () {

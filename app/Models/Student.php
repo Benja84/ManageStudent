@@ -24,4 +24,9 @@ class Student extends Model
     public function advisor(){
         return $this->belongsTo(Advisor::class);
     }
+
+    public function groups()
+    {
+        return $this->morphToMany(Group::class, 'groupable')->withPivot('status');
+    }
 }

@@ -40,7 +40,7 @@ class CarbonServiceProvider extends ServiceProvider
     {
         try {
             if (Schema::hasTable('close_days')) {
-                if (empty(self::$frenchHolidays)) {
+                if (empty(self::$generalHolidays)) {
                     self::$generalHolidays = app(CloseDay::class)->where('type', 'general_holiday')->pluck('date')->toArray();
                 }
                 if (empty(self::$schoolHoliDays)) {

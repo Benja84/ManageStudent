@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{csrf_token()}}">
-    <title>Ajouter un membre du personnel</title>
+
+    @extends('layouts.base')
+    @section('aditionnal_css')
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         .progress-container {
@@ -37,7 +33,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.3s ease;
             border-radius: 50%;
         }
@@ -48,146 +44,159 @@
             display: none;
         }
     </style>
-</head>
-<body class="bg-purple-100 p-6">
-    @extends('layouts.base')
-
+    @endsection
     @section('content')
-    <div class="container mx-auto">
-        <div class="flex justify-between mb-4">
-            <h2 class="text-xl font-bold">Ajouter un membre du personnel</h2>
-            <div>
-                <a href="#" class="text-blue-500 mr-2">Accueil</a> >
-                <a href="#" class="text-blue-500 mr-2">Membres du personnel</a> >
-                <a href="#" class="text-blue-500">Ajouter un membre du personnel</a>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    {{-- <div class="flex justify-between mb-4">
+                        <h2 class="text-xl font-bold">Ajouter un membre du personnel</h2>
+                        <div>
+                            <a href="#" class="text-blue-500 mr-2">Accueil</a> >
+                            <a href="#" class="text-blue-500 mr-2">Membres du personnel</a> >
+                            <a href="#" class="text-blue-500">Ajouter un membre du personnel</a>
+                        </div>
+                    </div> --}}
+
+                    
+                    <div class="flex  mb-4">
+                        <h2 class="text-gray w-1/2">1 Identité</h2>
+                        <h2 class="text-gray">2 Informations</h2>
+                    </div>
+                    <!-- Progress Bar -->
+                    <div class="progress-container mb-6">
+                        <div id="progress-bar" class="w-1/2" style="height: 8px; background-color: #3b82f6; transition: width 0.3s ease-in-out;"></div>
+                        <div class="flex-1 bg-gray-200" style="height: 8px;"></div>
+                    </div>
+
+                    <!-- Step 1: Identity -->
+                    <form id="step1" class="bg-white p-6 rounded shadow" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-4">
+                            <div class="w-1/4 flex mb-3">
+                                <div class="profile-pic-container mr-4">
+                                    <img id="profile-pic" src="https://via.placeholder.com/100?text=Profile" alt="" class="profile-pic">
+                                    <label for="photo-upload" class="upload-overlay cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h4l2-2h2l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                    </label>
+                                    <input id="photo-upload" type="file" name="photo" accept="image/*" class="upload-input">
+                                </div>
+                                
+                                <div class="flex space-x-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="gender" value="M" class="form-radio" checked>
+                                        <span class="ml-2 text-gray-700">Masculin</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="gender" value="F" class="form-radio">
+                                        <span class="ml-2 text-gray-700">Féminin</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="w-4/4">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-gray-700">Nom</label>
+                                        <input type="text" name="last_name" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700">Prénom</label>
+                                        <input type="text" name="first_name" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700">Portable</label>
+                                        <input type="tel" name="phone" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700">Email</label>
+                                        <input type="email" name="email" class="w-full p-2 border rounded">
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700">Matières pouvant être enseignées</label>
+                                        <select name="subject_id[]" class="select2 form-select" multiple placeholder="Selectionner les matières">
+                                            <option value=""  disabled>Selectionner les matières</option>
+                                            @foreach($subjects as $subject)
+                                            <option value="{{$subject->id}}" data-token="{{$subject->name}} ({{$subject->abbreviation}})">{{$subject->name}} ({{$subject->abbreviation}})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700">Affectation aux groupes</label>
+                                        <select name="group_id[]" class="select2 form-select selectpicker" multiple placeholder="Selectionner les groupes" title="Sélectionner les groupes">
+                                            <option value=""  disabled>Selectionner les groupes</option>
+                                            @foreach($groups as $group)
+                                            <option value="{{$group->id}}" data-token="{{$group->fullname}}">{{$group->fullname}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between mt-6">
+                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded">Précédent</button>
+                            <button type="button" id="nextBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Suivant</button>
+                        </div>
+                    </form>
+
+                    <!-- Step 2: Information -->
+                    <form id="step2" action="{{ route('professors.store') }}" method="POST" class="bg-white p-6 rounded shadow mt-6 hidden" enctype="multipart/form-data">
+                        @csrf
+                        <div class="space-y-4">
+                            <div class="flex space-x-4">
+                                <div class="w-1/3">
+                                    <label class="block text-gray-700">Naissance</label>
+                                    <input type="date" name="birth_date" class="w-full p-2 border rounded">
+                                </div>
+                                <div class="w-1/3">
+                                    <label class="block text-gray-700">Lieu de naissance</label>
+                                    <input type="text" name="birth_place" class="w-full p-2 border rounded">
+                                </div>
+                                <div class="w-1/3">
+                                    <label class="block text-gray-700">Nationalité</label>
+                                    <select name="nationality" class="w-full p-2 border rounded">
+                                        <option value="France">Francaise</option>
+                                        <option value="Malagasy">Malagasy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex space-x-4">
+                                <div class="w-1/3">
+                                    <label class="block text-gray-700">Adresse</label>
+                                    <input type="text" name="address" class="w-full p-2 border rounded">
+                                </div>
+                                <div class="w-1/3">
+                                    <label class="block text-gray-700">Ville</label>
+                                    <input type="text" name="city" class="w-full p-2 border rounded">
+                                </div>
+                                <div class="w-1/3">
+                                    <label class="block text-gray-700">Code postal</label>
+                                    <input type="text" name="zip_code" class="w-full p-2 border rounded">
+                                </div>
+                                <div class="w-1/3">
+                                    <label class="block text-gray-700">Pays</label>
+                                    <select name="country" class="w-full p-2 border rounded">
+                                        <option value="France">France</option>
+                                        <option value="Madagascar">Madagascar</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between mt-6">
+                            <button type="button" id="prevBtn" class="bg-gray-500 text-white px-4 py-2 ">Précédent</button>
+                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 ">Enregistrer</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-
-        <!-- Progress Bar -->
-        <div class="progress-container mb-6">
-            <div id="progress-bar" class="w-1/2" style="height: 8px; background-color: #3b82f6; transition: width 0.3s ease-in-out;"></div>
-            <div class="flex-1 bg-gray-200" style="height: 8px;"></div>
-        </div>
-        <div class="flex justify-between mb-4">
-            <h3 class="text-gray-700">1. Identité</h3>
-            <h3 class="text-gray-400">2. Informations</h3>
-        </div>
-
-        <!-- Step 1: Identity -->
-        <form id="step1" class="bg-white p-6 rounded shadow" enctype="multipart/form-data">
-            @csrf
-            <div class="flex mb-4">
-                <div class="w-1/4">
-                    <div class="profile-pic-container">
-                        <img id="profile-pic" src="https://via.placeholder.com/100?text=Profile" alt="Profile" class="profile-pic">
-                        <label for="photo-upload" class="upload-overlay cursor-pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h4l2-2h2l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </label>
-                        <input id="photo-upload" type="file" name="photo" accept="image/*" class="upload-input">
-                    </div>
-                </div>
-                <div class="w-3/4">
-                    <div class="flex space-x-4 mb-4">
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="gender" value="F" class="form-radio">
-                            <span class="ml-2 text-gray-700">Féminin</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="gender" value="M" class="form-radio">
-                            <span class="ml-2 text-gray-700">Masculin</span>
-                        </label>
-                    </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-gray-700">Nom</label>
-                            <input type="text" name="last_name" class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-gray-700">Prénom</label>
-                            <input type="text" name="first_name" class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-gray-700">Portable</label>
-                            <select name="phone_country" class="w-80 p-2 border rounded mt-1">
-                                <option value="+33">+33 (France)</option>
-                                <option value="+261">+261 (Madagascar)</option>
-                            </select>
-                            <input type="tel" name="phone" class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-gray-700">Email</label>
-                            <input type="email" name="email" class="w-full p-2 border rounded">
-                        </div>
-                        <div>
-                            <label class="block text-gray-700">Role</label>
-                            <select name="role" class="w-100 p-2 border rounded mt-1">
-                                <option value="Secrétaire">Secrétaire</option>
-                                <option value="Administrateur -trice">Administrateur -trice</option>
-                                <option value="Conseiller -ère">Conseiller -ère</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-between mt-6">
-                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded">Précédent</button>
-                <button type="button" id="nextBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Suivant</button>
-            </div>
-        </form>
-
-        <!-- Step 2: Information -->
-        <form id="step2" action="{{ route('professors.store') }}" method="POST" class="bg-white p-6 rounded shadow mt-6 hidden" enctype="multipart/form-data">
-            @csrf
-            <div class="space-y-4">
-                <div class="flex space-x-4">
-                    <div class="w-1/3">
-                        <label class="block text-gray-700">Naissance</label>
-                        <input type="date" name="birth_date" class="w-full p-2 border rounded">
-                    </div>
-                    <div class="w-1/3">
-                        <label class="block text-gray-700">Lieu de naissance</label>
-                        <input type="text" name="birth_place" class="w-full p-2 border rounded">
-                    </div>
-                    <div class="w-1/3">
-                        <label class="block text-gray-700">Nationalité</label>
-                        <select name="nationality" class="w-full p-2 border rounded">
-                            <option value="France">Francaise</option>
-                            <option value="Malagasy">Malagasy</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="flex space-x-4">
-                    <div class="w-1/3">
-                        <label class="block text-gray-700">Adresse</label>
-                        <input type="text" name="address" class="w-full p-2 border rounded">
-                    </div>
-                    <div class="w-1/3">
-                        <label class="block text-gray-700">Ville</label>
-                        <input type="text" name="city" class="w-full p-2 border rounded">
-                    </div>
-                    <div class="w-1/3">
-                        <label class="block text-gray-700">Code postal</label>
-                        <input type="text" name="zip_code" class="w-full p-2 border rounded">
-                    </div>
-                    <div class="w-1/3">
-                        <label class="block text-gray-700">Pays</label>
-                        <select name="country" class="w-full p-2 border rounded">
-                            <option value="France">France</option>
-                            <option value="Madagascar">Madagascar</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-between mt-6">
-                <button type="button" id="prevBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Précédent</button>
-                <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Enregistrer</button>
-            </div>
-        </form>
     </div>
-
+@endsection
+@section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const step1 = document.getElementById('step1');
@@ -249,9 +258,8 @@
                     const phone = step1.querySelector('input[name="phone"]').value.trim();
                     const email = step1.querySelector('input[name="email"]').value.trim();
                     const gender = step1.querySelector('input[name="gender"]:checked');
-                    const phoneCountry = step1.querySelector('select[name="phone_country"]').value;
-                    const role = step1.querySelector('select[name="role"]').value;
                     const photo = photoUpload.files[0];
+                    
 
                     // Check for missing fields
                     if (!lastName) {
@@ -272,14 +280,6 @@
                     }
                     if (!gender) {
                         alert("Le champ 'Genre' est requis.");
-                        return false;
-                    }
-                    if (!phoneCountry) {
-                        alert("Le champ 'Code pays pour le téléphone' est requis.");
-                        return false;
-                    }
-                    if (!role) {
-                        alert("Le champ 'Rôle' est requis.");
                         return false;
                     }
                     if (!photo) {
@@ -319,7 +319,6 @@
                     const city = step2.querySelector('input[name="city"]').value.trim();
                     const zipCode = step2.querySelector('input[name="zip_code"]').value.trim();
                     const country = step2.querySelector('select[name="country"]').value;
-
                     // Check for missing fields
                     if (!birthDate) {
                         alert("Le champ 'Naissance' est requis.");
@@ -388,8 +387,15 @@
                     const phone = step1.querySelector('input[name="phone"]').value;
                     const email = step1.querySelector('input[name="email"]').value;
                     const gender = step1.querySelector('input[name="gender"]:checked')?.value;
-                    const phoneCountry = step1.querySelector('select[name="phone_country"]').value;
-                    const role = step1.querySelector('select[name="role"]').value;
+                    // Récupérer l'élément <select> pour subject_id
+                    const subjectSelect = step1.querySelector('select[name="subject_id[]"]');
+                    // Extraire TOUTES les valeurs sélectionnées
+                    const subject_ids = Array.from(subjectSelect.selectedOptions).flatMap(option => option.value.split(',').map(v => v.trim()));
+
+                    // Récupérer l'élément <select> pour group_id
+                    const groupSelect = step1.querySelector('select[name="group_id[]"]');
+                    // Extraire TOUTES les valeurs sélectionnées
+                    const group_ids = Array.from(groupSelect.selectedOptions).map(option => option.value);
 
                     // Step2
                     const birthDate = step2.querySelector('input[name="birth_date"]').value;
@@ -405,8 +411,8 @@
                     formData.append('phone', phone);
                     formData.append('email', email);
                     formData.append('gender', gender);
-                    formData.append('phone_country', phoneCountry);
-                    formData.append('role', role);
+                    subject_ids.forEach(id => formData.append('subject_id[]', id));
+                    group_ids.forEach(id => formData.append('group_id[]', id));
 
                     // Add photo (already validated as required in Step 1)
                     formData.append('photo', photoUpload.files[0]);
@@ -415,19 +421,20 @@
                         method: 'POST',
                         body: formData,
                         headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                         }
                     })
                     .then(response => response)
                     .then(data => {
-                        if (data.success) {
+                        if (data.status === 201) {
+                            toastr.success('Professeur enregistré avec succés','Success!');
                             window.location.href = data.redirect || '{{ route('professors.index') }}';
                         } else {
                             alert(data.message || 'Erreur lors de l\'enregistrement.');
                         }
                     })
                     .catch(error => {
-                        console.error('Erreur lors de la soumission:', error);
+                        console.log('Erreur lors de la soumission:', error);
                         alert('Une erreur est survenue lors de l\'enregistrement. Vérifiez la console.');
                     });
                 }
@@ -435,5 +442,3 @@
         });
     </script>
     @endsection
-</body>
-</html>

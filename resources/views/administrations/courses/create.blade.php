@@ -25,7 +25,7 @@
                         <h5 class="card-title mb-0">Ajouter un cours</h5>
                         <div class="form-group mt-3">
                             <label>Matière</label>
-                            <select class="select2 form-select shadow-none" name="subject_id">
+                            <select class="select2 form-select shadow-none" name="subject_id" id="subject">
                                 <option value="" selected disabled>Séléctionner une matière</option>
                                 @foreach($subjects as $subject)
                                     <option value="{{ $subject->id }}"  @if(old('subject_id') == $subject->id) selected @endif>{{ $subject->name }}</option>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group mt-3">
                             <label>Professeur</label>
-                            <select class="select2 form-select shadow-none" name="professor_id">
+                            <select class="select2 form-select shadow-none" name="professor_id" id="professor">
                                 <option value="" selected disabled>Séléctionner un prof</option>
                                 @foreach($professors as $prof)
                                     <option value="{{ $prof->id }}" @if(old('professor_id') == $prof->id) selected @endif>{{ $prof->user->firstname }} {{ $prof->user->lastname }}</option>
@@ -52,8 +52,8 @@
                         </div>
                         <div class="form-group mt-3">
                             <label>Group</label>
-                            <select class="select2 form-select shadow-none" name="group_id">
-                                <option value="" selected hidden disabled>Séléctionner un groupe</option>
+                            <select class="select2 form-select shadow-none" name="group_id" id="group">
+                                <option value="" selected disabled>Séléctionner un groupe</option>
                                 @foreach($groups as $group)
                                     <option value="{{ $group->id }}"  @if(old('group_id') == $group->id) selected @endif>{{ $group->abbreviation }}</option>
                                 @endforeach
@@ -115,6 +115,34 @@
             errors.forEach(error => {
                 toastr.error(error +'.', 'Erreur!');
             });
+            $('#subject').on('change',function(){
+                const subject = $(this).val();
+                const url = "{{ route('professorSubject', ':value') }}".replace(':value', subject);
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(response){
+                        console.log('response',response)
+                        if(response){
+                            if(response.professors.length){
+                                $('#professor').html('<option value="" selected disabled>Séléctionner le prof</option>');
+                                response.professors.forEach(prof => {
+                                    $('#professor').append('<option value="'+prof.id+'" data-tokens="'+prof.user.firstname+' '+prof.user.lastname+'">'+prof.user.firstname+' '+prof.user.lastname+'</option>');
+                                });
+                            }
+                            if(response.groups.length){
+                                $('#group').html('<option value="" selected disabled>Séléctionner un groupe</option>')
+                                response.groups.forEach(group => {
+                                    $('#group').append('<option value="'+group.id+'" data-tokens="'+group.abbreviation+' '+group.school_year+' ( Section '+group.section.name+')">'+group.abbreviation+' '+group.school_year+' ( Section '+group.section.name+')</option>')
+                                })
+                            }
+                        }else{
+                            $('#professor').html('<option value="" disabled>Aucun professeurs trouvés</option>');
+                            $('#group').html('<option value="" disabled>Aucun groupes trouvés</option>');
+                        }
+                    }
+                })
+            })
             $('.start_time').on('change',function (){
                 if(isValidTime($(this).val())){
                     const valide = checkTimeWithDetails($(this).val());

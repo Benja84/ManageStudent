@@ -12,19 +12,20 @@
             <div class="alert alert-danger" role="alert">{{session('error')}}</div>
           @endif
             <div class="card">
-                <form action="{{ route('groups.store') }}" method="POST">
+                <form action="{{ route('groups.update',$group->id) }}" method="POST">
                     @csrf
+                    @method('PUT') 
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label>Abréviation</label>
-                            <input class="form-control" type="text" value="{{ old('abbreviation') ?? '' }}" name="abbreviation" placeholder="ex: GL" required>
+                            <input class="form-control" type="text" value="{{ $group->abbreviation }}" name="abbreviation" placeholder="ex: GL" required>
                         </div>
                         <div class="form-group mt-3">
                             <label>Section</label>
                             <select class="select2 form-select shadow-none" id="section" name="section_id" id="role" style="width: 100%; height:36px;">
                               <option value="" selected hidden disabled>Séléctionner la section</option>
-                              @foreach($sections as $key => $section)
-                                <option value="{{ $section->id }}" @if(old('section_id') == $section->id) selected @endif>{{ $section->name }}</option>
+                              @foreach($sections as $section)
+                                <option value="{{ $section->id }}" @if($group->section_id == $section->id) selected @endif>{{ $section->name }}</option>
                               @endforeach
                             </select>
                         </div>
@@ -35,7 +36,7 @@
                             <option value="" selected hidden disabled>Séléctionner l'année scolaire</option>
                             @foreach ($schoolYears as $year)
                               <option class="form-control" data-tokens="{{ $year }}"
-                                @if(old('school_year') == $year) @php($selected = TRUE) selected @endif
+                                @if($group->school_year == $year) @php($selected = TRUE) selected @endif
                                 value="{{ $year }}">{{ $year }}</option>
                               @php($selected = FALSE)
                             @endforeach
@@ -64,7 +65,7 @@
                             <option value="" hidden disabled>Séléctionner les professeurs coordinateurs</option>
                             @foreach($professors as $coordinator)
                               <option data-tokens="{{ $coordinator->user->firstname }} {{ $coordinator->user->lastname }}"
-                                @if(old('coordinator_id') && in_array($coordinator->id, old('coordinator_id'))) selected @php($selected = TRUE) @endif
+                                @if($group->coordinators && $group->coordinators->contains($coordinator->id)) selected @php($selected = TRUE) @endif
                                 value="{{$coordinator->id}}">{{ $coordinator->user->firstname }} {{ $coordinator->user->lastname }}
                               </option>
                               @php($selected = FALSE)
@@ -76,21 +77,21 @@
                           <div class="col-md-12">
                             <select id="subject" name="subject_id[]" class="select2 form-select shadow-none" multiple="multiple"
                             title="Sélectionner les matières">
-                              {{-- <option value=""  hidden disabled>Séléctionner les matières</option>
-                              @foreach($subjects as $subject)
+                              <option value=""   disabled>Séléctionner les matières</option>
+                              @foreach($group->section->subjects as $subject)
                                 <option data-tokens="{{ $subject->name }}"
-                                  @if(old('subject_id') && in_array($subject->id, old('subject_id'))) selected @php($selected = TRUE) @endif
+                                  @if($group->subjects && $group->subjects->contains($subject->id)) selected @php($selected = TRUE) @endif
                                   value="{{$subject->id}}">{{ $subject->name }} ( {{ $subject->abbreviation }} )
                                 </option>
                                 @php($selected = FALSE)
-                              @endforeach --}}
+                              @endforeach
                             </select>
                           </div>
                         </div>
                     </div>
                     <div class="card-footer">
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                            <button type="submit" class="btn btn-primary">Valider</button>
                         </div>
                     </div>
                 </form>
@@ -102,6 +103,7 @@
 @section('scripts')
     <script src="{{ asset('assets/libs/inputmask/dist/min/jquery.inputmask.bundle.min.js')}}"></script>
     <script>
+      let subjects = @json($group->subjects);
       $("#section").on('change',function(){
         const value = $(this).val();
         const url = "{{ route('subject', ':value') }}".replace(':value', value);
@@ -114,7 +116,7 @@
             if(response.length){
               $('#subject').html('<option value="" disabled>Séléctionner les matières</option>');
               response.forEach(element => {
-                $('#subject').append('<option data-tokens="'+element.subject.name+'" value="'+element.subject_id+'">'+element.subject.name+' ( '+element.subject.abbreviation+' )</option>');
+                $('#subject').append('<option data-tokens="'+element.subject.name+'" value="'+element.subject_id+'" ' +(subjects.some(item => item.id === element.subject.id) ? 'selected' : '') +'>'+element.subject.name+' ( '+element.subject.abbreviation+' )</option>');
               });
             }else{
               $('#subject').html('<option value="" disabled>Aucun matières trouvés</option>');

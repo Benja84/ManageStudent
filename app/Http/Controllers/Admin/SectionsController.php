@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Models\SectionSubject;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class SectionsController extends Controller
@@ -16,8 +18,8 @@ class SectionsController extends Controller
     public function index()
     {
         $sections = Section::all();
-        $title = "Ajouter du sections";
-        $page = "Membre";
+        $title = "Liste des sections";
+        $page = "Liste des sections";
         return view('administrations.sections.index', compact('sections', 'title', 'page'));
     }
 
@@ -28,7 +30,10 @@ class SectionsController extends Controller
      */
     public function create()
     {
-        $attitudes = [
+        $title = "Ajouter une section";
+        $page = "Sections";
+        $subjects = Subject::all();
+        $attitudes = $attitudes = [
             'Montage Video',
             'SCIENCES ',
             ' LETTRES ',
@@ -36,10 +41,8 @@ class SectionsController extends Controller
             ' GESTION ',
             ' DROIT',
         ];
-        $title = "Crée une section";
-        $page = "Membre";
 
-        return view('administrations.sections.create', compact('attitudes', 'title', 'page'));
+        return view('administrations.sections.create', compact('title', 'page', 'subjects', 'attitudes'));
     }
 
     /**
@@ -50,17 +53,22 @@ class SectionsController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'abbreviation' => 'required|string|max:50',
-            'promotion' => 'required|integer|min:1|max:5',
-            'pricing' => 'required|numeric|min:0',
-            'niveau' => 'required|string|max:100',
+        $request->validate([
+            'name' => 'required',
+            'abbreviation' => 'required',
+            'promotion' => 'required',
+            'subject_id' => 'required'
         ]);
 
-        Section::create($validated);
+        $section = Section::create($request->all());
+        foreach ($request->subject_id as $key => $subject) {
+            SectionSubject::create([
+                'section_id' => $section->id,
+                'subject_id' => $subject,
+            ]);
+        }
 
-        return redirect()->route('sections.index')->with('success', 'Section créée avec succès');
+        return redirect()->route('sections.create')->with('success', 'Section créé avec succés');
     }
 
     /**
@@ -140,6 +148,12 @@ class SectionsController extends Controller
         //mamafa ilay section
         $section->delete();
         return redirect()->route('sections.index')->with('success', 'Section supprimée avec succès');
+    }
+
+    public function getSubject($id)
+    {
+        $subjects = SectionSubject::with('subject')->where('section_id', $id)->get();
+        return $subjects;
     }
 }
 

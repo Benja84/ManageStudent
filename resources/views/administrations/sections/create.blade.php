@@ -23,6 +23,7 @@
                 <form action="{{ route('sections.store') }}" method="POST">
                     @csrf
                     <div class="card-body">
+<<<<<<< HEAD
                         <h5 class="card-title mb-0">Ajouter une sections</h5>
                         <div class="form-group mt-3">
                             <label>Intitulé</label>
@@ -40,10 +41,41 @@
                                 <option value="Portable">Master</option>
                             </select>
                         </div>
+=======
+                        <div class="mb-3">
+                            <label class="form-label">Nom de la section</label>
+                            <select name="name" class="form-select" required>
+                                <option value="">Sélectionnez une option</option>
+                                @foreach($attitudes as $attitude)
+                                    <option value="{{ $attitude }}" {{ old('name') == $attitude ? 'selected' : '' }}>{{ $attitude }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Abréviation</label>
+                            <input type="text" class="form-control" name="abbreviation" placeholder="Ex: GL">
+                        </div>
+                        
+                        <div class="form-group mt-3">
+                            <label>Matières</label>
+                            <div class="col-md-12">
+                                <select name="subject_id[]" class="select2 form-select" multiple
+                                title="Sélectionner les matières">
+                                @foreach($subjects as $subject)
+                                    <option data-tokens="{{ $subject->name }}"
+                                    @if(old('subject_id') && in_array($subject->id, old('subject_id'))) selected @php($selected = TRUE) @endif
+                                    value="{{$subject->id}}">{{ $subject->name }} ( {{ $subject->abbreviation }} )
+                                    </option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
+>>>>>>> dev_bis
                         <div class="form-group mt-3">
                             <label>Année de la section</label>
                             <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année">
                                 @for($i=1; $i<=5; $i++)
+<<<<<<< HEAD
                                 <option value="{{ $i }}" {{ old('promotion') == $i ? 'selected' : '' }}>
                                     {{ yearth($i) }}
                                 </option>
@@ -60,6 +92,26 @@
                     <div class="card-footer">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-success btn-rounded">Ajouter</button>
+=======
+                                    <option class="form-control" data-tokens="{{ yearth($i) }}"
+                                            @if(old('promotion') == $i) @php($selected = TRUE) selected @endif
+                                            value="{{ $i }}">{{ yearth($i) }}
+                                    </option>
+                                    @php($selected = FALSE)
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Prix année scolaire</label>
+                            <input class="form-control" type="text" name="pricing" placeholder="ex: 200 000" required>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="mt-6 d-flex justify-content-between">
+                                <a href="{{ route('sections.index') }}" class="btn btn-danger ">Annuler</a>
+                                <button type="submit" class="btn btn-primary ">Ajouter</button>
+                            </div>
+>>>>>>> dev_bis
                         </div>
                     </div>
                 </form>

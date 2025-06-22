@@ -52,3 +52,17 @@ if (!function_exists('weekdays')) {
         ];
     }
 }
+
+if (!function_exists('yearth')) {
+    function yearth(int $number): string
+    {
+        return match ($number) {
+            1 => '1ère année',
+            2 => '2ème année',
+            3 => '3ème année',
+            4 => '4ème année',
+            5 => '5ème année',
+            default => $number . 'ème'
+        };
+    }
+}

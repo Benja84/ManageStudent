@@ -58,11 +58,11 @@
                                 <div class="form-group row">
                                 <label for="role" class="mt-3">Rôles *</label>
                                 <div class="col-md-6">
-                                    <select class="select2 form-select shadow-none" name="role" id="role" style="width: 100%; height:36px;">
-                                    <option value="">Select</option>
-                                    @foreach($roles as $key => $role)
-                                        <option value="{{ $key }}" @if(old('phone') == $key) selected @endif>{{ $role }}</option>
-                                    @endforeach
+                                    <select class=" form-select selecpicker" name="role" id="role">
+                                        <option value="" selected disabled>Choisissez le rôle</option>
+                                        @foreach($roles as $key => $role)
+                                            <option value="{{ $key }}" @if(old('role') == $key) selected @endif>{{ $role }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 </div>
@@ -97,6 +97,11 @@
 <script src="{{ asset('assets/libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
 <script src="{{ asset('assets/libs/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 <script>
+    $(document).ready(function(){
+        $('a[href="#previous"]').text('Precedent');
+        $('a[href="#next"]').text('Suivant');
+        $('a[href="#finish"]').text('Valider');
+    })
     var form = $("#example-form");
     form.validate({
         errorPlacement: function errorPlacement(error, element) {

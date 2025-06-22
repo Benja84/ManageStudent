@@ -8,7 +8,9 @@ use App\Models\GroupSubject;
 use App\Models\Professor;
 use App\Models\Section;
 use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class GroupsController extends Controller
@@ -20,7 +22,10 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        //
+        $title = "Liste groupe";
+        $page = "Liste des groupes";
+        $groups = Group::with('section')->get();
+        return view('groups.index',compact('title','page','groups'));
     }
 
     /**
@@ -48,10 +53,10 @@ class GroupsController extends Controller
     {
         
         $data = $request->validate([
-            'abbreviation' => 'required',
-            'section_id' => 'required',
-            'school_year' => 'required',
-            'period_type' => 'required',
+            'abbreviation' => 'min:1|max:50|string|unique:groups,abbreviation',
+            'section_id'   => 'required|integer',
+            'school_year'  => 'required|min:9|max:9',
+            'period_type'  => 'required|in:trimestre,semestre',
         ]);
 
         $yearAbbreviations = $this->getYearAbreviation($request->school_year);
@@ -60,16 +65,16 @@ class GroupsController extends Controller
         }
         
         $group = Group::create($data);
-        foreach ($request->subject_id as $key => $subject) {
-            $groupsubject = new GroupSubject();
-            $groupsubject->group_id = $group->id;
-            $groupsubject->subject_id = $subject;
-            $groupsubject->save();
+        if($request->subject_id ){
+            $group->subjects()->syncWithoutDetaching($request->subject_id);
+                
         }
-
-        foreach ($request->coordinator_id as $prof_id){
-            $prof = Professor::find($prof_id);
-            $prof->user->assignRole('coordinator');
+        if($request->coordinator_id){
+            $group->coordinators()->attach($request->coordinator_id, ['status' => 'Coordinateur']);
+            foreach ($request->coordinator_id as $prof_id){
+                $prof = Professor::find($prof_id);
+                $prof->user->assignRole('coordinator');
+            }
         }
         
         return redirect()->route('groups.index')->with('success','Le groupe <a href="' . route('groups.show', $group->id) . '">' . $group->abbreviation . '</a> a bien été ajouté');
@@ -83,7 +88,12 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = "Editer un groupe";
+        $page = "Editer un groupe";
+        $sections = Section::all();
+        $group = Group::find($id);
+        dd($group);
+        return view('groups.edit',compact('title','page','sections','group'));
     }
 
     /**
@@ -94,7 +104,13 @@ class GroupsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = "Editer un groupe";
+        $page = "Editer un groupe";
+        $sections = Section::with('subjects')->get();
+        $professors = Professor::all();
+        $group = Group::with('coordinators','subjects')->find($id);
+    
+        return view('groups.edit',compact('title','page','sections','professors','group'));
     }
 
     /**
@@ -106,7 +122,55 @@ class GroupsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'abbreviation' => ['min:1','max:50','string',Rule::unique('groups')->ignore($id)],
+            'section_id'   => 'required|integer',
+            'school_year'  => 'required|min:9|max:9',
+            'period_type'  => 'required|in:trimestre,semestre',
+        ]);
+
+        $group = Group::find($id);
+        $group->update($data);
+        GroupSubject::where('group_id',$id)->delete();
+        if ($request->subject_id && is_array($request->subject_id)) {
+            $group->subjects()->syncWithoutDetaching($request->subject_id);
+        }
+
+        $oldUserIds = $group->coordinators->pluck('user_id')->filter()->toArray();
+        $group->coordinators()->detach();
+        // Révoque les rôles des anciens coordinateurs
+
+        if (!empty($oldUserIds)) {
+            // 1. Trouver les users qui sont encore coordinateurs dans d'autres groupes
+            $usersStillCoordinators = DB::table('groupables')
+                ->join('professors', 'professors.id', '=', 'groupables.groupable_id')
+                ->where('groupables.groupable_type', Professor::class)
+                ->where('groupables.status', 'Coordinateur')
+                ->where('groupables.group_id', '<>', $group->id)
+                ->whereIn('professors.user_id', $oldUserIds)
+                ->pluck('professors.user_id')
+                ->unique()
+                ->toArray();
+
+            // 2. Calculer les users à qui retirer le rôle
+            $usersToRevoke = array_diff($oldUserIds, $usersStillCoordinators);
+
+            // 3. Retirer le rôle uniquement à ceux qui ne sont plus coordinateurs ailleurs
+            User::whereIn('id', $usersToRevoke)
+                ->each(function ($user) {
+                    $user->removeRole('coordinator');
+                });
+        }
+
+        if($request->coordinator_id){
+            $group->coordinators()->attach($request->coordinator_id, ['status' => 'Coordinateur']);
+            foreach ($request->coordinator_id as $prof_id){
+                $prof = Professor::find($prof_id);
+                $prof->user->assignRole('coordinator');
+            }
+        }
+
+        return redirect()->route('groups.index')->with('success','Goupe modifié avec succés!');
     }
 
     /**
