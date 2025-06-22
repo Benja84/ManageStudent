@@ -30,12 +30,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 // voire profile
 // Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::resource('/roles',RoleController::class);
