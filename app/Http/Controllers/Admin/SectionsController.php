@@ -33,6 +33,7 @@ class SectionsController extends Controller
         $title = "Ajouter une section";
         $page = "Sections";
         $subjects = Subject::all();
+        $sectionsList = Section::all();
         $attitudes = $attitudes = [
             'Montage Video',
             'SCIENCES ',
@@ -41,8 +42,7 @@ class SectionsController extends Controller
             ' GESTION ',
             ' DROIT',
         ];
-
-        return view('administrations.sections.create',compact('title','page','subjects','attitudes'));
+        return view('administrations.sections.create',compact('title','page','subjects','attitudes','sectionsList'));
     }
 
     /**
@@ -52,7 +52,7 @@ class SectionsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {dd($request);
         $request->validate([
             'name' => 'required',
             'abbreviation' => 'required',
@@ -100,8 +100,9 @@ class SectionsController extends Controller
         ];
         $title = "Editer setion";
         $page = "Membre";
-
-        return view('administrations.sections.edit', compact('section', 'attitudes', 'title', 'page'));
+        $sectionsList = Section::all();
+        $subjects = Subject::all();
+        return view('administrations.sections.edit', compact('section', 'attitudes', 'title', 'page','sectionsList','subjects'));
     }
 
     /**
@@ -111,14 +112,13 @@ class SectionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Section $section)
+    public function update(Request $request,$id)
     {
+        dd($id);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'abbreviation' => 'required|string|max:50',
             'promotion' => 'required|string|max:255',
-            'year' => 'required|string|max:50',
-            'niveau' => 'required|string|max:255',
             'pricing' => 'required|numeric|min:0',
         ]);
 

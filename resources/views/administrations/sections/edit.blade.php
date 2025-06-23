@@ -18,8 +18,13 @@
                     @method('PUT')
                     <div class="card-body">
                         <div class="mb-3">
-                            <label for="name" class="form-label">Nom de la section</label>
-                            <input type="text" name="name" class="form-control" value="{{ old('name', $section->name) }}" required>
+                            <label for="name" class="form-label">Intitulé</label>
+                            <input list="sections" type="text" name="name" class="form-control" value="{{ old('name', $section->name) }}" required>
+                            <datalist id="sections">
+                                @foreach($sectionsList as $item)
+                                    <option value="{{ $item->name }}"></option>
+                                @endforeach
+                            </datalist>
                         </div>
 
                         <div class="mb-3">
@@ -28,28 +33,30 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="promotion" class="form-label">Promotion</label>
-                            {{-- <input type="text" name="promotion" class="form-control" value="{{ old('promotion', $section->promotion) }}" required> --}}
-                            <select name="promotion" class="form-select" required>
-                                <option value="">-- Choisir une option --</option>
-                                <option value="AEII" {{ old('promotion', $section->promotion) == 'AEII' ? 'selected' : '' }}>AEII</option>
-                                <option value="GL" {{ old('promotion', $section->promotion) == 'GL' ? 'selected' : '' }}>GL</option>
-                                </select>
-                        </div>
-                        <div class="md-3">
-                            <label for="niveau" class="form-label">Niveau : </label>
-                            <select name="niveau" class="form-select" required>
-                                {{-- <input type="text" name="year" class="form-control" placeholder="ex: 2024-2025" value="{{ old('year') }}" required> --}}
-                                <option value="1ère année" {{ old('niveau') == '1ère année' ? 'selected' : '' }}>1ère année</option>
-                                <option value="2ème année" {{ old('niveau') == '2ème année' ? 'selected' : '' }}>2ème année</option>
-                                <option value="2ème année" {{ old('niveau') == '2ème année' ? 'selected' : '' }}>3ème année</option>
-                                <option value="2ème année" {{ old('niveau') == '2ème année' ? 'selected' : '' }}>4ème année</option>
-                                <option value="2ème année" {{ old('niveau') == '2ème année' ? 'selected' : '' }}>5ème année</option>
+                            <label for="year" class="form-label">Niveau</label>
+                            <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année">
+                                @for($i=1; $i<=5; $i++)
+                                    <option class="form-control" data-tokens="{{ yearth($i) }}" @if(old('promotion', $section->promotion) == $i) @php($selected = TRUE) selected @endif
+                                         value="{{ $i }}">{{ yearth($i) }}
+                                    </option>
+                                    @php($selected = FALSE)
+                                @endfor
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="year" class="form-label">Année</label>
-                            <input type="text" name="year" class="form-control" placeholder="ex: 2024-2025" value="{{ old('year', $section->year) }}" required>
+                        
+                        <div class="form-group mt-3">
+                            <label>Matières</label>
+                            <div class="col-md-12">
+                                <select name="subject_id[]" class="select2 form-select" multiple
+                                title="Sélectionner les matières">
+                                @foreach($subjects as $subject)
+                                    <option data-tokens="{{ $subject->name }}"
+                                    @if((old('subject_id') && in_array($subject->id, old('subject_id')) ) || ( $section->subjects && $section->subjects->contains($subject->id))) selected @php($selected = TRUE) @endif
+                                    value="{{$subject->id}}">{{ $subject->name }} ( {{ $subject->abbreviation }} )
+                                    </option>
+                                @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -59,8 +66,8 @@
 
                         <div class="card-footer">
                             <div class="mt-6 d-flex justify-content-between">
-                                <button type="submit" class="btn btn-success btn-rounded">Annuler</button>
-                                <a href="{{ route('sections.index') }}" class="btn btn-secondary btn-rounded">Mettre à jours</a>
+                                <button type="submit" class="btn btn-success">Annuler</button>
+                                <a href="{{ route('sections.index') }}" class="btn btn-primary">Valider</a>
                             </div>
                         </div>
                     </div>
