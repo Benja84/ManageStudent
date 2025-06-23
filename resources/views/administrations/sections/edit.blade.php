@@ -66,8 +66,8 @@
 
                         <div class="card-footer">
                             <div class="mt-6 d-flex justify-content-between">
-                                <button type="submit" class="btn btn-success">Annuler</button>
-                                <a href="{{ route('sections.index') }}" class="btn btn-primary">Valider</a>
+                                <button  class="btn btn-danger">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Valider</a>
                             </div>
                         </div>
                     </div>

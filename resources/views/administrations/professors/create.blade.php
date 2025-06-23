@@ -101,19 +101,19 @@
                                 <div class="space-y-4">
                                     <div>
                                         <label class="block text-gray-700">Nom</label>
-                                        <input type="text" name="last_name" class="w-full p-2 border rounded">
+                                        <input type="text" name="last_name" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700">Prénom</label>
-                                        <input type="text" name="first_name" class="w-full p-2 border rounded">
+                                        <input type="text" name="first_name" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700">Portable</label>
-                                        <input type="tel" name="phone" class="w-full p-2 border rounded">
+                                        <input type="tel" name="phone" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700">Email</label>
-                                        <input type="email" name="email" class="w-full p-2 border rounded">
+                                        <input type="email" name="email" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div>
                                         <label class="block text-gray-700">Matières pouvant être enseignées</label>
@@ -150,15 +150,15 @@
                             <div class="flex space-x-4">
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Naissance</label>
-                                    <input type="date" name="birth_date" class="w-full p-2 border rounded">
+                                    <input type="date" name="birth_date" class="w-full p-2 border rounded form-control">
                                 </div>
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Lieu de naissance</label>
-                                    <input type="text" name="birth_place" class="w-full p-2 border rounded">
+                                    <input type="text" name="birth_place" class="w-full p-2 border rounded form-control">
                                 </div>
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Nationalité</label>
-                                    <select name="nationality" class="w-full p-2 border rounded">
+                                    <select name="nationality" class="w-full p-2 border rounded form-select">
                                         <option value="France">Francaise</option>
                                         <option value="Malagasy">Malagasy</option>
                                     </select>
@@ -167,19 +167,19 @@
                             <div class="flex space-x-4">
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Adresse</label>
-                                    <input type="text" name="address" class="w-full p-2 border rounded">
+                                    <input type="text" name="address" class="w-full p-2 border rounded form-control">
                                 </div>
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Ville</label>
-                                    <input type="text" name="city" class="w-full p-2 border rounded">
+                                    <input type="text" name="city" class="w-full p-2 border rounded form-control">
                                 </div>
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Code postal</label>
-                                    <input type="text" name="zip_code" class="w-full p-2 border rounded">
+                                    <input type="text" name="zip_code" class="w-full p-2 border rounded form-control">
                                 </div>
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Pays</label>
-                                    <select name="country" class="w-full p-2 border rounded">
+                                    <select name="country" class="w-full p-2 border rounded form-select">
                                         <option value="France">France</option>
                                         <option value="Madagascar">Madagascar</option>
                                     </select>
@@ -263,48 +263,64 @@
 
                     // Check for missing fields
                     if (!lastName) {
-                        alert("Le champ 'Nom' est requis.");
+                        step1.querySelector('input[name="last_name"]').focus();
+                        $('input[name="last_name"]').addClass('is-invalid');
                         return false;
+                    }else{
+                        $('input[name="last_name"]').removeClass('is-invalid');
                     }
                     if (!firstName) {
-                        alert("Le champ 'Prénom' est requis.");
+                        step1.querySelector('input[name="first_name"]').focus();
+                        $('input[name="first_name"]').addClass('is-invalid');
                         return false;
+                    }else{
+                        $('input[name="first_name"]').removeClass('is-invalid');
                     }
                     if (!phone) {
-                        alert("Le champ 'Portable' est requis.");
+                        step1.querySelector('input[name="phone"]').focus();
+                        $('input[name="phone"]').addClass('is-invalid');
                         return false;
+                    }else{
+                        $('input[name="phone"]').removeClass('is-invalid');
                     }
                     if (!email) {
-                        alert("Le champ 'Email' est requis.");
+                        step1.querySelector('input[name="email"]').focus();
+                        $('input[name="email"]').addClass('is-invalid');
                         return false;
+                    }else{
+                        $('input[name="email"]').removeClass('is-invalid');
                     }
-                    if (!gender) {
-                        alert("Le champ 'Genre' est requis.");
-                        return false;
-                    }
-                    if (!photo) {
-                        alert("Une image de profil est requise. Veuillez sélectionner une image.");
-                        return false;
-                    }
+                    
+                    // if (!photo) {
+                    //     alert("Une image de profil est requise. Veuillez sélectionner une image.");
+                    //     return false;
+                    // }
 
                     // Email validation
                     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                     if (!emailRegex.test(email)) {
-                        alert("L'email est incorrect. Veuillez entrer un email valide.");
+                        step1.querySelector('input[name="email"]').focus();
+                        $('input[name="email"]').addClass('is-invalid');
+                        toastr.error('Adresse mail non valide','Erreur!')
                         return false;
+                    }else{
+                        $('input[name="email"]').removeClass('is-invalid');
                     }
 
                     // Phone validation
                     const phoneRegex = /^\+?[0-9]{10,15}$/;
                     if (!phoneRegex.test(phone)) {
-                        alert("Le numéro de téléphone est incorrect. Veuillez entrer un numéro valide (10-15 chiffres, avec ou sans code pays).");
+                        step1.querySelector('input[name="phone"]').focus();
+                        $('input[name="phone"]').addClass('is-invalid');
+                        toastr.error('Numéro téléphone non valide','Erreur!')
                         return false;
+                    }else{
+                        $('input[name="phone"]').removeClass('is-invalid');
                     }
 
                     return true;
                 } catch (error) {
-                    console.error('Erreur dans validateStep1:', error);
-                    alert('Une erreur est survenue lors de la validation de l\'étape 1. Vérifiez la console pour plus de détails.');
+                    toastr.error('Veuillez completer les champs requis','Erreur!')
                     return false;
                 }
             }
@@ -321,38 +337,58 @@
                     const country = step2.querySelector('select[name="country"]').value;
                     // Check for missing fields
                     if (!birthDate) {
-                        alert("Le champ 'Naissance' est requis.");
+                        $('input[name="birth_date"]').addClass('is-invalid');
+                        step2.querySelector('input[name="birth_date"]').focus();
                         return false;
+                    }else{
+                        $('input[name="birth_date"]').removeClass('is-invalid');
                     }
                     if (!birthPlace) {
-                        alert("Le champ 'Lieu de naissance' est requis.");
+                        $('input[name="birth_place"]').addClass('is-invalid');
+                        step2.querySelector('input[name="birth_place"]').focus();
                         return false;
+                    }else{
+                        $('input[name="birth_place"]').removeClass('is-invalid');
                     }
                     if (!nationality) {
-                        alert("Le champ 'Nationalité' est requis.");
+                        $('input[name="nationality"]').addClass('is-invalid');
+                        step2.querySelector('input[name="nationality"]').focus();
                         return false;
+                    }else{
+                        $('input[name="nationality"]').removeClass('is-invalid');
                     }
                     if (!address) {
-                        alert("Le champ 'Adresse' est requis.");
+                        $('input[name="address"]').addClass('is-invalid');
+                        step2.querySelector('input[name="address"]').focus();
                         return false;
+                    }else{
+                        $('input[name="address"]').removeClass('is-invalid');
                     }
                     if (!city) {
-                        alert("Le champ 'Ville' est requis.");
+                        $('input[name="city"]').addClass('is-invalid');
+                        step2.querySelector('input[name="city"]').focus();
                         return false;
+                    }else{
+                        $('input[name="city"]').removeClass('is-invalid');
                     }
                     if (!zipCode) {
-                        alert("Le champ 'Code postal' est requis.");
+                        $('input[name="zip_code"]').addClass('is-invalid');
+                        step2.querySelector('input[name="zip_code"]').focus();
                         return false;
+                    }else{
+                        $('input[name="zip_code"]').removeClass('is-invalid');
                     }
                     if (!country) {
-                        alert("Le champ 'Pays' est requis.");
+                        $('input[name="country"]').addClass('is-invalid');
+                        step2.querySelector('input[name="country"]').focus();
                         return false;
+                    }else{
+                        $('input[name="country"]').removeClass('is-invalid');
                     }
 
                     return true;
                 } catch (error) {
-                    console.error('Erreur dans validateStep2:', error);
-                    alert('Une erreur est survenue lors de la validation de l\'étape 2. Vérifiez la console pour plus de détails.');
+                    toastr.error('Veuillez completer les champs requis','Erreur!')
                     return false;
                 }
             }
@@ -430,12 +466,12 @@
                             toastr.success('Professeur enregistré avec succés','Success!');
                             window.location.href = data.redirect || '{{ route('professors.index') }}';
                         } else {
-                            alert(data.message || 'Erreur lors de l\'enregistrement.');
+                            toastr.error(data.message,'Erreur');
                         }
                     })
                     .catch(error => {
                         console.log('Erreur lors de la soumission:', error);
-                        alert('Une erreur est survenue lors de l\'enregistrement. Vérifiez la console.');
+                        toastr.error('Une erreur est survenue lors de l\'enregistrement. Vérifiez la console.','Erreur!');
                     });
                 }
             });
