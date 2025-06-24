@@ -74,7 +74,6 @@
                     <div id="progress-bar" class="w-1/2" style="height: 8px; background-color: #3b82f6; transition: width 0.3s ease-in-out;"></div>
                     <div class="flex-1 bg-gray-200" style="height: 8px;"></div>
                 </div>
-                @csrf
                 <div id="step1" class="bg-white p-6 rounded shadow" enctype="multipart/form-data">
                     <div class="form-group mb-4">
                         <div class="w-1/4 flex mb-3">
@@ -132,16 +131,17 @@
                         <button type="button" id="nextBtn" class="btn btn-primary px-4 py-2">Suivant</button>
                     </div>
                 </div>
-                <div id="step2" action="{{ route('professors.store') }}" method="POST" class="bg-white p-6 rounded shadow mt-6 hidden" enctype="multipart/form-data">
+                <form id="step2" action="{{ route('members.store') }}" method="POST" class="bg-white p-6 rounded shadow mt-6 hidden" enctype="multipart/form-data">
+                    @csrf
                     <div class="space-y-4">
                         <div class="flex space-x-4">
                             <div class="w-1/3">
                                 <label class="block text-gray-700">Naissance <span class="text-warning">*</span> </label>
-                                <input type="date" name="birth_date" class="w-full p-2 border rounded form-control">
+                                <input type="date" name="birthdate" class="w-full p-2 border rounded form-control">
                             </div>
                             <div class="w-1/3">
                                 <label class="block text-gray-700">Lieu de naissance <span class="text-warning">*</span></label>
-                                <input type="text" name="birth_place" class="w-full p-2 border rounded form-control">
+                                <input type="text" name="birthplace" class="w-full p-2 border rounded form-control">
                             </div>
                             <div class="w-1/3">
                                 <label class="block text-gray-700">Nationalité <span class="text-warning">*</span></label>
@@ -154,15 +154,15 @@
                         <div class="flex space-x-4">
                             <div class="w-1/3">
                                 <label class="block text-gray-700">Adresse <span class="text-warning">*</span></label>
-                                <input type="text" name="address" class="w-full p-2 border rounded form-control">
+                                <input type="text" name="address_street" class="w-full p-2 border rounded form-control">
                             </div>
                             <div class="w-1/3">
                                 <label class="block text-gray-700">Ville <span class="text-warning">*</span></label>
-                                <input type="text" name="city" class="w-full p-2 border rounded form-control">
+                                <input type="text" name="birthplace_city" class="w-full p-2 border rounded form-control">
                             </div>
                             <div class="w-1/3">
                                 <label class="block text-gray-700">Code postal <span class="text-warning">*</span></label>
-                                <input type="text" name="zip_code" class="w-full p-2 border rounded form-control">
+                                <input type="text" name="address_postcode" class="w-full p-2 border rounded form-control">
                             </div>
                             <div class="w-1/3">
                                 <label class="block text-gray-700">Pays <span class="text-warning">*</span></label>
@@ -178,7 +178,7 @@
                         <button type="button" id="prevBtn" class="btn btn-danger text-white px-4 py-2 ">Précédent</button>
                         <button type="submit" id="submitBtn" class="btn btn-primary text-white px-4 py-2 ">Enregistrer</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -203,20 +203,20 @@
             try {
                 const file = e.target.files[0];
                 if (!file) {
-                    alert('Aucun fichier sélectionné.');
+                    toastr.error('Aucun fichier sélectionné.','Erreur !');
                     return;
                 }
 
                 // Validate file type
                 if (!file.type.startsWith('image/')) {
-                    alert('Veuillez sélectionner une image valide (jpg, png, etc.).');
+                    toastr.error('Veuillez sélectionner une image valide (jpg, png, etc.).','Erreur !');
                     return;
                 }
 
                 // Validate file size (e.g., max 5MB)
                 const maxSize = 5 * 1024 * 1024; // 5MB in bytes
                 if (file.size > maxSize) {
-                    alert('L\'image est trop volumineuse. La taille maximale est de 5 Mo.');
+                    toastr.error('L\'image est trop volumineuse. La taille maximale est de 5 Mo.','Erreur !');
                     return;
                 }
 
@@ -226,17 +226,17 @@
                         profilePic.src = e.target.result;
                     } catch (error) {
                         console.error('Erreur lors de l\'affichage de l\'image:', error);
-                        alert('Impossible d\'afficher l\'image. Vérifiez la console pour plus de détails.');
+                        toastr.error('Impossible d\'afficher l\'image. Vérifiez la console pour plus de détails.','Erreur !');
                     }
                 };
                 reader.onerror = function (error) {
                     console.error('Erreur lors de la lecture du fichier:', error);
-                    alert('Erreur lors de la lecture du fichier image. Vérifiez la console pour plus de détails.');
+                    toastr.error('Erreur lors de la lecture du fichier image. Vérifiez la console pour plus de détails.','Erreur !');
                 };
                 reader.readAsDataURL(file);
             } catch (error) {
                 console.error('Erreur dans le gestionnaire de changement d\'image:', error);
-                alert('Une erreur est survenue lors du chargement de l\'image. Vérifiez la console.');
+                toastr.error('Une erreur est survenue lors du chargement de l\'image. Vérifiez la console.','Erreur !');
             }
         });
 
@@ -326,66 +326,67 @@
         // Validation for Step 2
         function validateStep2() {
             try {
-                const birthDate = step2.querySelector('input[name="birth_date"]').value;
-                const birthPlace = step2.querySelector('input[name="birth_place"]').value.trim();
+                const birthDate = step2.querySelector('input[name="birthdate"]').value;
+                const birthPlace = step2.querySelector('input[name="birthplace"]').value.trim();
                 const nationality = step2.querySelector('select[name="nationality"]').value;
-                const address = step2.querySelector('input[name="address"]').value.trim();
-                const city = step2.querySelector('input[name="city"]').value.trim();
-                const zipCode = step2.querySelector('input[name="zip_code"]').value.trim();
+                const address = step2.querySelector('input[name="address_street"]').value.trim();
+                const city = step2.querySelector('input[name="birthplace_city"]').value.trim();
+                const zipCode = step2.querySelector('input[name="address_postcode"]').value.trim();
                 const country = step2.querySelector('select[name="country"]').value;
                 // Check for missing fields
                 if (!birthDate) {
-                    $('input[name="birth_date"]').addClass('is-invalid');
-                    step2.querySelector('input[name="birth_date"]').focus();
+                    $('input[name="birthdate"]').addClass('is-invalid');
+                    step2.querySelector('input[name="birthdate"]').focus();
                     return false;
                 }else{
-                    $('input[name="birth_date"]').removeClass('is-invalid');
+                    $('input[name="birthdate"]').removeClass('is-invalid');
                 }
                 if (!birthPlace) {
-                    $('input[name="birth_place"]').addClass('is-invalid');
-                    step2.querySelector('input[name="birth_place"]').focus();
+                    $('input[name="birthplace"]').addClass('is-invalid');
+                    step2.querySelector('input[name="birthplace"]').focus();
                     return false;
                 }else{
-                    $('input[name="birth_place"]').removeClass('is-invalid');
+                    $('input[name="birthplace"]').removeClass('is-invalid');
                 }
                 if (!nationality) {
-                    $('input[name="nationality"]').addClass('is-invalid');
-                    step2.querySelector('input[name="nationality"]').focus();
+                    $('select[name="nationality"]').addClass('is-invalid');
+                    step2.querySelector('select[name="nationality"]').focus();
                     return false;
                 }else{
-                    $('input[name="nationality"]').removeClass('is-invalid');
+                    $('select[name="nationality"]').removeClass('is-invalid');
                 }
                 if (!address) {
-                    $('input[name="address"]').addClass('is-invalid');
-                    step2.querySelector('input[name="address"]').focus();
+                    $('input[name="address_street"]').addClass('is-invalid');
+                    step2.querySelector('input[name="address_street"]').focus();
                     return false;
                 }else{
-                    $('input[name="address"]').removeClass('is-invalid');
+                    $('input[name="address_street"]').removeClass('is-invalid');
                 }
                 if (!city) {
-                    $('input[name="city"]').addClass('is-invalid');
-                    step2.querySelector('input[name="city"]').focus();
+                    $('input[name="birthplace_city"]').addClass('is-invalid');
+                    step2.querySelector('input[name="birthplace_city"]').focus();
                     return false;
                 }else{
-                    $('input[name="city"]').removeClass('is-invalid');
+                    $('input[name="birthplace_city"]').removeClass('is-invalid');
                 }
                 if (!zipCode) {
-                    $('input[name="zip_code"]').addClass('is-invalid');
-                    step2.querySelector('input[name="zip_code"]').focus();
+                    $('input[name="address_postcode"]').addClass('is-invalid');
+                    step2.querySelector('input[name="address_postcode"]').focus();
                     return false;
                 }else{
-                    $('input[name="zip_code"]').removeClass('is-invalid');
+                    $('input[name="address_postcode"]').removeClass('is-invalid');
                 }
                 if (!country) {
-                    $('input[name="country"]').addClass('is-invalid');
-                    step2.querySelector('input[name="country"]').focus();
+                    $('select[name="country"]').addClass('is-invalid');
+                    step2.querySelector('select[name="country"]').focus();
                     return false;
                 }else{
-                    $('input[name="country"]').removeClass('is-invalid');
+                    $('select[name="country"]').removeClass('is-invalid');
                 }
 
                 return true;
             } catch (error) {
+                console.log('error',error.message)
                 toastr.error('Veuillez completer les champs requis','Erreur!')
                 return false;
             }
@@ -424,12 +425,12 @@
                 const role = step1.querySelector('select[name="role"]').value;
 
                 // Step2
-                const birthDate = step2.querySelector('input[name="birth_date"]').value;
-                const birthPlace = step2.querySelector('input[name="birth_place"]').value.trim();
+                const birthDate = step2.querySelector('input[name="birthdate"]').value;
+                const birthPlace = step2.querySelector('input[name="birthplace"]').value.trim();
                 const nationality = step2.querySelector('select[name="nationality"]').value;
-                const address = step2.querySelector('input[name="address"]').value.trim();
-                const city = step2.querySelector('input[name="city"]').value.trim();
-                const zipCode = step2.querySelector('input[name="zip_code"]').value.trim();
+                const address = step2.querySelector('input[name="address_street"]').value.trim();
+                const city = step2.querySelector('input[name="birthplace_city"]').value.trim();
+                const zipCode = step2.querySelector('input[name="address_postcode"]').value.trim();
                 const country = step2.querySelector('select[name="country"]').value;
 
                 formData.append('lastname', lastName);
@@ -440,7 +441,9 @@
                 formData.append('role', role);
 
                 // Add photo (already validated as required in Step 1)
-                formData.append('photo', photoUpload.files[0]);
+                if(photoUpload.files[0]){
+                    formData.append('photo', photoUpload.files[0]);
+                }
 
                 fetch('{{ route('members.store') }}', {
                     method: 'POST',
@@ -452,10 +455,11 @@
                 .then(response => response)
                 .then(data => {
                     if (data.status === 201) {
-                        toastr.success('Professeur enregistré avec succés','Success!');
-                        window.location.href = data.redirect || '{{ route('professors.index') }}';
+                        console.log('data',data)
+                        toastr.success('Membre enregistré avec succés','Success!');
+                        window.location.href = data.url || '{{ route('members.index') }}';
                     } else {
-                        toastr.error(data.message,'Erreur');
+                        toastr.error('Erreur lors de l\'enregistrement','Erreur !');
                     }
                 })
                 .catch(error => {

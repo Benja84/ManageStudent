@@ -60,7 +60,9 @@ class MembersController extends Controller
             'birthdate' => 'required',
             'birthplace_city' => 'required',
         ]);
-        // $fields['gender'] = $request->gender;
+        $fields['addresse_street'] = $request->addresse_street;
+        $fields['address_postcode'] = $request->address_postcode;
+        $fields['country'] = $request->country;
         $fields['password'] = Hash::make($request->firstname . 'school');
         if ($request->hasFile('photo')) {
             $request->validate([
@@ -80,7 +82,8 @@ class MembersController extends Controller
         $user->assignRole($request->role);
         $advisor = Advisor::create($attributes);
 
-        return redirect()->route('members.index');
+        // return redirect()->route('members.index')->with('success','Membre enregistré avec succé !');
+        return $advisor;
     }
 
     /**
@@ -119,7 +122,6 @@ class MembersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
         $fields = $request->validate([
             'firstname' => 'required',
             'gender' => 'required',
