@@ -55,15 +55,16 @@ class MembersController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|max:10',
+            'phone' => 'required|max:10|unique:users,phone',
             'role' => 'required',
             'birthdate' => 'required',
             'birthplace_city' => 'required',
+            'address_city' => 'required',
+            'address_street' => 'required',
         ]);
-        $fields['addresse_street'] = $request->addresse_street;
         $fields['address_postcode'] = $request->address_postcode;
-        $fields['country'] = $request->country;
-        $fields['password'] = Hash::make($request->firstname . 'school');
+        $fields['nationality'] = $request->nationality;
+        $fields['password'] = Hash::make(strtolower($request->firstname) . 'school');
         if ($request->hasFile('photo')) {
             $request->validate([
                 'photo' => 'required|image|mimes:jpeg,png|max:2048',
@@ -82,8 +83,8 @@ class MembersController extends Controller
         $user->assignRole($request->role);
         $advisor = Advisor::create($attributes);
 
-        // return redirect()->route('members.index')->with('success','Membre enregistré avec succé !');
-        return $advisor;
+        return redirect()->route('members.create')->with('success','Membre enregistré avec succé !');
+        // return $advisor;
     }
 
     /**
@@ -109,7 +110,7 @@ class MembersController extends Controller
         $title = "Editer un membre du personnel";
         $page = "Membres";
         $member = Advisor::find($id);
-        $roles = [User::ADMIN => 'administrateur-trice', User::ADVISOR => 'conseiller-ère', User::SECRETARY => 'secrétaire'];
+        $roles = [User::ADMIN => 'Administrateur-trice', User::ADVISOR => 'Conseiller-ère', User::SECRETARY => 'Secrétaire'];
         return view('administrations.members.edit', compact('member', 'roles', 'title', 'page'));
     }
 
@@ -122,15 +123,21 @@ class MembersController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $advisor = Advisor::find($id);
         $fields = $request->validate([
             'firstname' => 'required',
             'gender' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|unique:users,email,' . $request->id,
-            'phone' => 'required|max:10',
+            'email' => ['required','email',Rule::unique('users')->ignore($advisor->user_id)],
+            'phone' => ['required','max:10',Rule::unique('users')->ignore($advisor->user_id)] ,
             'birthdate' => 'required',
             'birthplace_city' => 'required',
+            'address_street' => 'required',
+            'address_city' => 'required',
         ]);
+
+        $fields['address_postcode'] = $request->address_postcode;
+        $fields['nationality'] = $request->nationality;
 
         if ($request->hasFile('photo')) {
             $request->validate([
@@ -144,8 +151,8 @@ class MembersController extends Controller
             $name = $file->storeAs('public/images', $filename . '.' . $file->extension());
             $fields['photo'] = $name;
         }
-
-        $user = User::find($request->id);
+        
+        $user = User::find($advisor->user_id);
         $user->gender = $request->gender;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -153,10 +160,12 @@ class MembersController extends Controller
         $user->birthdate = $request->birthdate;
         $user->birthplace_city = $request->birthplace_city;
         $user->address_city = $request->address_city;
+        $user->address_postcode = $request->address_postcode;
+        $user->address_street = $request->address_street;
 
         $user->save();
 
-        return redirect()->route('members.index');
+        return redirect()->route('members.index')->with('success','Membre modifié avec succès');
     }
 
     /**

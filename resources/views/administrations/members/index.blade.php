@@ -87,7 +87,11 @@
 @section('scripts')
 <!-- jQuery et DataTables -->
 <script src="{{asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>
-
+@if(Session::has('success'))
+    <script>
+        toastr.success("{{ Session::get('success') }}", "Succès!");
+    </script>
+@endif
 <!-- Initialisation -->
 <script>
     $(document).ready(function () {

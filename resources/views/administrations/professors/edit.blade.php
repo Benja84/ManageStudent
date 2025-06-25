@@ -69,8 +69,9 @@
                         <div id="progress-bar" class="w-1/2" style="height: 8px; background-color: #3b82f6; transition: width 0.3s ease-in-out;"></div>
                         <div class="flex-1 bg-gray-200" style="height: 8px;"></div>
                     </div>
-                    <form action="{{ route('professors.store') }}" method="POST" enctype="multipart/form-data" id="form_data">
+                    <form action="{{ route('professors.update',$prof->id) }}" method="POST" enctype="multipart/form-data" id="form_data">
                         @csrf
+                        @method('PUT')
                         <!-- Step 1: Identity -->
                         <div id="step1" class="bg-white p-6 rounded shadow" >
                             <div class="form-group mb-4">
@@ -88,11 +89,11 @@
                                     
                                     <div class="flex space-x-4">
                                         <label class="inline-flex items-center">
-                                            <input type="radio" name="gender" value="M" class="form-radio" checked>
+                                            <input type="radio" name="gender" value="M" class="form-radio" @if($prof->user->gender == "M") checked @endif>
                                             <span class="ml-2 text-gray-700">Masculin</span>
                                         </label>
                                         <label class="inline-flex items-center">
-                                            <input type="radio" name="gender" value="F" class="form-radio">
+                                            <input type="radio" name="gender" value="F" class="form-radio" @if($prof->user->gender == "F") checked @endif>
                                             <span class="ml-2 text-gray-700">Féminin</span>
                                         </label>
                                     </div>
@@ -101,26 +102,26 @@
                                     <div class="space-y-4">
                                         <div>
                                             <label class="block text-gray-700">Nom</label>
-                                            <input type="text" name="lastname" class="w-full p-2 border rounded form-control">
+                                            <input type="text" name="lastname" value="{{ old('lastname',$prof->user->lastname) }}" class="w-full p-2 border rounded form-control">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700">Prénom</label>
-                                            <input type="text" name="firstname" class="w-full p-2 border rounded form-control">
-                                        </div>
-                                        <div>
-                                            <label class="block text-gray-700">Portable</label>
-                                            <input type="tel" name="phone" class="w-full p-2 border rounded form-control">
+                                            <input type="text" name="firstname" value="{{ old('firstname',$prof->user->firstname) }}" class="w-full p-2 border rounded form-control">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700">Email</label>
-                                            <input type="email" name="email" class="w-full p-2 border rounded form-control">
+                                            <input type="email" name="email" value="{{ old('email',$prof->user->email) }}" class="w-full p-2 border rounded form-control">
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700">Portable</label>
+                                            <input type="tel" name="phone" value="{{ old('phone',$prof->user->phone) }}" class="w-full p-2 border rounded form-control">
                                         </div>
                                         <div>
                                             <label class="block text-gray-700">Matières pouvant être enseignées</label>
                                             <select name="subject_id[]" class="select2 form-select" multiple placeholder="Selectionner les matières">
                                                 <option value=""  disabled>Selectionner les matières</option>
                                                 @foreach($subjects as $subject)
-                                                <option value="{{$subject->id}}" data-token="{{$subject->name}} ({{$subject->abbreviation}})">{{$subject->name}} ({{$subject->abbreviation}})</option>
+                                                <option value="{{$subject->id}}" data-token="{{$subject->name}} ({{$subject->abbreviation}})" @if($prof->subjects->contains($subject)) selected @endif>{{$subject->name}} ({{$subject->abbreviation}})</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -130,7 +131,7 @@
                                             <select name="group_id[]" class="select2 form-select selectpicker" multiple placeholder="Selectionner les groupes" title="Sélectionner les groupes">
                                                 <option value=""  disabled>Selectionner les groupes</option>
                                                 @foreach($groups as $group)
-                                                <option value="{{$group->id}}" data-token="{{$group->fullname}}">{{$group->fullname}}</option>
+                                                <option value="{{$group->id}}" data-token="{{$group->fullname}}" @if($prof->groups->contains($group->id)) selected @endif>{{$group->fullname}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -149,11 +150,11 @@
                                 <div class="flex space-x-4">
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Naissance</label>
-                                        <input type="date" name="birthdate" class="w-full p-2 border rounded form-control">
+                                        <input type="date" name="birthdate" value="{{ old('birthdate',$prof->user->birthdate) }}" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Lieu de naissance</label>
-                                        <input type="text" name="birthplace_city" class="w-full p-2 border rounded form-control">
+                                        <input type="text" name="birthplace_city" value="{{ old('birthplace_city',$prof->user->birthplace_city) }}" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Nationalité</label>
@@ -166,15 +167,15 @@
                                 <div class="flex space-x-4">
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Adresse</label>
-                                        <input type="text" name="address_street" class="w-full p-2 border rounded form-control">
+                                        <input type="text" name="address_street" value="{{ old('address_street',$prof->user->address_street) }}" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Ville</label>
-                                        <input type="text" name="address_city" class="w-full p-2 border rounded form-control">
+                                        <input type="text" name="address_city" value="{{ old('address_city',$prof->user->address_city) }}" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Code postal</label>
-                                        <input type="text" name="address_postcode" class="w-full p-2 border rounded form-control">
+                                        <input type="text" name="address_postcode" value="{{ old('address_postcode',$prof->user->address_postcode) }}" class="w-full p-2 border rounded form-control">
                                     </div>
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Pays</label>
@@ -197,11 +198,7 @@
     </div>
 @endsection
 @section('scripts')
-    @if(Session::has('success'))
-        <script>
-            toastr.success("{{ Session::get('success') }}", "Succès!");
-        </script>
-    @endif
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const step1 = document.getElementById('step1');
@@ -423,66 +420,8 @@
                 e.preventDefault();
                 if (validateStep2()) {
                     $("#form_data").submit();
-                    // const formData = new FormData(step2);
-
-                    // // Add Step 1 data to FormData
-                    // const lastName = step1.querySelector('input[name="lastname"]').value;
-                    // const firstName = step1.querySelector('input[name="firstname"]').value;
-                    // const phone = step1.querySelector('input[name="phone"]').value;
-                    // const email = step1.querySelector('input[name="email"]').value;
-                    // const gender = step1.querySelector('input[name="gender"]:checked')?.value;
-                    // // Récupérer l'élément <select> pour subject_id
-                    // const subjectSelect = step1.querySelector('select[name="subject_id[]"]');
-                    // // Extraire TOUTES les valeurs sélectionnées
-                    // const subject_ids = Array.from(subjectSelect.selectedOptions).flatMap(option => option.value.split(',').map(v => v.trim()));
-
-                    // // Récupérer l'élément <select> pour group_id
-                    // const groupSelect = step1.querySelector('select[name="group_id[]"]');
-                    // // Extraire TOUTES les valeurs sélectionnées
-                    // const group_ids = Array.from(groupSelect.selectedOptions).map(option => option.value);
-
-                    // // Step2
-                    // const birthDate = step2.querySelector('input[name="birthdate"]').value;
-                    // const birthPlace = step2.querySelector('input[name="birthplace_city"]').value.trim();
-                    // const nationality = step2.querySelector('select[name="nationality"]').value;
-                    // const address = step2.querySelector('input[name="address_street"]').value.trim();
-                    // const city = step2.querySelector('input[name="address_city"]').value.trim();
-                    // const zipCode = step2.querySelector('input[name="address_postcode"]').value.trim();
-                    // const country = step2.querySelector('select[name="country"]').value;
-
-                    // formData.append('lastname', lastName);
-                    // formData.append('firstname', firstName);
-                    // formData.append('phone', phone);
-                    // formData.append('email', email);
-                    // formData.append('gender', gender);
-                    // subject_ids.forEach(id => formData.append('subject_id[]', id));
-                    // group_ids.forEach(id => formData.append('group_id[]', id));
-
-                    // // Add photo (already validated as required in Step 1)
-                    // formData.append('photo', photoUpload.files[0]);
-
-                    // fetch('{{ route('professors.store') }}', {
-                    //     method: 'POST',
-                    //     body: formData,
-                    //     headers: {
-                    //         'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                    //     }
-                    // })
-                    // .then(response => response)
-                    // .then(data => {
-                    //     if (data.status === 201) {
-                    //         toastr.success('Professeur enregistré avec succés','Success!');
-                    //         window.location.href = data.redirect || '{{ route('professors.index') }}';
-                    //     } else {
-                    //         toastr.error(data.message,'Erreur');
-                    //     }
-                    // })
-                    // .catch(error => {
-                    //     console.log('Erreur lors de la soumission:', error);
-                    //     toastr.error('Une erreur est survenue lors de l\'enregistrement. Vérifiez la console.','Erreur!');
-                    // });
                 }
             });
         });
     </script>
-    @endsection
+@endsection
