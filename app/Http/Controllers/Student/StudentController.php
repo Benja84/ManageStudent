@@ -53,19 +53,20 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $data = $request->validate([
-            'gender' => 'required',
-            'firstname' => 'required|string|max:255',
+            'gender' => 'required|in:M,F',
             'lastname' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'phone' => 'required|string|max:20|unique:users,phone',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|string|max:20',
             'birthdate' => 'required|date',
             'birthplace_city' => 'required|string|max:255',
-            'nationality' => 'required|string|max:255',
-            'address_city' => 'nullable|string|max:255',
+            'address_street' => 'required|string|max:255',
+            'address_city' => 'required|string|max:255',
+            'address_postcode' => 'required|string|max:20',
         ]);
-        // dd($request);
-        $pass = str_replace('-','',$request->birthdate);
+        $pass = strtolower(normaliserChaine($request->firstname).'school');
         $data['password'] = Hash::make($pass);
         // création compte utilisateur pour l'étudiant
         $user = User::create($data);
@@ -87,14 +88,20 @@ class StudentController extends Controller
             'parent1_firstname' => $request->father_firstname,
             'parent1_lastname' => $request->father_lastname,
             'parent1_phone' => $request->father_phone,
-            'parent1_relation' => $request->father_company,
+            'parent1_relation' => $request->father_relation,
+            'parent1_profession' => $request->father_profession,
             
             'parent2_firstname' => $request->mother_firstname,
             'parent2_lastname' => $request->mother_lastname,
             'parent2_phone' => $request->mother_phone,
-            'parent2_relation' => $request->mother_company,
+            'parent2_relation' => $request->mother_relation,
+            'parent2_profession' => $request->mother_profession,
 
         ]);
+
+        if($request->group_id){
+            $student->groups()->attach($request->group_id);
+        }
 
         StudentGroupHistory::create([
             'student_id' => $student->id,
@@ -102,7 +109,7 @@ class StudentController extends Controller
         ]);
 
         // Redirection avec message de succès
-        return redirect()->route('students.index')->with('success', 'Étudiant enregistré avec succès.');
+        return redirect()->route('students.create')->with('success', 'Étudiant enregistré avec succès.');
     }
 
     /**
@@ -113,8 +120,10 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $student = Student::with('father', 'mother')->findOrFail($id);
-        return view('students.show', compact('student'));
+        $title = "Détail de l'étudiant(e)";
+        $page = "Etudiants";
+        $student = Student::findOrFail($id);
+        return view('students.show', compact('title','page','student'));
     }
 
     /**
@@ -125,8 +134,13 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $student = Student::with('father', 'mother')->findOrFail($id);
-        return view('students.edit', compact('student'));
+        $title = "Modification d'un(e) étudiant(e)";
+        $page = "Etudiants";
+        $groups = Group::all();
+        $professors = Professor::all();
+        $advisors = Advisor::all();
+        $student = Student::findOrFail($id);
+        return view('students.edit', compact('title','page','groups','advisors','student'));
     }
 
     /**

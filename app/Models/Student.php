@@ -13,7 +13,19 @@ class Student extends Model
     protected $fillable = [
         'photo',
         'user_id',
-        'advison_id',
+        'advisor_id',
+        'parent1_gender',
+        'parent1_firstname',
+        'parent1_lastname',
+        'parent1_relation',
+        'parent1_phone',
+        'parent1_profession',
+        'parent2_gender',
+        'parent2_firstname',
+        'parent2_lastname',
+        'parent2_relation',
+        'parent2_phone',
+        'parent2_profession',
     ];
 
 
@@ -28,5 +40,10 @@ class Student extends Model
     public function groups()
     {
         return $this->morphToMany(Group::class, 'groupable')->withPivot('status');
+    }
+
+    public function traineeGroupHistories()
+    {
+        return $this->hasMany(StudentGroupHistory::class)->orderBy('created_at', 'desc');
     }
 }
