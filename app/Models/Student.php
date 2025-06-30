@@ -14,6 +14,7 @@ class Student extends Model
         'photo',
         'user_id',
         'advisor_id',
+        'nationality',
         'parent1_gender',
         'parent1_firstname',
         'parent1_lastname',
@@ -42,7 +43,7 @@ class Student extends Model
         return $this->morphToMany(Group::class, 'groupable')->withPivot('status');
     }
 
-    public function traineeGroupHistories()
+    public function studentGroupHistories()
     {
         return $this->hasMany(StudentGroupHistory::class)->orderBy('created_at', 'desc');
     }

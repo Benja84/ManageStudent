@@ -126,7 +126,7 @@
                                         
                                         <div>
                                             <label class="block text-gray-700">Affectation aux groupes</label>
-                                            <select name="group_id" class="select2 form-select"  placeholder="Selectionner les groupes" title="Sélectionner les groupes">
+                                            <select name="group_id[]" class="select2 form-select"  placeholder="Selectionner les groupes" title="Sélectionner les groupes">
                                                 <option value=""  disabled>Selectionner un groupe</option>
                                                 @foreach($groups as $group)
                                                     <option data-tokens="{{ $group->fullname }}"
@@ -161,8 +161,8 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Nationalité</label>
                                         <select name="nationality" class="w-full p-2 border rounded form-select">
-                                            <option value="France">Francaise</option>
-                                            <option value="Malagasy">Malagasy</option>
+                                            <option value="France" @if($student->nationality == 'France') selected @endif>Francaise</option>
+                                            <option value="Malagasy" @if($student->nationality == 'Malagasy') selected @endif>Malagasy</option>
                                         </select>
                                     </div>
                                 </div>

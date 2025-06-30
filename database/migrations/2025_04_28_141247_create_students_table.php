@@ -15,14 +15,7 @@ return new class extends Migration
             $table->id();
 
             // Informations personnelles
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('email')->unique(); // Champ requis dans le contrôleur
-            $table->string('phone');
-            $table->enum('gender', ['Homme', 'Femme']); // Enum pour limiter les valeurs
-            $table->date('birth');
             $table->string('nationality');
-            $table->string('address')->nullable();
             $table->string('photo')->nullable();
 
             // Liens avec utilisateur et conseiller
@@ -35,18 +28,7 @@ return new class extends Migration
 
             // Informations sur le premier parent
 
-            // mere
-            $table->string('father_firstname')->nullable();
-            $table->string('father_lastname')->nullable();
-            $table->string('father_company')->nullable();
-            $table->string('father_phone')->nullable();
-            $table->text('father_message')->nullable();
-            //pere
-            $table->string('mother_firstname')->nullable();
-            $table->string('mother_lastname')->nullable();
-            $table->string('mother_company')->nullable();
-            $table->string('mother_phone')->nullable();
-            $table->text('mother_message')->nullable();
+            // pere et mere
 
 
             $table->string('parent1_gender', 60)->nullable();
@@ -55,6 +37,7 @@ return new class extends Migration
             $table->string('parent1_relation', 60)->nullable();
             $table->string('parent1_phone', 60)->nullable();
             $table->string('parent1_email', 60)->nullable();
+            $table->string('parent1_profession', 60)->nullable();
 
             // Informations sur le deuxième parent
             $table->string('parent2_gender', 60)->nullable();
@@ -63,6 +46,7 @@ return new class extends Migration
             $table->string('parent2_relation', 60)->nullable();
             $table->string('parent2_phone', 60)->nullable();
             $table->string('parent2_email', 60)->nullable();
+            $table->string('parent2_profession', 60)->nullable();
 
             // Adresse des parents
             $table->string('parent_address_street', 150)->nullable();

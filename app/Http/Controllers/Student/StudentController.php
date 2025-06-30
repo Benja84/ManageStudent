@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
@@ -85,6 +86,7 @@ class StudentController extends Controller
         $student = Student::create([
             'user_id' => $user->id,
             'advisor_id' => $request->advisor_id,
+            'nationality' => $request->nationality,
             'parent1_firstname' => $request->father_firstname,
             'parent1_lastname' => $request->father_lastname,
             'parent1_phone' => $request->father_phone,
@@ -156,29 +158,20 @@ class StudentController extends Controller
 
         // Validation des champs de l'étudiant
         $validated = $request->validate([
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'gender' => 'required|in:Homme,Femme',
-            'firstname' => 'required|string|max:255',
+            'gender' => 'required|in:M,F',
             'lastname' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email,' . $student->id,
-            'phone' => 'required|string|max:20',
-            'birth' => 'required|date',
-            'nationality' => 'required|string|max:255',
-            'address' => 'nullable|string',
-
-            'father_firstname' => 'nullable|string|max:255',
-            'father_lastname' => 'nullable|string|max:255',
-            'father_company' => 'nullable|string|max:255',
-            'father_phone' => 'nullable|string|max:20',
-            'father_message' => 'nullable|string',
-
-            'mother_firstname' => 'nullable|string|max:255',
-            'mother_lastname' => 'nullable|string|max:255',
-            'mother_company' => 'nullable|string|max:255',
-            'mother_phone' => 'nullable|string|max:20',
-            'mother_message' => 'nullable|string',
+            'firstname' => 'required|string|max:255',
+            'email' => ['required','email',Rule::unique('users')->ignore($student->user_id)],
+            'phone' => ['required','max:10',Rule::unique('users')->ignore($student->user_id)] ,
+            'birthdate' => 'required|date',
+            'birthplace_city' => 'required|string|max:255',
+            'address_street' => 'required|string|max:255',
+            'address_city' => 'required|string|max:255',
+            'address_postcode' => 'required|string|max:20',
         ]);
 
+        $user = User::find($student->user_id);
+        $user->update($validated);
         // Gestion de la photo
         if ($request->hasFile('photo')) {
             // Supprimer l’ancienne photo si elle existe
@@ -190,46 +183,37 @@ class StudentController extends Controller
             $validated['photo'] = $request->file('photo')->store('students/photos', 'public');
         }
 
+        if($request->group_id){
+            $student->groups()->sync($request->group_id);
+        }
+
+        if ($student->groups->isnotEmpty()) {
+            foreach ($student->groups as $groupAttached) {
+                $student->studentGroupHistories()->updateOrCreate([
+                    'group_id' => $groupAttached->id,
+                    'status'   => 'Student',
+                ]);
+            }
+        }
+
         // Mise à jour des informations de l’étudiant
-        $student->update($validated);
+        $data = [
+            'advisor_id' => $request->advisor_id,
+            'nationality' => $request->nationality,
+            'parent1_firstname' => $request->father_firstname,
+            'parent1_lastname' => $request->father_lastname,
+            'parent1_phone' => $request->father_phone,
+            'parent1_relation' => $request->father_relation,
+            'parent1_profession' => $request->father_profession,
+            
+            'parent2_firstname' => $request->mother_firstname,
+            'parent2_lastname' => $request->mother_lastname,
+            'parent2_phone' => $request->mother_phone,
+            'parent2_relation' => $request->mother_relation,
+            'parent2_profession' => $request->mother_profession,
 
-        // Met à jour les informations des parents
-
-        // Supprimer les parents existants
-        $student->parents()->delete();
-
-        // Créer un tableau pour les nouveaux parents à insérer
-        $parents = [];
-
-        // Si les champs du père sont remplis
-        if ($request->filled('father_firstname') && $request->filled('father_lastname')) {
-            $parents[] = [
-                'type' => 'father',
-                'firstname' => $request->input('father_firstname'),
-                'lastname' => $request->input('father_lastname'),
-                'company' => $request->input('father_company'),
-                'phone' => $request->input('father_phone'),
-                'message' => $request->input('father_message'),
-            ];
-        }
-
-        // Si les champs de la mère sont remplis
-        if ($request->filled('mother_firstname') && $request->filled('mother_lastname')) {
-            $parents[] = [
-                'type' => 'mother',
-                'firstname' => $request->input('mother_firstname'),
-                'lastname' => $request->input('mother_lastname'),
-                'company' => $request->input('mother_company'),
-                'phone' => $request->input('mother_phone'),
-                'message' => $request->input('mother_message'),
-            ];
-        }
-
-        // Insérer les parents s’ils existent
-        if (!empty($parents)) {
-            $student->parents()->createMany($parents);
-        }
-
+        ];
+        $student->update($data);
         return redirect()->route('students.index')->with('success', 'Étudiant mis à jour avec succès.');
     }
 
