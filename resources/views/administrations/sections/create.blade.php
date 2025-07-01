@@ -60,7 +60,7 @@
 
                         <div class="card-footer">
                             <div class="mt-6 d-flex justify-content-between">
-                                <a href="{{ route('sections.index') }}" class="btn btn-danger ">Annuler</a>
+                                <a href="{{ route('sections.index') }}" class="btn btn-secondary ">Annuler</a>
                                 <button type="submit" class="btn btn-primary ">Ajouter</button>
                             </div>
                         </div>

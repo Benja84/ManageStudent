@@ -10,12 +10,12 @@
 @endsection
 
 @section('content')
-    @if ($message = Session::get('success'))
+    {{-- @if ($message = Session::get('success'))
         <div class="alert alert-success alert-block">
             <h4><i class="icon fa fa-check"></i> Succès!</h4>
             {!! $message !!}
         </div>
-    @endif
+    @endif --}}
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -105,6 +105,11 @@
 @endsection
 
 @section('scripts')
+    @if(Session::has('success'))
+        <script>
+            toastr.success("{{ Session::get('success') }}", "Succès!");
+        </script>
+    @endif
     <script>
         $(document).ready(function (){
             let errors = @json($errors->all());

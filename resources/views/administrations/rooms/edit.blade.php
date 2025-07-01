@@ -1,11 +1,9 @@
 @extends('layouts.base')
 
 @section('content')
-<div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <h3>Modifier la salle : {{ $room->name }}</h3>
                 <form action="{{ route('rooms.update', $room->id) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -37,7 +35,7 @@
 
                         <div class="form-group">
                             <label>Capacité en matériel :</label>
-                            <input type="number" name="material_capacity" class="form-control" value="{{ old('material_capacity', $room->material_capacity) }}">
+                            <input type="number" name="material_capacity" placeholder="ex:20" class="form-control" value="{{ old('material_capacity', $room->material_capacity) }}">
                         </div>
 
                         <div class="form-group">
@@ -49,12 +47,13 @@
                                 <option value="Hybride" {{ $room->computer_type == 'Hybride' ? 'selected' : '' }}>Hybride</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Modifier</button>
-                        <a href="{{ route('rooms.index') }}" class="btn btn-secondary">Annuler</a>
+                        <div class="form-group d-flex justify-content-between">
+                            <a href="{{ route('rooms.index') }}" class="btn btn-secondary">Annuler</a>
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
 @endsection

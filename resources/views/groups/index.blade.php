@@ -11,7 +11,7 @@
           <div class="d-flex justify-content-end">
 
             <a href="{{ route('groups.create') }}" class="btn btn-success mb-3">
-              <i class="fas fa-plus-circle"></i> Ajouter un groupe
+              <i class="mdi mdi-plus"></i> Ajouter un groupe
             </a>
           </div>
           <div class="table-responsive">

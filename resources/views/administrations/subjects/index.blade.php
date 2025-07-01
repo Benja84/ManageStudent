@@ -13,9 +13,9 @@
                     <h4 class="mb-4">listes des matieres({{ $subjects->count() }})</h4>
                     <a href="{{ route('subjects.create') }}" class="btn btn-success mb-3"><i class="fas fa-plus-circle"></i>Ajouter une matière</a>
                 </div>
-                @if (session('success'))
+                {{-- @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
+                @endif --}}
                 <div class="table-responsive">
                 <table id="matieresTable" class="table table-striped table align-middle text-center table-bordered">
                     <thead class="table-light">
@@ -55,6 +55,11 @@
 </div>
 @endsection
 @section('scripts')
+    @if(Session::has('success'))
+        <script>
+            toastr.success("{{ Session::get('success') }}", "Succès!");
+        </script>
+    @endif
   <!-- jQuery requis -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

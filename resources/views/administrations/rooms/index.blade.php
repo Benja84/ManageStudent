@@ -13,9 +13,9 @@
                     <h3>Liste des salles({{ $rooms->count() }})</h3>
                     <a href="{{ route('rooms.create') }}" class="btn btn-success mb-3"><i class="fas fa-plus-circle"></i> Ajouter une salle</a>
                 </div>
-                    @if(session('success'))
+                    {{-- @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
+                    @endif --}}
                     <div class="table-responsive">
                     <table id="roomsTable" class="table table-striped table align-middle text-center table-bordered">
                     <thead>
@@ -70,6 +70,11 @@
 </div>
 @endsection
 @section('scripts')
+    @if(Session::has('success'))
+        <script>
+            toastr.success("{{ Session::get('success') }}", "Succès!");
+        </script>
+    @endif
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

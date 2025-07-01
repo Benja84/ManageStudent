@@ -66,7 +66,7 @@
 
                         <div class="card-footer">
                             <div class="mt-6 d-flex justify-content-between">
-                                <button  class="btn btn-danger">Annuler</button>
+                                <button  class="btn btn-secondary">Annuler</button>
                                 <button type="submit" class="btn btn-primary">Valider</a>
                             </div>
                         </div>
