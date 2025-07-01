@@ -88,12 +88,11 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $title = "Editer un groupe";
+        $group = Group::find($id);
+        $title = "Groupe ".$group->abbreviation;
         $page = "Editer un groupe";
         $sections = Section::all();
-        $group = Group::find($id);
-        dd($group);
-        return view('groups.edit',compact('title','page','sections','group'));
+        return view('groups.show',compact('title','page','sections','group'));
     }
 
     /**

@@ -43,11 +43,11 @@ use Illuminate\Support\Carbon;
     function weekdays()
     {        
       return [
-          'monday'    => 'lundi',
-          'tuesday'   => 'mardi',
-          'wednesday' => 'mercredi',
-          'thursday'  => 'jeudi',
-          'friday'    => 'vendredi'
+          'monday'    => 'Lundi',
+          'tuesday'   => 'Mardi',
+          'wednesday' => 'Mercredi',
+          'thursday'  => 'Jeudi',
+          'friday'    => 'Vendredi'
       ];
     }
   }

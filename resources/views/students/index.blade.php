@@ -11,7 +11,7 @@
                     <div class="d-flex justify-content-end">
 
                         <a href="{{ route('students.create') }}" class="btn btn-success mb-3">
-                        <i class="fas fa-plus"></i> Ajouter un étudiant
+                        <i class="mdi mdi-plus"></i> Ajouter un étudiant
                         </a>
                     </div>
                     <div class="table-responsive">
