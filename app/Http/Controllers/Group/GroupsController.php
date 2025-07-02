@@ -88,7 +88,7 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $group = Group::find($id);
+        $group = Group::with('courses.group.section','courses.professor','courses.subject','courses.room')->find($id);
         $title = "Groupe ".$group->abbreviation;
         $page = "Editer un groupe";
         $sections = Section::all();
