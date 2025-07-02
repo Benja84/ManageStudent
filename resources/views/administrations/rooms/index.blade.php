@@ -1,23 +1,23 @@
 @extends('layouts.base')
 
-@section('content')
 @section('additional_css')
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/extra-libs/multicheck/multicheck.css') }}">
   <link  rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
 @endsection
+@section('content')
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3>Liste des salles({{ $rooms->count() }})</h3>
-                    <a href="{{ route('rooms.create') }}" class="btn btn-success mb-3"><i class="fas fa-plus-circle"></i> Ajouter une salle</a>
+                <div class="d-flex justify-content-end align-items-center">
+                    {{-- <h3>Liste des salles({{ $rooms->count() }})</h3> --}}
+                    <a href="{{ route('rooms.create') }}" class="btn btn-success mb-3"><i class="mdi mdi-plus"></i> Ajouter une salle</a>
                 </div>
                     {{-- @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif --}}
                     <div class="table-responsive">
-                    <table id="roomsTable" class="table table-striped table align-middle text-center table-bordered">
+                    <table id="roomsTable" class="table table-striped align-middle text-center table-bordered">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -53,7 +53,7 @@
                                 <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                                    <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
                                     <i class="mdi mdi-delete"></i>
                                     </button>
                                 </form>
@@ -75,40 +75,26 @@
             toastr.success("{{ Session::get('success') }}", "Succès!");
         </script>
     @endif
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Bootstrap JS (si besoin) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- DataTables JS -->
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-
-  <!-- DataTables CSS -->
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+  <script src="{{asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>
 
   <script>
     $(document).ready(function () {
+      const ulr_json = "{{asset('dist/fr-FR.json')}}";
         $('#roomsTable').DataTable({
-            responsive: true,
-            language: {
-                "emptyTable": "Aucune donnée disponible dans le tableau",
-                "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
-                "infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
-                "infoFiltered": "(filtrées depuis _MAX_ entrées totales)",
-                "lengthMenu": "Afficher _MENU_ entrées",
-                "loadingRecords": "Chargement...",
-                "processing": "Traitement...",
-                "search": "Recherche :",
-                "zeroRecords": "Aucun résultat trouvé",
-                "paginate": {
-                    "first": "Premier",
-                    "last": "Dernier",
-                    "next": "Suivant",
-                    "previous": "Précédent"
-                }
+          responsive: true,
+          language: {
+              url: ulr_json
+          },
+          columnDefs: [
+            {
+              // Colonne photo (première colonne) non triable et non filtrable
+              targets: [8],
+              orderable: false,
+              searchable: false
             }
+          ],
         });
     });
   </script>

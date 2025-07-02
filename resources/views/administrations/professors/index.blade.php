@@ -40,11 +40,7 @@
                         @endif
                       </td>
 
-                    <td>
-                      <div class="item-center" style="margin-top:-1.3rem">
-                        <i style="font-size: 3em" class="mdi {{ $prof->user->gender === 'F' ? 'mdi-gender-female' : 'mdi-gender-male'}}"></i>
-                      </div>
-                    </td>
+                    <td class=" text-center">{{$prof->user->gender}}</td>
                     <td class="text-center">{{ $prof->user->lastname }}</td>
                     <td class="text-center">{{ $prof->user->firstname }}</td>
                     <td class="text-center">{{ $prof->user->email }}</td>
@@ -60,7 +56,7 @@
                         <form action="{{ route('professors.destroy', $prof->id) }}" method="POST">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                          <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
                             <i class="mdi mdi-delete"></i>
                           </button>
                         </form>

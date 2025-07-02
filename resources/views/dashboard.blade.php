@@ -2,6 +2,11 @@
 @section('aditionnal_css')
     <link href="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/extra-libs/calendar/calendar.css') }}" rel="stylesheet" />
+    <style>
+        .fc-row{
+            height: 80px!important;
+        }
+    </style>
 @show
 @section('content')
     <div class="row">
@@ -123,9 +128,9 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                 height: 'auto',     // Hauteur automatique
+                height: 'auto',     // Hauteur automatique
                 aspectRatio: 1.5,
-                defaultView: 'agendaWeek', 
+                // defaultView: 'agendaWeek', 
                 views: {
                 agendaWeek: {
                     minTime: moment.duration('08:00:00'),

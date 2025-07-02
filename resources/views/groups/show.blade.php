@@ -25,7 +25,7 @@
           </a> 
         </li>
         <li class="nav-item"> 
-          <a class="nav-link" data-bs-toggle="tab" href="#coorinator" role="tab">
+          <a class="nav-link" data-bs-toggle="tab" href="#coordinator" role="tab">
             <span class="hidden-sm-up"></span> 
             <span class="hidden-xs-down">Coordinateurs du groupe</span>
           </a> 
@@ -353,7 +353,7 @@
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        defaultView: 'agendaWeek', 
+        // defaultView: 'agendaWeek', 
         views: {
           agendaWeek: {
             minTime: moment.duration('08:00:00'),

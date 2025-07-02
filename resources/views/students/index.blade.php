@@ -47,21 +47,21 @@
                                                 </div>
                                             @endif
                                         </td>
-                                        <td>{{ $student->user->gender === 'F' ? '♀' : '♂' }}</td>
-                                        <td>{{ $student->user->lastname }}</td>
-                                        <td>{{ $student->user->firstname }}</td>
-                                        <td><a href="mailto:{{ $student->user->email }}">{{ $student->user->email }}</a></td>
-                                        <td><a href="tel:{{ $student->user->phone }}">{{ $student->user->phone }}</a></td>
+                                        <td class=" text-center">{{ $student->user->gender }}</td>
+                                        <td class=" text-center">{{ $student->user->lastname }}</td>
+                                        <td class=" text-center">{{ $student->user->firstname }}</td>
+                                        <td class=" text-center"><a href="mailto:{{ $student->user->email }}">{{ $student->user->email }}</a></td>
+                                        <td class=" text-center"><a href="tel:{{ $student->user->phone }}">{{ $student->user->phone }}</a></td>
                                         <td >
                                             <div class="d-flex justify-content-center gap-3">
-                                                <a href="{{ route('students.show', $student->id) }}" class="btn btn-sm btn-info">👁</a>
+                                                <a href="{{ route('students.show', $student->id) }}" class="btn btn-sm btn-info"><i class="mdi mdi-eye"></i></a>
 
-                                                <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-primary">✏️</a>
+                                                <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-primary"><i class="mdi mdi-pencil"></i></a>
 
                                                 <form action="{{ route('students.destroy', $student->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la suppression ?')">🗑️</button>
+                                                    <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Confirmer la suppression ?')"><i class="mdi mdi-delete"></i></button>
                                                 </form>
                                             </div>
                                         </td>

@@ -44,11 +44,7 @@
                         @endif
                       </td>
 
-                    <td>
-                      <div class="item-center" style="margin-top:-1.3rem">
-                        <i style="font-size: 3em" class="mdi {{ $member->user->gender === 'F' ? 'mdi-gender-female' : 'mdi-gender-male'}}"></i>
-                      </div>
-                    </td>
+                    <td class=" text-center">{{$member->user->gender}}</td>
                     <td class="text-center">{{ $member->user->lastname }}</td>
                     <td class="text-center">{{ $member->user->firstname }}</td>
                     <td class="text-center"><a href="mailto:{{ $member->email }}">{{ $member->user->email }}</a></td>
@@ -64,7 +60,7 @@
                         <form action="{{ route('members.destroy', $member->id) }}" method="POST">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                          <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
                             <i class="mdi mdi-delete"></i>
                           </button>
                         </form>
