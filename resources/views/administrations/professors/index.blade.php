@@ -10,7 +10,7 @@
         <div class="card-body">
           <div class="d-flex justify-content-end">
 
-            <a href="{{ route('professors.create') }}" class="btn btn-success mb-3">
+            <a href="{{ route('professors.create') }}" class="btn btn-success mb-3 text-white">
               <i class="mdi mdi-plus"></i> Ajouter un professeur
             </a>
           </div>

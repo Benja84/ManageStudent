@@ -11,7 +11,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-end align-items-center">
                     {{-- <h4 class="mb-4">listes des matieres({{ $subjects->count() }})</h4> --}}
-                    <a href="{{ route('subjects.create') }}" class="btn btn-success mb-3"><i class="mdi mdi-plus"></i>Ajouter une matière</a>
+                    <a href="{{ route('subjects.create') }}" class="btn btn-success mb-3 text-white"><i class="mdi mdi-plus"></i>Ajouter une matière</a>
                 </div>
                 {{-- @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>

@@ -11,7 +11,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-end align-items-center">
                     {{-- <h3>Liste des salles({{ $rooms->count() }})</h3> --}}
-                    <a href="{{ route('rooms.create') }}" class="btn btn-success mb-3"><i class="mdi mdi-plus"></i> Ajouter une salle</a>
+                    <a href="{{ route('rooms.create') }}" class="btn btn-success mb-3 text-white"><i class="mdi mdi-plus"></i> Ajouter une salle</a>
                 </div>
                     {{-- @if(session('success'))
                         <div class="alert alert-success">{{ session('success') }}</div>

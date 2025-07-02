@@ -14,8 +14,8 @@
                 <i class="fas fa-file-pdf"></i> Exporter en PDF
             </a>
 
-            <a href="{{ route('members.create') }}" class="btn btn-success mb-3">
-              <i class="fas fa-plus-circle"></i> Ajouter un membre
+            <a href="{{ route('members.create') }}" class="btn btn-success mb-3 text-white">
+              <i class="mdi mdi-plus"></i> Ajouter un membre
             </a>
           </div>
           <div class="table-responsive">
