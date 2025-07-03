@@ -37,8 +37,8 @@
                   <tr>
                     <td class="d-none">{{ $member->id }}</td>
                     <td>
-                        @if ($member->photo && file_exists(public_path('storage/' . $member->photo)))
-                          <img src="{{ asset('storage/' . $member->photo) }}" alt="Photo de {{ $member->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
+                        @if ($member->user->photo && file_exists(public_path('storage/' . $member->user->photo)))
+                          <img src="{{ asset('storage/' . $member->user->photo) }}" alt="Photo de {{ $member->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
                         @else
                           <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px; font-size: 14px; margin-top:-0.5rem">N/A</div>
                         @endif

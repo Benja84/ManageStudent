@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProfessorsController extends Controller
 {
@@ -66,6 +68,13 @@ class ProfessorsController extends Controller
 
             // Prépare les données validées
             $validated['password'] = Hash::make(strtolower($request->firstname).'school123');
+            if ($request->hasFile('photo')) {
+                $request->validate([
+                    'photo' => 'image|mimes:jpeg,png|max:20480',
+                ]);
+                $photoPath = $request->file('photo')->store('professors/photos', 'public');
+                $validated['photo'] = $photoPath;
+            }
             $user = User::create($validated);
             $user->assignRole('professor');
             // Associe l'ID de l'utilisateur créé
@@ -73,10 +82,6 @@ class ProfessorsController extends Controller
                 'user_id' => $user->id,
                 'comments' => $validated['comments'] ?? null,
             ];
-
-            // if ($request->hasFile('photo')) {
-            //     $data['photo'] = $request->file('photo')->store('professors', 'public');
-            // }
 
             // Crée un nouveau professeur avec les données
             $prof = Professor::create($data);
@@ -105,7 +110,7 @@ class ProfessorsController extends Controller
      */
     public function show($id)
     {
-        //
+        $prof = Professor::find($id);
     }
 
     /**
@@ -134,7 +139,47 @@ class ProfessorsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $prof = Professor::find($id);
+        $validated = $request->validate([
+            'gender' => 'required|in:M,F',
+            'lastname' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'phone' => ['required','string','max:20',Rule::unique('users')->ignore($prof->user_id)],
+            'email' => ['required','email',Rule::unique('users')->ignore($prof->user_id)],
+            'birthdate' => 'required|date',
+            'birthplace_city' => 'required|string|max:255',
+            'address_street' => 'required|string|max:255',
+            'address_city' => 'required|string|max:255',
+            'address_postcode' => 'required|string|max:20',
+            'nationality' => 'required|string',
+            'country' => 'string',
+        ]);
+        if($prof->geoups){
+            $prof->groups()->detach();
+        }
+        if($request->group_id){
+            $prof->groups()->attach($request->group_id);
+        }
+        ProfessorSubject::where('professor_id',$id)->delete();
+        if($request->subject_id){
+            $prof->subjects()->syncWithoutDetaching($request->subject_id);
+        }
+
+        if ($request->hasFile('photo')) {
+            $request->validate([
+                'photo' => 'image|mimes:jpeg,png|max:20480',
+            ]);
+            // Supprimer l’ancienne photo si elle existe
+            if ($prof->user->photo && Storage::disk('public')->exists($prof->user->photo)) {
+                Storage::disk('public')->delete($prof->user->photo);
+            }
+            $photoPath = $request->file('photo')->store('members/photos', 'public');
+            $validated['photo'] = $photoPath;
+        }
+        $user = User::find($prof->user_id);
+        $user->update($validated);
+
+        return redirect()->route('professors.index')->with('success','Mise à jour du professeur avec succès!');
     }
 
     /**

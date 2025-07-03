@@ -33,9 +33,9 @@
                                     <tr>
                                         <td>{{ $student->id }}</td>
                                         <td>
-                                            @if ($student->photo)
-                                                <img src="{{ asset('storage/' . $student->photo) }}"
-                                                    alt="Photo de {{ $student->lastname }}"
+                                            @if ($student->user->photo)
+                                                <img src="{{ asset('storage/'.$student->user->photo) }}"
+                                                    alt="{{ $student->user->lastname }}"
                                                     width="60"
                                                     height="60"
                                                     class="rounded-circle border  shadow"

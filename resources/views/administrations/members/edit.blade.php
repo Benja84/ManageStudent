@@ -79,13 +79,23 @@
                         <div class="form-group mb-4">
                             <div class="w-1/4 flex mb-3">
                                 <div class="profile-pic-container mr-4">
-                                    <img id="profile-pic" src="https://via.placeholder.com/100?text=Profile" alt="" class="profile-pic">
-                                    <label for="photo-upload" class="upload-overlay cursor-pointer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h4l2-2h2l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                    </label>
+                                    @if($member->user->photo)
+                                        <img id="profile-pic" src="{{ asset('storage/'.$member->user->photo) }}" alt="" class="profile-pic">
+                                        <label for="photo-upload" class="upload-overlay cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h4l2-2h2l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                        </label>
+                                    @else
+                                        <img id="profile-pic" src="https://via.placeholder.com/100?text=Profile" alt="" class="profile-pic">
+                                        <label for="photo-upload" class="upload-overlay cursor-pointer">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h4l2-2h2l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                        </label>
+                                    @endif
                                     <input id="photo-upload" type="file" name="photo" accept="image/*" class="upload-input">
                                 </div>
                                 

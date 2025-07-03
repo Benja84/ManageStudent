@@ -13,11 +13,6 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-
-            // Informations personnelles
-            $table->string('nationality');
-            $table->string('photo')->nullable();
-
             // Liens avec utilisateur et conseiller
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('advisor_id')->nullable();

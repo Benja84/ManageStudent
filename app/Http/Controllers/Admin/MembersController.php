@@ -11,8 +11,7 @@ use Illuminate\Validation\Rule;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
+use Illuminate\Support\Facades\Storage;
 
 class MembersController extends Controller
 {
@@ -67,15 +66,10 @@ class MembersController extends Controller
         $fields['password'] = Hash::make(strtolower($request->firstname) . 'school');
         if ($request->hasFile('photo')) {
             $request->validate([
-                'photo' => 'required|image|mimes:jpeg,png|max:2048',
+                'photo' => 'image|mimes:jpeg,png|max:20480',
             ]);
-            $file = $request->file('photo');
-            $filename = str_replace(' ', '', $request->firstname . $request->lasname);
-            $filename = iconv('UTF-8', 'ASCII//TRANSLIT', $filename);
-            $filename = preg_replace('/[^a-zA-Z0-9]/', '', strtolower($filename));
-            // $plus = Str::random(10);
-            $name = $file->storeAs('public/images', $filename . '.' . $file->extension());
-            $fields['photo'] = $name;
+            $photoPath = $request->file('photo')->store('members/photos', 'public');
+            $fields['photo'] = $photoPath;
         }
         $user = User::create($fields);
 
@@ -139,17 +133,16 @@ class MembersController extends Controller
         $fields['address_postcode'] = $request->address_postcode;
         $fields['nationality'] = $request->nationality;
 
+        $photoPath = null;
         if ($request->hasFile('photo')) {
             $request->validate([
-                'photo' => 'required|image|mimes:jpeg,png|max:2048',
+                'photo' => 'image|mimes:jpeg,png|max:20480',
             ]);
-            $file = $request->file('photo');
-            $filename = str_replace(' ', '', $request->firstname . $request->lasname);
-            $filename = iconv('UTF-8', 'ASCII//TRANSLIT', $filename);
-            $filename = preg_replace('/[^a-zA-Z0-9]/', '', strtolower($filename));
-            // $plus = Str::random(10);
-            $name = $file->storeAs('public/images', $filename . '.' . $file->extension());
-            $fields['photo'] = $name;
+            // Supprimer l’ancienne photo si elle existe
+            if ($advisor->user->photo && Storage::disk('public')->exists($advisor->user->photo)) {
+                Storage::disk('public')->delete($advisor->user->photo);
+            }
+            $photoPath = $request->file('photo')->store('members/photos', 'public');
         }
         
         $user = User::find($advisor->user_id);
@@ -162,6 +155,7 @@ class MembersController extends Controller
         $user->address_city = $request->address_city;
         $user->address_postcode = $request->address_postcode;
         $user->address_street = $request->address_street;
+        $user->photo = $photoPath;
 
         $user->save();
 

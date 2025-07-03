@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('address_street', 150)->nullable();
 			$table->string('address_postcode', 60)->nullable();
 			$table->string('address_city', 60)->nullable();
+			$table->string('nationality', 60)->nullable();
+			$table->string('photo', 60)->nullable();
 
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

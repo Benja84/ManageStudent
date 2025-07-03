@@ -7,8 +7,8 @@
         <div class="card-body">
             <div class="row mb-4">
                 <div class="col-md-3 text-center">
-                    @if ($student->photo)
-                        <img src="{{ asset('storage/' . $student->photo) }}"
+                    @if ($student->user->photo)
+                        <img src="{{ asset('storage/' . $student->user->photo) }}"
                             alt="Photo de {{ $student->user->firstname }}"
                             class="rounded-circle shadow"
                             width="150" height="150" style="object-fit: cover;">
@@ -25,8 +25,8 @@
                     <p><strong>Email :</strong> <a href="mailto:{{ $student->user->email }}">{{ $student->user->email }}</a></p>
                     <p><strong>Téléphone :</strong> <a href="tel:{{ $student->user->phone }}">{{ $student->user->phone }}</a></p>
                     <p><strong>Date de naissance :</strong> {{ \Carbon\Carbon::parse($student->user->birthdate)->format('d/m/Y') }}</p>
-                    <p><strong>Lieu de naissance :</strong> {{ $student->user->birthplace_postcode }} {{ $student->user->birthplace_city }}</p>
-                    <p><strong>Nationalité :</strong> {{ $student->nationality ?? 'Non renseignée' }}</p>
+                    <p><strong>Lieu de naissance :</strong>  {{ $student->user->birthplace_city }}</p>
+                    <p><strong>Nationalité :</strong> {{ $student->user->nationality ?? 'Non renseignée' }}</p>
                     <p><strong>Adresse :</strong>
                         {{ $student->user->address_street }}, {{ $student->user->address_postcode }} {{ $student->user->address_city }}
                     </p>

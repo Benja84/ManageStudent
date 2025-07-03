@@ -66,27 +66,29 @@ class StudentController extends Controller
             'address_street' => 'required|string|max:255',
             'address_city' => 'required|string|max:255',
             'address_postcode' => 'required|string|max:20',
+            'nationality' => 'required',
         ]);
         $pass = strtolower(normaliserChaine($request->firstname).'school');
         $data['password'] = Hash::make($pass);
-        // création compte utilisateur pour l'étudiant
-        $user = User::create($data);
-        // Donner un rôle 'student' pour l'utilisateur créé
-        $user->assignRole('student');
         // Upload de la photo
         $photoPath = null;
         if ($request->hasFile('photo')) {
             $request->validate([
-                'photo' => 'image|mimes:jpeg,png|max:2048',
+                'photo' => 'image|mimes:jpeg,png|max:20480',
             ]);
             $photoPath = $request->file('photo')->store('students/photos', 'public');
+            $data['photo'] = $photoPath;
         }
 
+        // création compte utilisateur pour l'étudiant
+        $user = User::create($data);
+        // Donner un rôle 'student' pour l'utilisateur créé
+        $user->assignRole('student');
+        
         // Création de l'étudiant
         $student = Student::create([
             'user_id' => $user->id,
             'advisor_id' => $request->advisor_id,
-            'nationality' => $request->nationality,
             'parent1_firstname' => $request->father_firstname,
             'parent1_lastname' => $request->father_lastname,
             'parent1_phone' => $request->father_phone,
@@ -169,19 +171,20 @@ class StudentController extends Controller
             'address_city' => 'required|string|max:255',
             'address_postcode' => 'required|string|max:20',
         ]);
-
-        $user = User::find($student->user_id);
-        $user->update($validated);
         // Gestion de la photo
         if ($request->hasFile('photo')) {
             // Supprimer l’ancienne photo si elle existe
-            if ($student->photo && Storage::disk('public')->exists($student->photo)) {
-                Storage::disk('public')->delete($student->photo);
+            if ($student->user->photo && Storage::disk('public')->exists($student->user->photo)) {
+                Storage::disk('public')->delete($student->user->photo);
             }
 
             // Stocker la nouvelle photo
             $validated['photo'] = $request->file('photo')->store('students/photos', 'public');
         }
+
+        $user = User::find($student->user_id);
+        $user->update($validated);
+        
 
         if($request->group_id){
             $student->groups()->sync($request->group_id);
@@ -199,7 +202,6 @@ class StudentController extends Controller
         // Mise à jour des informations de l’étudiant
         $data = [
             'advisor_id' => $request->advisor_id,
-            'nationality' => $request->nationality,
             'parent1_firstname' => $request->father_firstname,
             'parent1_lastname' => $request->father_lastname,
             'parent1_phone' => $request->father_phone,

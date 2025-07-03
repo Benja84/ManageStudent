@@ -36,13 +36,15 @@ class User extends Authenticatable
         'email',
         'phone',
         'birthdate',
-        // 'birthplace_postcode',
+        'birthplace_postcode',
         'birthplace_city',
         'address_street',
         'address_postcode',
         'address_city',
+        'nationality',
         'password',
         'active',
+        'photo'
     ];
 
     /**
