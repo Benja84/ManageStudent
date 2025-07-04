@@ -135,16 +135,16 @@
                 agendaWeek: {
                     minTime: moment.duration('08:00:00'),
                     maxTime: moment.duration('20:00:00'),
-                    slotDuration: moment.duration('00:30:00'),
-                    slotLabelInterval: moment.duration('00:30:00'),
+                    // slotDuration: moment.duration('00:30:00'),
+                    // slotLabelInterval: moment.duration('00:30:00'),
                     scrollTime: moment.duration('08:00:00'),
                     slotLabelFormat: 'H[h]mm'
                 },
                 agendaDay: {
                     minTime: moment.duration('08:00:00'),
                     maxTime: moment.duration('20:00:00'),
-                    slotDuration: moment.duration('00:30:00'),
-                    slotLabelInterval: moment.duration('00:30:00'),
+                    // slotDuration: moment.duration('00:30:00'),
+                    // slotLabelInterval: moment.duration('00:30:00'),
                     scrollTime: moment.duration('08:00:00'),
                     slotLabelFormat: 'H[h]mm'
                 }

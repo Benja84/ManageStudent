@@ -358,16 +358,16 @@
           agendaWeek: {
             minTime: moment.duration('08:00:00'),
             maxTime: moment.duration('20:00:00'),
-            slotDuration: moment.duration('00:30:00'),
-            slotLabelInterval: moment.duration('00:30:00'),
+            // slotDuration: moment.duration('00:30:00'),
+            // slotLabelInterval: moment.duration('00:30:00'),
             scrollTime: moment.duration('08:00:00'),
             slotLabelFormat: 'H[h]mm'
           },
           agendaDay: {
             minTime: moment.duration('08:00:00'),
             maxTime: moment.duration('20:00:00'),
-            slotDuration: moment.duration('00:30:00'),
-            slotLabelInterval: moment.duration('00:30:00'),
+            // slotDuration: moment.duration('00:30:00'),
+            // slotLabelInterval: moment.duration('00:30:00'),
             scrollTime: moment.duration('08:00:00'),
             slotLabelFormat: 'H[h]mm'
           }
@@ -380,9 +380,9 @@
         selectable: true,
         selectHelper: false,
         eventClick: function(info){
-          const event = info;
-          const start = new Date(event.start);
-          const end = new Date(event.end);
+          // const event = info;
+          const start = new Date(info.start);
+          const end = new Date(info.end);
           
           // Formater la date en français
           const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
@@ -391,14 +391,14 @@
           
           // Remplir le modal
           // $('#eventModal').find('.modal-header').style.backgroundColor =event.color;
-          $('#eventModal').find('.modal-header').css('background-color', event.color+'!important');;
-          $('#eventHeader').text(event.title);
-          $('#eventCourse').text(event.extendedProps.course);
-          $('#eventTeacher').text(event.extendedProps.teacher);
+          $('#eventModal').find('.modal-header').css('background-color', info.color+'!important');;
+          $('#eventHeader').text(info.title);
+          $('#eventCourse').text(info.extendedProps.course);
+          $('#eventTeacher').text(info.extendedProps.teacher);
           $('#eventDate').text(dateString);
-          $('#eventTime').text(`De ${event.extendedProps.startHour.split(':').slice(0, 2).join(':')} à ${event.extendedProps.endHour.split(':').slice(0, 2).join(':')}`);
-          $('#eventClass').text(event.extendedProps.class);
-          $('#eventLocation').text(event.extendedProps.location);
+          $('#eventTime').text(`De ${info.extendedProps.startHour.split(':').slice(0, 2).join(':')} à ${info.extendedProps.endHour.split(':').slice(0, 2).join(':')}`);
+          $('#eventClass').text(info.extendedProps.class);
+          $('#eventLocation').text(info.extendedProps.location);
           
           // Afficher le modal
           $('#eventModal').modal('toggle');
