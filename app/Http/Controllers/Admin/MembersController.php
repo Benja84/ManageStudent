@@ -11,8 +11,7 @@ use Illuminate\Validation\Rule;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
+use Illuminate\Support\Facades\Storage;
 
 class MembersController extends Controller
 {
@@ -55,24 +54,22 @@ class MembersController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|max:10',
+            'phone' => 'required|max:10|unique:users,phone',
             'role' => 'required',
             'birthdate' => 'required',
             'birthplace_city' => 'required',
+            'address_city' => 'required',
+            'address_street' => 'required',
         ]);
-        // $fields['gender'] = $request->gender;
-        $fields['password'] = Hash::make($request->firstname . 'school');
+        $fields['address_postcode'] = $request->address_postcode;
+        $fields['nationality'] = $request->nationality;
+        $fields['password'] = Hash::make(strtolower($request->firstname) . 'school');
         if ($request->hasFile('photo')) {
             $request->validate([
-                'photo' => 'required|image|mimes:jpeg,png|max:2048',
+                'photo' => 'image|mimes:jpeg,png|max:20480',
             ]);
-            $file = $request->file('photo');
-            $filename = str_replace(' ', '', $request->firstname . $request->lasname);
-            $filename = iconv('UTF-8', 'ASCII//TRANSLIT', $filename);
-            $filename = preg_replace('/[^a-zA-Z0-9]/', '', strtolower($filename));
-            // $plus = Str::random(10);
-            $name = $file->storeAs('public/images', $filename . '.' . $file->extension());
-            $fields['photo'] = $name;
+            $photoPath = $request->file('photo')->store('members/photos', 'public');
+            $fields['photo'] = $photoPath;
         }
         $user = User::create($fields);
 
@@ -80,7 +77,8 @@ class MembersController extends Controller
         $user->assignRole($request->role);
         $advisor = Advisor::create($attributes);
 
-        return redirect()->route('members.index');
+        return redirect()->route('members.create')->with('success','Membre enregistré avec succé !');
+        // return $advisor;
     }
 
     /**
@@ -106,7 +104,7 @@ class MembersController extends Controller
         $title = "Editer un membre du personnel";
         $page = "Membres";
         $member = Advisor::find($id);
-        $roles = [User::ADMIN => 'administrateur-trice', User::ADVISOR => 'conseiller-ère', User::SECRETARY => 'secrétaire'];
+        $roles = [User::ADMIN => 'Administrateur-trice', User::ADVISOR => 'Conseiller-ère', User::SECRETARY => 'Secrétaire'];
         return view('administrations.members.edit', compact('member', 'roles', 'title', 'page'));
     }
 
@@ -119,31 +117,35 @@ class MembersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request);
+        $advisor = Advisor::find($id);
         $fields = $request->validate([
             'firstname' => 'required',
             'gender' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email|unique:users,email,' . $request->id,
-            'phone' => 'required|max:10',
+            'email' => ['required','email',Rule::unique('users')->ignore($advisor->user_id)],
+            'phone' => ['required','max:10',Rule::unique('users')->ignore($advisor->user_id)] ,
             'birthdate' => 'required',
             'birthplace_city' => 'required',
+            'address_street' => 'required',
+            'address_city' => 'required',
         ]);
 
+        $fields['address_postcode'] = $request->address_postcode;
+        $fields['nationality'] = $request->nationality;
+
+        $photoPath = null;
         if ($request->hasFile('photo')) {
             $request->validate([
-                'photo' => 'required|image|mimes:jpeg,png|max:2048',
+                'photo' => 'image|mimes:jpeg,png|max:20480',
             ]);
-            $file = $request->file('photo');
-            $filename = str_replace(' ', '', $request->firstname . $request->lasname);
-            $filename = iconv('UTF-8', 'ASCII//TRANSLIT', $filename);
-            $filename = preg_replace('/[^a-zA-Z0-9]/', '', strtolower($filename));
-            // $plus = Str::random(10);
-            $name = $file->storeAs('public/images', $filename . '.' . $file->extension());
-            $fields['photo'] = $name;
+            // Supprimer l’ancienne photo si elle existe
+            if ($advisor->user->photo && Storage::disk('public')->exists($advisor->user->photo)) {
+                Storage::disk('public')->delete($advisor->user->photo);
+            }
+            $photoPath = $request->file('photo')->store('members/photos', 'public');
         }
-
-        $user = User::find($request->id);
+        
+        $user = User::find($advisor->user_id);
         $user->gender = $request->gender;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -151,10 +153,13 @@ class MembersController extends Controller
         $user->birthdate = $request->birthdate;
         $user->birthplace_city = $request->birthplace_city;
         $user->address_city = $request->address_city;
+        $user->address_postcode = $request->address_postcode;
+        $user->address_street = $request->address_street;
+        $user->photo = $photoPath;
 
         $user->save();
 
-        return redirect()->route('members.index');
+        return redirect()->route('members.index')->with('success','Membre modifié avec succès');
     }
 
     /**

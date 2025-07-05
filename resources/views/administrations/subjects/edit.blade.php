@@ -21,8 +21,8 @@
 
                         <div class="card-footer">
                             <div class="mt-6 d-flex justify-content-between">
-                                <a href="{{ route('sections.index') }}" class="btn btn-secondary btn-rounded">Annuler</a>
-                                <button type="submit" class="btn btn-success btn-rounded">Mettre à jours</button>
+                                <a href="{{ route('sections.index') }}" class="btn btn-secondary">Annuler</a>
+                                <button type="submit" class="btn btn-primary">Valider</button>
                             </div>
                         </div>
                     </div>

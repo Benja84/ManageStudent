@@ -10,8 +10,8 @@
         <div class="card-body">
           <div class="d-flex justify-content-end">
 
-            <a href="{{ route('professors.create') }}" class="btn btn-success mb-3">
-              <i class="fas fa-plus"></i> Ajouter un professeur
+            <a href="{{ route('professors.create') }}" class="btn btn-success mb-3 text-white">
+              <i class="mdi mdi-plus"></i> Ajouter un professeur
             </a>
           </div>
           <div class="table-responsive">
@@ -33,18 +33,14 @@
                   <tr>
                     <td class="d-none">{{ $prof->id }}</td>
                     <td>
-                        @if ($prof->photo && file_exists(public_path('storage/' . $prof->photo)))
-                          <img src="{{ asset('storage/' . $prof->photo) }}" alt="Photo de {{ $prof->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
+                        @if ($prof->user->photo && file_exists(public_path('storage/' . $prof->user->photo)))
+                          <img src="{{ asset('storage/' . $prof->user->photo) }}" alt="Photo de {{ $prof->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
                         @else
                           <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px; font-size: 14px; margin-top:-0.5rem">N/A</div>
                         @endif
                       </td>
 
-                    <td>
-                      <div class="item-center" style="margin-top:-1.3rem">
-                        <i style="font-size: 3em" class="mdi {{ $prof->user->gender === 'F' ? 'mdi-gender-female' : 'mdi-gender-male'}}"></i>
-                      </div>
-                    </td>
+                    <td class=" text-center">{{$prof->user->gender}}</td>
                     <td class="text-center">{{ $prof->user->lastname }}</td>
                     <td class="text-center">{{ $prof->user->firstname }}</td>
                     <td class="text-center">{{ $prof->user->email }}</td>
@@ -60,7 +56,7 @@
                         <form action="{{ route('professors.destroy', $prof->id) }}" method="POST">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                          <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
                             <i class="mdi mdi-delete"></i>
                           </button>
                         </form>
@@ -81,11 +77,15 @@
   </div>
 @endsection
 @section('scripts')
-<!-- jQuery et DataTables -->
-<script src="{{asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>
-
-<!-- Initialisation -->
-<script>
+  <!-- jQuery et DataTables -->
+  <script src="{{asset('assets/extra-libs/DataTables/datatables.min.js')}}"></script>
+  @if(Session::has('success'))
+    <script>
+      toastr.success("{{ Session::get('success') }}", "Succès!");
+    </script>
+  @endif
+  <!-- Initialisation -->
+  <script>
     $(document).ready(function () {
       const ulr_json = "{{asset('dist/fr-FR.json')}}";
         $('#liste_prof').DataTable({
@@ -103,6 +103,6 @@
           ],
         });
     });
-</script>
+  </script>
 @endsection
 

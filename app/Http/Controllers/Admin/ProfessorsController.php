@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProfessorsController extends Controller
 {
@@ -34,8 +36,8 @@ class ProfessorsController extends Controller
      */
     public function create()
     {
-        $title = "Ajouter un prof";
-        $page = "Prof";
+        $title = "Ajouter un professeur";
+        $page = "Professeur";
         $subjects = Subject::all();
         $groups = Group::with('section')->where('school_year', 'LIKE', '%' . date('Y') . '%')->get();
         return view('administrations.professors.create',compact('title','page','subjects','groups'));
@@ -53,51 +55,33 @@ class ProfessorsController extends Controller
             // Valide les données du formulaire
             $validated = $request->validate([
                 'gender' => 'required|in:M,F',
-                'last_name' => 'required|string|max:255',
-                'first_name' => 'required|string|max:255',
-                'phone' => 'required|string|max:20',
+                'lastname' => 'required|string|max:255',
+                'firstname' => 'required|string|max:255',
+                'phone' => 'required|string|max:20|unique:users,phone',
                 'email' => 'required|email|unique:users,email',
-                'birth_date' => 'required|date',
-                'birth_place' => 'required|string|max:255',
-                'nationality' => 'required|string|max:100',
-                'address' => 'required|string|max:255',
-                'city' => 'required|string|max:100',
-                'zip_code' => 'required|string|max:20',
-                // 'country' => 'required|string|max:100',
+                'birthdate' => 'required|date',
+                'birthplace_city' => 'required|string|max:255',
+                'address_street' => 'required|string|max:255',
+                'address_city' => 'required|string|max:255',
+                'address_postcode' => 'required|string|max:20',
             ]);
-            // dd($request);
 
             // Prépare les données validées
-            $user = new User();
-            $user->gender = $validated['gender'];
-            $user->firstname = $validated['first_name'];
-            $user->lastname = $validated['last_name'];
-            $user->birthdate = $validated['birth_date'];
-            $user->birthplace_city = $validated['birth_place'];
-            // $user->nationality = $validated['nationality'];
-            $user->address_street = $validated['address'];
-            $user->address_city = $validated['city'];
-            $user->address_postcode = $validated['zip_code'];
-            // $user->country = $validated['country'];
-            $user->phone = $validated['phone'] ?? null;
-            $user->email = $validated['email'];
-            $user->password = Hash::make('school123');
-
-            // $password = Hash::make('school123');
-            // $user->password = $password;
-
-            $user->save();
+            $validated['password'] = Hash::make(strtolower($request->firstname).'school123');
+            if ($request->hasFile('photo')) {
+                $request->validate([
+                    'photo' => 'image|mimes:jpeg,png|max:20480',
+                ]);
+                $photoPath = $request->file('photo')->store('professors/photos', 'public');
+                $validated['photo'] = $photoPath;
+            }
+            $user = User::create($validated);
             $user->assignRole('professor');
-            // Associe l'ID de l'utilisateur authentifié
+            // Associe l'ID de l'utilisateur créé
             $data = [
                 'user_id' => $user->id,
                 'comments' => $validated['comments'] ?? null,
-
             ];
-
-            // if ($request->hasFile('photo')) {
-            //     $data['photo'] = $request->file('photo')->store('professors', 'public');
-            // }
 
             // Crée un nouveau professeur avec les données
             $prof = Professor::create($data);
@@ -108,8 +92,8 @@ class ProfessorsController extends Controller
                 $prof->subjects()->syncWithoutDetaching($request->subject_id);
             }
             // Redirige vers la liste des professeurs avec un message de succès
-            // return redirect()->route('professors.index')->with('success', 'Professeur ajouté avec succès');
-            return $prof;
+            return redirect()->route('professors.create')->with('success', 'Professeur ajouté avec succès');
+            // return $prof;
         } catch (\Exception $e) {
             // Enregistre l'erreur dans les logs
             Log::error('Error in store: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
@@ -126,7 +110,7 @@ class ProfessorsController extends Controller
      */
     public function show($id)
     {
-        //
+        $prof = Professor::find($id);
     }
 
     /**
@@ -137,7 +121,13 @@ class ProfessorsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $title = "Modification professeur";
+        $page = "Professeur";
+        $prof = Professor::find($id);
+        $subjects = Subject::all();
+        $groups = Group::with('section')->where('school_year', 'LIKE', '%' . date('Y') . '%')->get();
+
+        return view('administrations.professors.edit',compact('title','page','prof','subjects','groups'));
     }
 
     /**
@@ -149,7 +139,47 @@ class ProfessorsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $prof = Professor::find($id);
+        $validated = $request->validate([
+            'gender' => 'required|in:M,F',
+            'lastname' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'phone' => ['required','string','max:20',Rule::unique('users')->ignore($prof->user_id)],
+            'email' => ['required','email',Rule::unique('users')->ignore($prof->user_id)],
+            'birthdate' => 'required|date',
+            'birthplace_city' => 'required|string|max:255',
+            'address_street' => 'required|string|max:255',
+            'address_city' => 'required|string|max:255',
+            'address_postcode' => 'required|string|max:20',
+            'nationality' => 'required|string',
+            'country' => 'string',
+        ]);
+        if($prof->geoups){
+            $prof->groups()->detach();
+        }
+        if($request->group_id){
+            $prof->groups()->attach($request->group_id);
+        }
+        ProfessorSubject::where('professor_id',$id)->delete();
+        if($request->subject_id){
+            $prof->subjects()->syncWithoutDetaching($request->subject_id);
+        }
+
+        if ($request->hasFile('photo')) {
+            $request->validate([
+                'photo' => 'image|mimes:jpeg,png|max:20480',
+            ]);
+            // Supprimer l’ancienne photo si elle existe
+            if ($prof->user->photo && Storage::disk('public')->exists($prof->user->photo)) {
+                Storage::disk('public')->delete($prof->user->photo);
+            }
+            $photoPath = $request->file('photo')->store('members/photos', 'public');
+            $validated['photo'] = $photoPath;
+        }
+        $user = User::find($prof->user_id);
+        $user->update($validated);
+
+        return redirect()->route('professors.index')->with('success','Mise à jour du professeur avec succès!');
     }
 
     /**

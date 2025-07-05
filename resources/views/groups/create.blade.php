@@ -89,7 +89,8 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-between">
+                            <a href="{{route('groups.index')}}" class="btn btn-secondary">Annuler</a>
                             <button type="submit" class="btn btn-primary">Ajouter</button>
                         </div>
                     </div>

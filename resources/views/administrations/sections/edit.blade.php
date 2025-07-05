@@ -8,15 +8,20 @@
                     @csrf
                     @method('PUT')
                     <div class="card-body">
-                        <h5 class="card-title mb-0">Modifier une section</h5>
-                        <div class="form-group mt-3">
-                            <label>Intitulé</label>
-                            <input class="form-control" type="text" name="name" value="{{ old('name', $section->name) }}" required>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Intitulé</label>
+                            <input list="sections" type="text" name="name" class="form-control" value="{{ old('name', $section->name) }}" required>
+                            <datalist id="sections">
+                                @foreach($sectionsList as $item)
+                                    <option value="{{ $item->name }}"></option>
+                                @endforeach
+                            </datalist>
                         </div>
                         <div class="form-group mt-3">
                             <label>Abréviation</label>
                             <input class="form-control" type="text" name="abbreviation" value="{{ old('abbreviation', $section->abbreviation) }}" required>
                         </div>
+<<<<<<< HEAD
                         <div class="form-group mt-3">
                             <label>Année de la section</label>
                             <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année" required>
@@ -35,6 +40,46 @@
                     <div class="card-footer">
                         <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-warning btn-rounded">Modifier</button>
+=======
+
+                        <div class="mb-3">
+                            <label for="year" class="form-label">Niveau</label>
+                            <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année">
+                                @for($i=1; $i<=5; $i++)
+                                    <option class="form-control" data-tokens="{{ yearth($i) }}" @if(old('promotion', $section->promotion) == $i) @php($selected = TRUE) selected @endif
+                                         value="{{ $i }}">{{ yearth($i) }}
+                                    </option>
+                                    @php($selected = FALSE)
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label>Matières</label>
+                            <div class="col-md-12">
+                                <select name="subject_id[]" class="select2 form-select" multiple
+                                title="Sélectionner les matières">
+                                @foreach($subjects as $subject)
+                                    <option data-tokens="{{ $subject->name }}"
+                                    @if((old('subject_id') && in_array($subject->id, old('subject_id')) ) || ( $section->subjects && $section->subjects->contains($subject->id))) selected @php($selected = TRUE) @endif
+                                    value="{{$subject->id}}">{{ $subject->name }} ( {{ $subject->abbreviation }} )
+                                    </option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="pricing" class="form-label">Prix</label>
+                            <input type="number" name="pricing" step="0.01" class="form-control" value="{{ old('pricing', $section->pricing) }}" required>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="mt-6 d-flex justify-content-between">
+                                <button  class="btn btn-secondary">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Valider</a>
+                            </div>
+>>>>>>> dev_bis
                         </div>
                     </div>
                 </form>

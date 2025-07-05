@@ -36,13 +36,15 @@ class User extends Authenticatable
         'email',
         'phone',
         'birthdate',
-        // 'birthplace_postcode',
+        'birthplace_postcode',
         'birthplace_city',
-        // 'address_street',
-        // 'address_postcode',
+        'address_street',
+        'address_postcode',
         'address_city',
+        'nationality',
         'password',
         'active',
+        'photo'
     ];
 
     /**
@@ -82,7 +84,7 @@ class User extends Authenticatable
         $role= $this->roles()->get()[0]->name;
         switch ($role) {
             case 'admin':
-                return 'Administrateur';
+                return 'Administrateur-trice';
                 break;
             case 'professor':
                 return 'Professeur';
@@ -91,13 +93,13 @@ class User extends Authenticatable
                 return 'Etudiant';
                 break;
             case 'coordinator':
-                return 'Coordinateur';
+                return 'Coordinateur-trice';
                 break;
             case 'advisor':
-                return 'Conseiller';
+                return 'Conseiller-ère';
                 break;
             case 'secretary':
-                return 'Secretaire';
+                return 'Secrétaire';
                 break;
             default:
                 return "";

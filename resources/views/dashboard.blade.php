@@ -2,6 +2,11 @@
 @section('aditionnal_css')
     <link href="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/extra-libs/calendar/calendar.css') }}" rel="stylesheet" />
+    <style>
+        .fc-row{
+            height: 80px!important;
+        }
+    </style>
 @show
 @section('content')
     <div class="row">
@@ -20,27 +25,6 @@
         </div>
     </div>
     <!-- BEGIN MODAL -->
-    <div class="modal none-border" id="my-event">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title"><strong>Add Event</strong></h4>
-                    <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect"
-                        data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success save-event waves-effect waves-light">Create
-                        event</button>
-                    <button type="button" class="btn btn-danger delete-event waves-effect waves-light"
-                        data-dismiss="modal">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- New modal --}}
     <div class="modal fade" id="eventModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -83,7 +67,7 @@
             </div>
             </div>
         </div>
-        </div>
+    </div>
     <!-- END MODAL -->
 @endsection
 @section('scripts')
@@ -144,7 +128,29 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                
+                height: 'auto',     // Hauteur automatique
+                aspectRatio: 1.5,
+                // defaultView: 'agendaWeek', 
+                views: {
+                agendaWeek: {
+                    minTime: moment.duration('08:00:00'),
+                    maxTime: moment.duration('20:00:00'),
+                    // slotDuration: moment.duration('00:30:00'),
+                    // slotLabelInterval: moment.duration('00:30:00'),
+                    scrollTime: moment.duration('08:00:00'),
+                    slotLabelFormat: 'H[h]mm'
+                },
+                agendaDay: {
+                    minTime: moment.duration('08:00:00'),
+                    maxTime: moment.duration('20:00:00'),
+                    // slotDuration: moment.duration('00:30:00'),
+                    // slotLabelInterval: moment.duration('00:30:00'),
+                    scrollTime: moment.duration('08:00:00'),
+                    slotLabelFormat: 'H[h]mm'
+                }
+                },
+                allDaySlot: false,
+                hiddenDays: [0, 6],
                 events: courses,
                 selectable: true,
                 selectHelper: true,

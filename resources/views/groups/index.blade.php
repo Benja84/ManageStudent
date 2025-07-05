@@ -10,8 +10,8 @@
         <div class="card-body">
           <div class="d-flex justify-content-end">
 
-            <a href="{{ route('groups.create') }}" class="btn btn-success mb-3">
-              <i class="fas fa-plus-circle"></i> Ajouter un groupe
+            <a href="{{ route('groups.create') }}" class="btn btn-success mb-3 text-white">
+              <i class="mdi mdi-plus"></i> Ajouter un groupe
             </a>
           </div>
           <div class="table-responsive">
@@ -45,7 +45,7 @@
                         <form action="{{ route('groups.destroy', $group->id) }}" method="POST">
                           @csrf
                           @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                          <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
                             <i class="mdi mdi-delete"></i>
                           </button>
                         </form>

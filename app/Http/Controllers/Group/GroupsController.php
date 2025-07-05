@@ -88,12 +88,11 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $title = "Editer un groupe";
+        $group = Group::with('courses.group.section','courses.professor','courses.subject','courses.room')->find($id);
+        $title = "Groupe ".$group->abbreviation;
         $page = "Editer un groupe";
         $sections = Section::all();
-        $group = Group::find($id);
-        dd($group);
-        return view('groups.edit',compact('title','page','sections','group'));
+        return view('groups.show',compact('title','page','sections','group'));
     }
 
     /**
@@ -181,12 +180,15 @@ class GroupsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $group = Group::find($id);
+        if($group->delete()){
+            return redirect()->route('groups.index')->with('success', 'Le groupe  a bien été supprimé');
+        }
+        return redirect()->route('groups.index')->with('error', 'Problème. Le groupe n\'a pas été supprimé');
     }
 
     // Récuperer les abréviations d'une année scolaire
     public function getYearAbreviation($school_year){
-        // dd($school_year);
         return Group::where('school_year',$school_year)->get()->pluck('abbreviation');
     }
 }

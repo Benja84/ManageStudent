@@ -13,16 +13,34 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label class="form-label">Nom de la section</label>
-                            <select name="name" class="form-select" required>
+                            <input list="sections" type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+                            {{-- <select name="name" class="form-select" required>
                                 <option value="">Sélectionnez une option</option>
                                 @foreach($attitudes as $attitude)
                                     <option value="{{ $attitude }}" {{ old('name') == $attitude ? 'selected' : '' }}>{{ $attitude }}</option>
                                 @endforeach
-                            </select>
+                            </select> --}}
+                            <datalist id="sections">
+                                @foreach($sectionsList as $item)
+                                    <option value="{{ $item->name }}"></option>
+                                @endforeach
+                            </datalist>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Abréviation</label>
                             <input type="text" class="form-control" name="abbreviation" placeholder="Ex: GL">
+                        </div>
+                        <div class="form-group mt-3">
+                            <label>Année de la section</label>
+                            <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année">
+                                @for($i=1; $i<=5; $i++)
+                                    <option class="form-control" data-tokens="{{ yearth($i) }}"
+                                            @if(old('promotion') == $i) @php($selected = TRUE) selected @endif
+                                            value="{{ $i }}">{{ yearth($i) }}
+                                    </option>
+                                    @php($selected = FALSE)
+                                @endfor
+                            </select>
                         </div>
 
                         <div class="form-group mt-3">
@@ -40,25 +58,13 @@
                             </div>
                         </div>
                         <div class="form-group mt-3">
-                            <label>Année de la section</label>
-                            <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année">
-                                @for($i=1; $i<=5; $i++)
-                                    <option class="form-control" data-tokens="{{ yearth($i) }}"
-                                            @if(old('promotion') == $i) @php($selected = TRUE) selected @endif
-                                            value="{{ $i }}">{{ yearth($i) }}
-                                    </option>
-                                    @php($selected = FALSE)
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="form-group mt-3">
                             <label>Prix année scolaire</label>
                             <input class="form-control" type="text" name="pricing" placeholder="ex: 200 000" required>
                         </div>
 
                         <div class="card-footer">
                             <div class="mt-6 d-flex justify-content-between">
-                                <a href="{{ route('sections.index') }}" class="btn btn-danger ">Annuler</a>
+                                <a href="{{ route('sections.index') }}" class="btn btn-secondary ">Annuler</a>
                                 <button type="submit" class="btn btn-primary ">Ajouter</button>
                             </div>
                         </div>

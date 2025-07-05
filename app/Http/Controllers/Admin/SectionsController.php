@@ -33,6 +33,7 @@ class SectionsController extends Controller
         $title = "Ajouter une section";
         $page = "Sections";
         $subjects = Subject::all();
+        $sectionsList = Section::all();
         $attitudes = $attitudes = [
             'Montage Video',
             'SCIENCES ',
@@ -41,8 +42,7 @@ class SectionsController extends Controller
             ' GESTION ',
             ' DROIT',
         ];
-
-        return view('administrations.sections.create', compact('title', 'page', 'subjects', 'attitudes'));
+        return view('administrations.sections.create', compact('title', 'page', 'subjects', 'attitudes', 'sectionsList'));
     }
 
     /**
@@ -61,11 +61,8 @@ class SectionsController extends Controller
         ]);
 
         $section = Section::create($request->all());
-        foreach ($request->subject_id as $key => $subject) {
-            SectionSubject::create([
-                'section_id' => $section->id,
-                'subject_id' => $subject,
-            ]);
+        if ($request->subject_id) {
+            $section->subjects()->syncWithoutDetaching($request->subject_id);
         }
 
         return redirect()->route('sections.create')->with('success', 'Section créé avec succés');
@@ -100,8 +97,9 @@ class SectionsController extends Controller
         ];
         $title = "Editer setion";
         $page = "Membre";
-
-        return view('administrations.sections.edit', compact('section', 'attitudes', 'title', 'page'));
+        $sectionsList = Section::all();
+        $subjects = Subject::all();
+        return view('administrations.sections.edit', compact('section', 'attitudes', 'title', 'page', 'sectionsList', 'subjects'));
     }
 
     /**
@@ -116,11 +114,15 @@ class SectionsController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'abbreviation' => 'required|string|max:50',
-            'promotion' => 'required|integer|min:1|max:5',
+            'promotion' => 'required|string|max:255',
             'pricing' => 'required|numeric|min:0',
         ]);
 
         $section->update($validated);
+        SectionSubject::where('section_id', $section->id)->delete();
+        if ($request->subject_id) {
+            $section->subjects()->syncWithoutDetaching($request->subject_id);
+        }
 
         return redirect()->route('sections.index')->with('success', 'Section mise à jour avec succès');
     }
