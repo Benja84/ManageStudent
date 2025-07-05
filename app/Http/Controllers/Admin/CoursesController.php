@@ -25,7 +25,10 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::with(['group.section','professor','subject','room'])->get();
+        $title = "Liste des cours";
+        $page = "Calendrier des cours";
+        return view('administrations.courses.index', compact('courses','title','page'));
     }
 
     /**

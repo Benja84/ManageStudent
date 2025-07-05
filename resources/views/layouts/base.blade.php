@@ -209,7 +209,7 @@
                                 <li class="sidebar-item">
                                     <a href="{{ route('courses.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des cours </span>
+                                        <span class="hide-menu"> Calendrier des cours </span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">

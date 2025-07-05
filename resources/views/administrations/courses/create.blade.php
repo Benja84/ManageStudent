@@ -108,6 +108,11 @@
 @endsection
 
 @section('scripts')
+    @if(Session::has('success'))
+        <script>
+            toastr.success("{{ Session::get('success') }}", "Succès!");
+        </script>
+    @endif
     <script>
 
         $(document).ready(function (){
