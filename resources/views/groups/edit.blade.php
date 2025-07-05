@@ -14,7 +14,7 @@
             <div class="card">
                 <form action="{{ route('groups.update',$group->id) }}" method="POST">
                     @csrf
-                    @method('PUT') 
+                    @method('PUT')
                     <div class="card-body">
                         <div class="form-group mt-3">
                             <label>Abréviation</label>
@@ -107,7 +107,7 @@
       $("#section").on('change',function(){
         const value = $(this).val();
         const url = "{{ route('subject', ':value') }}".replace(':value', value);
-        
+
         console.log('url',url)
         $.ajax({
           url: url,
