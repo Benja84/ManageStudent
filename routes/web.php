@@ -50,6 +50,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/subject/{id}',[SectionsController::class,'getSubject'])->name('subject');
     // Route::get('/professorSubject/{subject_id}',[ProfessorsController::class,'getProfSubject'])->name('professorSubject');
     Route::get('/professorSubject/{subject_id}',[SubjectController::class,'getProf'])->name('professorSubject');
+    Route::post('/courses/recherche',[CoursesController::class,'chercheCourse'])->name('search_courses');
 });
 
 Route::middleware(['auth'])->group(function () {

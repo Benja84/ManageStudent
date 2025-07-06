@@ -26,9 +26,13 @@ class CoursesController extends Controller
     public function index()
     {
         $courses = Course::with(['group.section','professor','subject','room'])->get();
+        $groups = Group::all();
+        $professors = Professor::all();
+        $subjects = Subject::all();
+        $rooms = Room::all();
         $title = "Liste des cours";
         $page = "Calendrier des cours";
-        return view('administrations.courses.index', compact('courses','title','page'));
+        return view('administrations.courses.index', compact('courses','title','page','professors','groups','rooms','subjects'));
     }
 
     /**
@@ -310,5 +314,43 @@ class CoursesController extends Controller
 
 
         return $inputDates;
+    }
+
+    public function chercheCourse(Request $request){
+        $query = Course::query();
+        
+        if ($request->filled('date_debut') && $request->filled('date_fin')) {
+            $dateDebut = Carbon::createFromFormat('d/m/Y', $request->date_debut)->startOfDay()->format('Y-m-d');
+            $dateFin = Carbon::createFromFormat('d/m/Y', $request->date_fin)->startOfDay()->format('Y-m-d');
+            $query->whereBetween('date', [
+                $dateDebut,
+                $dateFin
+            ]);
+        } elseif ($request->filled('date_debut')) {
+            $dateDebut = Carbon::createFromFormat('d/m/Y', $request->date_debut)->startOfDay()->format('Y-m-d');
+            $query->where('date', '>=', $dateDebut);
+        } elseif ($request->filled('date_fin')) {
+            $dateFin = Carbon::createFromFormat('d/m/Y', $request->date_fin)->startOfDay()->format('Y-m-d');
+            $query->where('date', '<=', $dateFin);
+        }
+
+        // Autres filtres
+        $filters = [
+            'heure_debut' => '=',
+            'jour' => '=',
+            'prof_id' => '=',
+            'group_id' => '=',
+            'salle_id' => '=',
+            'matiere_id' => '='
+        ];
+
+        foreach ($filters as $field => $operator) {
+            if ($request->filled($field)) {
+                $query->where($field, $operator, $request->$field);
+            }
+        }
+        $query->with(['room','subject','group','professor']);
+        $results = $query->get();
+        return $results;
     }
 }
