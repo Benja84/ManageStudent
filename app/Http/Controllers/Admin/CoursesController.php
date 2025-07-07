@@ -318,8 +318,9 @@ class CoursesController extends Controller
 
     public function chercheCourse(Request $request){
         $query = Course::query();
-        
+         $hasFilters = false;
         if ($request->filled('date_debut') && $request->filled('date_fin')) {
+            $hasFilters = true;
             $dateDebut = Carbon::createFromFormat('d/m/Y', $request->date_debut)->startOfDay()->format('Y-m-d');
             $dateFin = Carbon::createFromFormat('d/m/Y', $request->date_fin)->startOfDay()->format('Y-m-d');
             $query->whereBetween('date', [
@@ -327,27 +328,33 @@ class CoursesController extends Controller
                 $dateFin
             ]);
         } elseif ($request->filled('date_debut')) {
+            $hasFilters = true;
             $dateDebut = Carbon::createFromFormat('d/m/Y', $request->date_debut)->startOfDay()->format('Y-m-d');
             $query->where('date', '>=', $dateDebut);
         } elseif ($request->filled('date_fin')) {
+            $hasFilters = true;
             $dateFin = Carbon::createFromFormat('d/m/Y', $request->date_fin)->startOfDay()->format('Y-m-d');
             $query->where('date', '<=', $dateFin);
         }
 
         // Autres filtres
         $filters = [
-            'heure_debut' => '=',
-            'jour' => '=',
-            'prof_id' => '=',
+            'start_time' => '=',
+            'weekday' => '=',
+            'professor_id' => '=',
             'group_id' => '=',
-            'salle_id' => '=',
-            'matiere_id' => '='
+            'room_id' => '=',
+            'subject_id' => '='
         ];
 
         foreach ($filters as $field => $operator) {
             if ($request->filled($field)) {
+                $hasFilters = true;
                 $query->where($field, $operator, $request->$field);
             }
+        }
+        if (!$hasFilters) {
+            return [];
         }
         $query->with(['room','subject','group','professor']);
         $results = $query->get();

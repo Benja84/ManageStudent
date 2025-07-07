@@ -74,7 +74,7 @@
                       </div>
                       <div class="col-md-3">
                         <label>Heure :</label>
-                        <input class="form-control col-md-2 js-masked-time start_time" type="text" name="start_time" placeholder="Heure de début du cours (HH:MM)">
+                        <input class="form-control col-md-2 js-masked-time start_time" type="time" name="start_time" placeholder="Heure de début du cours (HH:MM)">
                       </div>
                       
                     </div>
@@ -82,7 +82,7 @@
                       <div class="col-md-3">
                         <label for="">Groupe :</label>
                         <div>
-                        <select class="select2 form-select shadow-none" style="width: 100%"   name="group">
+                        <select class="select2 form-select shadow-none" style="width: 100%"   name="group_id">
                           <option value="" disabled selected hidden>Selectionner un groupe</option>
                           @foreach ($groups as $group)
                             <option class="form-control" data-tokens="{{ $group->fullname }}" value="{{ $group->id }}">
@@ -95,7 +95,7 @@
                       <div class="col-md-3">
                         <label for="">Salle :</label>
                         <div>
-                        <select class="select2 shadow-none" style="width: 100%"   name="room">
+                        <select class="select2 shadow-none" style="width: 100%"   name="room_id">
                           <option value="" disabled selected hidden>Selectionner une salle</option>
                           @foreach ($rooms as $room)
                             <option class="form-control" data-tokens="{{ $room->name }}" value="{{ $room->id }}">
@@ -108,7 +108,7 @@
                       <div class="col-md-3">
                         <label for="">Matière :</label>
                         <div>
-                        <select class="select2 form-select shadow-none" style="width: 100%"  name="duration">
+                        <select class="select2 form-select shadow-none" style="width: 100%"  name="subject_id">
                           <option value="" disabled selected >Selectionner la matière</option>
                           @foreach ($subjects as $subject)
                             <option class="form-control" data-tokens="{{ $subject->name }}" value="{{ $subject->id }}">
@@ -122,11 +122,11 @@
                       <div class="col-md-3">
                         <label for="">Professeur :</label>
                         <div>
-                        <select class="select2 form-select shadow-none" style="width: 100%" name="weekday">
+                        <select class="select2 form-select shadow-none" style="width: 100%" name="prof_id">
                           <option value="" disabled selected hidden>Selectionner un professeur</option>
                           @foreach ($professors as $prof)
-                            <option class="form-control" data-tokens="{{ $prof->user->firstname }}{{ $prof->user->lastname }}" value="{{ $prof->id }}">
-                              {{ $prof->user->firstname }}{{ $prof->user->lastname }}
+                            <option class="form-control" data-tokens="{{ $prof->user->firstname }} {{ $prof->user->lastname }}" value="{{ $prof->id }}">
+                              {{ $prof->user->firstname }} {{ $prof->user->lastname }}
                             </option>
                           @endforeach
                         </select>
@@ -152,20 +152,10 @@
                         <th class=" text-center" scope="col">Action</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {{-- @forelse ($courses as $course)
-                        <tr>
-                          <td class="text-center">{{ weekdays()[$course->weekday] }} {{ DateTime::createFromFormat('Y-m-d', $course->date)->format('d/m/Y') }}</td>
-                          <td class="text-center">{{ DateTime::createFromFormat('H:i:s', $course->start_time)->format('H\hi') }} à {{ DateTime::createFromFormat('H:i:s', $course->end_time)->format('H\hi') }}</td>
-                          <td class="text-center">{{ $course->subject->name }}</td>
-                          <td class="text-center">{{ $course->professor->user->firstname }} {{ $course->professor->user->lastname }}</td>
-                          <td class="text-center">{{ $course->room->name }} ({{ $course->room->department }}), n° {{ $course->room->number }}, étage {{ $course->room->floor ?? '' }} </td>
-                        </tr>
-                      @empty --}}
+                    <tbody id="data_tr">
                         <tr>
                           <td colspan="8" class="text-muted">Aucun cours trouvé</td>
                         </tr>
-                      {{-- @endforelse --}}
                     </tbody>
                   </table>
                 </div>
@@ -334,17 +324,65 @@
 
       $('#recherche').on('click',function(event){
         event.preventDefault();
+        $('#data_tr').html('');
         let url = $(this).closest('form').attr('action');
         let date_start = $('input[name="start_date"]').val();
         let date_end = $('input[name="end_date"]').val();
         let token = $('input[name="_token"]').val();
-        console.log('url',url)
+        let weekday = $('select[name="weekday"]').val();
+        let prof = $('select[name="prof_id"]').val();
+        let group = $('select[name="group_id"]').val();
+        let subject = $('select[name="subject_id"]').val();
+        let room = $('select[name="room_id"]').val();
+        let start_time = $('input[name="start_time"]').val() ;
+        let url_delete = "{{ route('courses.destroy',':id') }}";
+        let url_edit = "{{ route('courses.edit',':id') }}";
+        console.log('start_time',start_time)
         $.ajax({
           url:url,
           method: 'POST',
-          data: {date_debut:date_start,date_fin:date_end,'_token':token},
+          data: {date_debut:date_start,date_fin:date_end,weekday:weekday,start_time:start_time,professor_id:prof,group_id:group,subject_id:subject,room_id:room,'_token':token},
           success: function (response){
             console.log('response',response)
+            if(response.length){
+              response.forEach(element => {
+                const edit_route = url_edit.replace(':id',element.id);
+                const delete_route = url_delete.replace(':id',element.id);
+                moment.locale('en');
+                const dayIndex = moment.weekdays().indexOf(element.weekday.charAt(0).toUpperCase() + element.weekday.slice(1));
+                const date = new Date(element.date);
+                const jour = date.getDate().toString().padStart(2, '0');
+                const mois = (date.getMonth() + 1).toString().padStart(2, '0');
+                const annee = date.getFullYear();
+                // Formatter heure
+                const heure_debut = element.start_time.substring(0, 5).replace(':', 'h');
+                const heure_fin = element.end_time.substring(0, 5).replace(':', 'h');
+                moment.locale('fr');
+                let result = '<tr>';
+                result +='<td class="text-center">'+moment.weekdays()[dayIndex].charAt(0).toUpperCase() + moment.weekdays()[dayIndex].slice(1)+' '+`${jour}/${mois}/${annee} </td>`;
+                result +=`<td class="text-center">${heure_debut} à ${heure_fin} </td>`;
+                result += `<td class="text-center">${element.subject.name} </td>`;
+                result += `<td class="text-center">${element.professor.user.firstname} ${element.professor.user.lastname}</td>`;
+                result += `<td class="text-center">${element.room.name} (${element.room.department}), n° ${element.room.number}, étage ${element.room.floor}</td>`;
+                result += `<td class="text-center">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                    <a class="btn btn-primary text-white" href="${edit_route}"><i class="mdi mdi-pencil"></i></a>
+                    </div>
+                    <form action="${delete_route}" mthod="POST">
+                      @csrf
+                      @method('DELETE')
+                      <button class="btn btn-danger text-white"><i class="mdi mdi-delete"></i></button>
+                    </form>
+                  </div>
+                  </td>`;
+                result +='</tr>';
+                console.log(moment.weekdays()[dayIndex],element)
+                $('#data_tr').append(result);
+              });
+            }else{
+              $('#data_tr').append('<tr><td colspan="8" class="text-muted">Aucun cours trouvé</td></tr>')
+            }
           }
         })
       });
