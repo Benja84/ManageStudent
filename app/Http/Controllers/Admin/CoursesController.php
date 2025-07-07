@@ -149,7 +149,15 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = 'Modifier cours';
+        $title = 'Editer un cours';
+        $course = Course::with('subject.professors','subject.groups')->find($id);
+        $subjects = Subject::all();
+        $rooms = Room::all();
+        // $professors = Professor::all();
+        // $groups = Group::all();
+
+        return view('administrations.courses.edit',compact('title','page','course','subjects','rooms'));
     }
 
     /**
@@ -311,8 +319,6 @@ class CoursesController extends Controller
         }
 
         $inputDates = array_flip($switchedInputdates);
-
-
         return $inputDates;
     }
 
