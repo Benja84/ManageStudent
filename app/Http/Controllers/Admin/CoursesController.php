@@ -169,7 +169,75 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            "subject_id" => "required",
+            "professor_id" => "required",
+            "room_id" => "required",
+            "group_id" => "required",
+            "weekday" => "required",
+            "start_time" => "required",
+            "duration" => "required",
+            "start_date" => "required",
+            "end_date" => "required"
+        ]);
+        
+        $course = Course::find($id);
+        $messagesErrors = ['start_date' => ''];
+        try {
+            $inputDates = $this->checkDatesProfessor($request);
+        } catch (ValidationException $e) {
+            $messagesErrors['start_date'] .= 'Le professeur donne déjà des cours dans cette période <br>';
+        }
+
+        try {
+            $inputDates = $this->checkDatesRoom($request);
+        } catch (ValidationException $e) {
+            $messagesErrors['start_date'] .= 'La salle est occupée dans cette période <br>';
+        }
+
+        try {
+            $inputDates = $this->checkDatesGroup($request);
+        } catch (ValidationException $e) {
+            $messagesErrors['start_date'] .= 'Le groupe est déjà en cours dans cette période <br>';
+        }
+
+        
+        $inputDates = $this->avoidClosedDays($request);
+
+        if (!empty($messagesErrors['start_date'])) {
+            throw ValidationException::withMessages($messagesErrors);
+        }
+        
+        // Modifier la durée choisi en minutes
+        $duration = floatval($request->duration)*60 ."minutes";
+        // Calculer l'heure fin à partir de l'heure du début choisi et la durée en minutes
+        $heureFin = date('H:i', strtotime("$request->start_time + $duration"));
+        $createdCourses  = [];
+
+        if(count($inputDates)){
+            foreach($inputDates as $date){
+                $course->subject_id = $request->subject_id;
+                $course->professor_id = $request->professor_id;
+                $course->room_id = $request->room_id;
+                $course->group_id = $request->group_id;
+                $course->weekday = $request->weekday;
+                $course->start_time = $request->start_time;
+                $course->end_time = $heureFin;
+                $course->date = $date;
+                $course->duration = $request->duration;
+                $course->save();
+                $createdCourses[] = $course;
+            }
+        }
+        // else{
+        //     return redirect()->back()->withErrors('Vérifier le jour ou les dates début et fin!');
+        // }
+
+        if (empty($createdCourses)) {
+            throw ValidationException::withMessages(['start_date' => 'Aucun cours n\'a été créé car les dates sont hors du jour indiqué ou sur des jours fermés']);
+        }
+
+        return redirect()->route('courses.create')->with('success', 'Le cours a bien été ajouté');
     }
 
     /**
@@ -322,6 +390,7 @@ class CoursesController extends Controller
         return $inputDates;
     }
 
+    // Recherche cours ajax
     public function chercheCourse(Request $request){
         $query = Course::query();
          $hasFilters = false;
@@ -353,10 +422,10 @@ class CoursesController extends Controller
             'subject_id' => '='
         ];
 
-        foreach ($filters as $field => $operator) {
-            if ($request->filled($field)) {
+        foreach ($filters as $key => $operator) {
+            if ($request->filled($key)) {
                 $hasFilters = true;
-                $query->where($field, $operator, $request->$field);
+                $query->where($key, $operator, $request->$key);
             }
         }
         if (!$hasFilters) {

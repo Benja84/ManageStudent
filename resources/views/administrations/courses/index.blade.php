@@ -322,10 +322,13 @@
         },
       });
 
+      // Recherche cours
       $('#recherche').on('click',function(event){
         event.preventDefault();
         $('#data_tr').html('');
+        // Récuperer l'url d'action form (POST)
         let url = $(this).closest('form').attr('action');
+        // Récuperer les valeurs du formulaire
         let date_start = $('input[name="start_date"]').val();
         let date_end = $('input[name="end_date"]').val();
         let token = $('input[name="_token"]').val();
@@ -335,29 +338,38 @@
         let subject = $('select[name="subject_id"]').val();
         let room = $('select[name="room_id"]').val();
         let start_time = $('input[name="start_time"]').val() ;
-        let url_delete = "{{ route('courses.destroy',':id') }}";
+        // Déclaration url delete et edit cours
+        let url_delete = "{{ route('courses.destroy',':id_cours') }}";
         let url_edit = "{{ route('courses.edit',':id') }}";
-        console.log('start_time',start_time)
+
+        // Ajax methode
         $.ajax({
           url:url,
           method: 'POST',
           data: {date_debut:date_start,date_fin:date_end,weekday:weekday,start_time:start_time,professor_id:prof,group_id:group,subject_id:subject,room_id:room,'_token':token},
           success: function (response){
-            console.log('response',response)
             if(response.length){
+              // S'il y a des valeurs dans response
               response.forEach(element => {
+                // Remplacer :id et :id_cours par id cours trouvé 
                 const edit_route = url_edit.replace(':id',element.id);
-                const delete_route = url_delete.replace(':id',element.id);
+                const delete_route = url_delete.replace(':id_cours',element.id);
+
                 moment.locale('en');
+                // Récuperer l'index du tableau weekdays
                 const dayIndex = moment.weekdays().indexOf(element.weekday.charAt(0).toUpperCase() + element.weekday.slice(1));
+                
                 const date = new Date(element.date);
                 const jour = date.getDate().toString().padStart(2, '0');
                 const mois = (date.getMonth() + 1).toString().padStart(2, '0');
                 const annee = date.getFullYear();
-                // Formatter heure
+
+                // Formatter heure ex: 08:30 => 08h30
                 const heure_debut = element.start_time.substring(0, 5).replace(':', 'h');
                 const heure_fin = element.end_time.substring(0, 5).replace(':', 'h');
+
                 moment.locale('fr');
+                // Prepare la ligne et colonne du tableau (<tr> <td></td> </tr>)
                 let result = '<tr>';
                 result +='<td class="text-center">'+moment.weekdays()[dayIndex].charAt(0).toUpperCase() + moment.weekdays()[dayIndex].slice(1)+' '+`${jour}/${mois}/${annee} </td>`;
                 result +=`<td class="text-center">${heure_debut} à ${heure_fin} </td>`;
@@ -377,17 +389,33 @@
                   </div>
                   </td>`;
                 result +='</tr>';
-                console.log(moment.weekdays()[dayIndex],element)
+                // Afficher dans la table les rérultats
                 $('#data_tr').append(result);
               });
             }else{
               $('#data_tr').append('<tr><td colspan="8" class="text-muted">Aucun cours trouvé</td></tr>')
             }
+          },
+          error: function (error){
+            toastr.error(error.message);
           }
         })
       });
       $('#reinitialiser').on('click',function(event){
         event.preventDefault();
+        $('input[name="start_date"]').val('');
+        $('input[name="end_date"]').val('');
+        $('input[name="start_time"]').val('') ;
+        $('select[name="weekday"] option').each(element =>{
+          console.log(element)
+          // if($(option).hasAttribute('selected')){
+          //   $(option).removeAttr('selected');
+          // }
+        });
+        $('select[name="prof_id"]').val('');
+        $('select[name="group_id"]').val('');
+        $('select[name="subject_id"]').val('');
+        $('select[name="room_id"]').val(''); 
       });
     })
   </script>
