@@ -45,7 +45,7 @@
                                 <div class="col-md-2">
                                     <input class="form-control col-md-2 end_date  datepicker" type="text" name="end_date" placeholder="Date fin (dd/mm/yyyy)" required> 
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     <input class="form-control col-md-2 " type="text" name="description" placeholder="Déscription"> 
                                 </div>
                             </div>

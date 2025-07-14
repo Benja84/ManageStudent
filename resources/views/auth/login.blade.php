@@ -46,11 +46,12 @@
 
                 @if ($errors->any())
                     <div class="alert alert-danger">
-                        <ul class="mb-0">
+                        <span>Veuillez vérifier le login ou mot de passe</span>
+                        {{-- <ul class="mb-0">
                             @foreach ($errors->all() as $error)
-                                <li>misy diso fa hamarino tsara</li>
+                                <li>{{$error}}</li>
                             @endforeach
-                        </ul>
+                        </ul> --}}
                     </div>
                 @endif
 

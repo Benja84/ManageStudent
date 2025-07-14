@@ -107,9 +107,10 @@
 @endsection
 
 @section('scripts')
-  @if(Session::has('success'))
+
+  @if(Session::has('error'))
     <script>
-      toastr.success("{{ Session::get('success') }}", "Succès!");
+      toastr.error("{{ Session::get('error') }}", "Erreur!");
     </script>
   @endif
   <script>
@@ -205,11 +206,4 @@
       })
     })
   </script>
-@endsection
-@section('scripts')
-  @if(Session::has('error'))
-    <script>
-      toastr.error("{{ Session::get('error') }}", "Erreur!");
-    </script>
-  @endif
 @endsection

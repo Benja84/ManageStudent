@@ -127,7 +127,7 @@
                             <p class="text-warning mt-3">(*) Champ obligatoire</p>
                         </div>
                         <div class="flex justify-between mt-6">
-                            <button type="button" class="btn btn-danger text-white px-4 py-2">Précédent</button>
+                            <button type="button" class="btn btn-secondary text-white px-4 py-2">Précédent</button>
                             <button type="button" id="nextBtn" class="btn btn-primary px-4 py-2">Suivant</button>
                         </div>
                     </div>
@@ -174,7 +174,7 @@
                         </div>
                         <p class="text-warning mt-3">(*) Champ obligatoire</p>
                         <div class="flex justify-between mt-6">
-                            <button type="button" id="prevBtn" class="btn btn-danger text-white px-4 py-2 ">Précédent</button>
+                            <button type="button" id="prevBtn" class="btn btn-secondary text-white px-4 py-2 ">Précédent</button>
                             <button type="submit" id="submitBtn" class="btn btn-primary text-white px-4 py-2 ">Enregistrer</button>
                         </div>
                     </div>

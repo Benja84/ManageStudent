@@ -171,10 +171,11 @@ class CoursesController extends Controller
     {
         $course = Course::find($id);
         $data = $request->all();
-        $messagesErrors = ['started_on' => ''];
+        $messagesErrors = ['start_date' => ''];
         $attributes   = collect($data);
         $duration = floatval($attributes->get('duration')) * 60;
         $attributes['end_time'] = Carbon::parse($attributes->get('start_time'))->addRealMinutes($duration)->format('H:i');
+        
         $toUpdate = [];
         $toUpdate[] = $course;
 
@@ -188,20 +189,21 @@ class CoursesController extends Controller
         $dayWeek = $attributes->get('weekday');
         $group = $attributes->get('group_id');
         $startTime = Carbon::createFromFormat('H:i', $attributes->get('start_time'));
-        $endTime = Carbon::createFromFormat('H:i', $attributes->get('end_time'));
+        // $endTime = Carbon::createFromFormat('H:i', $attributes->get('end_time'));
         $prof = $attributes->get('professor_id');
         $room = $attributes->get('room_id');
 
+        // Récuperer les cours qui ont les mêmes infos
         $toverify = $this->searchCoursesVerify($fromDate, $toDate, $dayWeek, $group, $startTime, $prof, $room);
 
-        if(count($toverify)>0)
+        if(count($toverify)>0) // s'il y en a
         {
             $verif = collect($toverify[0]);
             
             array_push($idtoverify, $verif['id']);
-
+            // comparer les cours trouvé avec le cours actuel
             $hascommon = array_intersect($idtoverify, $tempIdArr);
-            if(count($hascommon)<=0)
+            if(count($hascommon)<=0) // 
             {
                 $idtoverif = [];
                 $toverif = $this->searchCoursesVerify($fromDate, $toDate, $dayWeek, null, $startTime, null, $room);
@@ -217,7 +219,7 @@ class CoursesController extends Controller
                         try {
                             $inputDates = $this->checkDatesRoom($request);
                         } catch (ValidationException $e) {
-                            return redirect()->route('courses.edit',$id)->with('error','La salle est occupée dans cette période');
+                            return redirect()->back()->with('error','La salle est occupée dans cette période');
                         }
                     }
                 }
@@ -236,7 +238,7 @@ class CoursesController extends Controller
                         try {
                             $inputDates = $this->checkDatesProfessor($request);
                         } catch (ValidationException $e) {
-                            return redirect()->route('courses.edit',$id)->with('error','Le professeur donne déjà des cours dans cette période');
+                            return redirect()->back()->with('error','Le professeur donne déjà des cours dans cette période');
                         }
                     }
                 }
@@ -255,7 +257,7 @@ class CoursesController extends Controller
                         try {
                             $inputDates = $this->checkDatesGroup($request);
                         } catch (ValidationException $e) {
-                            return redirect()->route('courses.edit',$id)->with('error','Le groupe est déjà en cours dans cette période');
+                            return redirect()->back()->with('error','Le groupe est déjà en cours dans cette période');
                         }
                     }
                 }
@@ -271,7 +273,9 @@ class CoursesController extends Controller
         $prof = $toUpdate[0]['professor_id'];
         $room = $toUpdate[0]['room_id'];
         $subject = $toUpdate[0]['subject_id'];
+        
         $inputDates = $this->avoidClosedDays($request);
+        dd($inputDates);
         $allcourse = $this->searchGroupedCoursesLimited($fromDate, $toDate, $dayWeek, $group, $startTime, $subject, $prof, $room);
         if(count($allcourse)>0)
         {
