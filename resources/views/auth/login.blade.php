@@ -9,7 +9,7 @@
     <meta name="keywords" content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Matrix lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Matrix admin lite design, Matrix admin lite dashboard bootstrap 5 dashboard template">
     <meta name="description" content="Matrix Admin Lite Free Version is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
-    <title>Matrix Admin Lite Free Versions Template by WrapPixel</title>
+    <title>SIU</title>
     <!-- Favicon icon -->
    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
     <!-- Custom CSS -->
@@ -28,7 +28,14 @@
             <div class="auth-box bg-dark border-top border-secondary" style="margin-top: 15%">
                 <div id="loginform">
                     <div class="text-center pt-3 pb-3">
-                        <span class="db"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" /></span>
+                        {{-- <span class="db"><img src="{{ asset('assets/images/logo.png') }}" alt="logo" /></span> --}}
+                        {{-- <b class="logo-icon">
+                            <img src="{{asset('assets/images/logo-icon.png')}}" alt="homepage" class="light-logo"/>
+                        </b> --}}
+                        <span class="logo-text">
+                            {{-- <img src="{{asset('assets/images/logo-text.png')}}" alt="homepage" class="light-logo" /> --}}
+                            <label class="text-white font-extrabold" style="font-size: 2em">Géstion Universitaire</label>
+                        </span>
                     </div>
 
                     @if (session('status'))

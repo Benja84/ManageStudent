@@ -40,9 +40,9 @@
         <header class="topbar" data-navbarbg="skin5">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header" data-logobg="skin5">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="{{ route('dashboard') }}">
                         <b class="logo-icon ps-2">
-                            <img src="{{asset('assets/images/logo-icon.png')}}" alt="homepage" class="light-logo" width="70%" height="70%"/>
+                            <img src="{{asset('assets/images/logo-icon.png')}}" alt="homepage" class="light-logo"/>
                         </b>
                         <span class="logo-text">
                             {{-- <img src="{{asset('assets/images/logo-text.png')}}" alt="homepage" class="light-logo" /> --}}

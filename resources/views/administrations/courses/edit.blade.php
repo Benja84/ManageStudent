@@ -197,30 +197,19 @@
         return 'valide';
       }
 
+      $('.start_date').on('change',function(){
+        $('.end_date').val($(this).val());
+      })
       $('.end_date').on('change',function(){
-        const startVal = $('.start_date').val();
-        const endVal = $(this).val();
-        const startParts = startVal.split('/');
-        const endParts = endVal.split('/');
-
-        // Créer des dates correctes (new Date(année, mois-1, jour))
-        const start = new Date(
-          parseInt(startParts[2]),
-          parseInt(startParts[1]) - 1,
-          parseInt(startParts[0])
-        );
-
-        const end = new Date(
-          parseInt(endParts[2]),
-          parseInt(endParts[1]) - 1,
-          parseInt(endParts[0])
-        );
-        if(start != ""){
-          if( start > end){
-            toastr.error('La date début doit inférieur ou égal à la date fin','Erreur date!')
-          }
-        }
+        $('.start_date').val($(this).val());
       })
     })
   </script>
+@endsection
+@section('scripts')
+  @if(Session::has('error'))
+    <script>
+      toastr.error("{{ Session::get('error') }}", "Erreur!");
+    </script>
+  @endif
 @endsection
