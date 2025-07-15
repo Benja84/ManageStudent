@@ -25,7 +25,14 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::with(['group.section', 'professor', 'subject', 'room'])->get();
+        $groups = Group::all();
+        $professors = Professor::all();
+        $subjects = Subject::all();
+        $rooms = Room::all();
+        $title = "Liste des cours";
+        $page = "Calendrier des cours";
+        return view('administrations.courses.index', compact('courses', 'title', 'page', 'professors', 'groups', 'rooms', 'subjects'));
     }
 
     /**
@@ -142,7 +149,15 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = 'Modifier cours';
+        $title = 'Editer un cours';
+        $course = Course::with('subject.professors', 'subject.groups')->find($id);
+        $subjects = Subject::all();
+        $rooms = Room::all();
+        // $professors = Professor::all();
+        // $groups = Group::all();
+
+        return view('administrations.courses.edit', compact('title', 'page', 'course', 'subjects', 'rooms'));
     }
 
     /**
@@ -154,7 +169,145 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $course = Course::find($id);
+        $data = $request->all();
+        $messagesErrors = ['start_date' => ''];
+        $attributes   = collect($data);
+        $duration = floatval($attributes->get('duration')) * 60;
+        $attributes['end_time'] = Carbon::parse($attributes->get('start_time'))->addRealMinutes($duration)->format('H:i');
+
+        $toUpdate = [];
+        $toUpdate[] = $course;
+
+        $tempIdArr = [];
+        $idtoverify = [];
+
+        array_push($tempIdArr, $course->id);
+
+        $fromDate = Carbon::createFromFormat('d/m/Y', $attributes->get('start_date'))->format('Y-m-d');
+        $toDate = Carbon::createFromFormat('d/m/Y', $attributes->get('end_date'))->format('Y-m-d');
+        $dayWeek = $attributes->get('weekday');
+        $group = $attributes->get('group_id');
+        $startTime = Carbon::createFromFormat('H:i', $attributes->get('start_time'));
+        // $endTime = Carbon::createFromFormat('H:i', $attributes->get('end_time'));
+        $prof = $attributes->get('professor_id');
+        $room = $attributes->get('room_id');
+
+        // Récuperer les cours qui ont les mêmes infos
+        $toverify = $this->searchCoursesVerify($fromDate, $toDate, $dayWeek, $group, $startTime, $prof, $room);
+
+        if (count($toverify) > 0) // s'il y en a
+        {
+            $verif = collect($toverify[0]);
+
+            array_push($idtoverify, $verif['id']);
+            // comparer les cours trouvé avec le cours actuel
+            $hascommon = array_intersect($idtoverify, $tempIdArr);
+            if (count($hascommon) <= 0) //
+            {
+                $idtoverif = [];
+                $toverif = $this->searchCoursesVerify($fromDate, $toDate, $dayWeek, null, $startTime, null, $room);
+
+                if (count($toverif) > 0) {
+                    $ver = collect($toverif[0]);
+                    array_push($idtoverif, $ver['id']);
+
+                    $hascom = array_diff($idtoverif, $tempIdArr);
+                    if (count($hascom) > 0) {
+                        try {
+                            $inputDates = $this->checkDatesRoom($request);
+                        } catch (ValidationException $e) {
+                            return redirect()->back()->with('error', 'La salle est occupée dans cette période');
+                        }
+                    }
+                }
+
+                $toverify2 = $this->searchCoursesVerify($fromDate, $toDate, $dayWeek, null, $startTime, $prof, null);
+                $idtoverify2 = [];
+
+                if (count($toverify2) > 0) {
+                    $verif2 = collect($toverify[0]);
+                    array_push($idtoverify2, $verif2['id']);
+
+                    $hascommon2 = array_diff($idtoverify2, $tempIdArr);
+                    if (count($hascommon2) > 0) {
+                        try {
+                            $inputDates = $this->checkDatesProfessor($request);
+                        } catch (ValidationException $e) {
+                            return redirect()->back()->with('error', 'Le professeur donne déjà des cours dans cette période');
+                        }
+                    }
+                }
+
+                $toverify3 = $this->searchCoursesVerify($fromDate, $toDate, $dayWeek, $group, $startTime, null, null);
+                $idtoverify3 = [];
+
+                if (count($toverify3) > 0) {
+                    $verif3 = collect($toverify[0]);
+                    array_push($idtoverify3, $verif3['id']);
+
+                    $hascommon3 = array_diff($idtoverify3, $tempIdArr);
+                    if (count($hascommon3) > 0) {
+                        try {
+                            $inputDates = $this->checkDatesGroup($request);
+                        } catch (ValidationException $e) {
+                            return redirect()->back()->with('error', 'Le groupe est déjà en cours dans cette période');
+                        }
+                    }
+                }
+            }
+        }
+
+        $fromDate = $toUpdate[0]['date'];
+        $toDate = $toUpdate[count($toUpdate)  - 1]['date'];
+        $dayWeek = $toUpdate[0]['weekday'];
+        $group = $toUpdate[0]['group_id'];
+        $startTime = $toUpdate[0]['start_time'];
+        $endTime = $toUpdate[0]['end_time'];
+        $prof = $toUpdate[0]['professor_id'];
+        $room = $toUpdate[0]['room_id'];
+        $subject = $toUpdate[0]['subject_id'];
+
+        $inputDates = $this->avoidClosedDays($request);
+        dd($inputDates);
+        $allcourse = $this->searchGroupedCoursesLimited($fromDate, $toDate, $dayWeek, $group, $startTime, $subject, $prof, $room);
+        if (count($allcourse) > 0) {
+            $coursessources = collect($allcourse[0]);
+
+            if (count($inputDates) == 1) {
+                $attributes['date'] = $inputDates[0];
+                $course = Course::find($coursessources['id']);
+                if ($attributes['group_id'] != $course->group_id) {
+                    $attributes['absences_checked'] = false;
+                }
+                $this->coursesService->update($attributes->toArray(), $course);
+                $response['message'] = "Le cours a bien été modifié.";
+                $response['type'] = "success";
+                return response()->json($response);
+            } else {
+                $createdCourses = [];
+                $attributes['date'] = $inputDates[0];
+                $course = Course::find($coursessources['id']);
+                if ($attributes['group_id'] != $course->group_id) {
+                    $attributes['absences_checked'] = false;
+                }
+                $created = $this->coursesService->update($attributes->toArray(), $course);
+                array_push($createdCourses, $created);
+
+
+                if (empty($createdCourses)) {
+                    $response['message'] = 'Aucun cours n\'a été créé car les dates sont hors du jour indiqué ou sur des jours fermés';
+                    $response['type'] = "error";
+                } else {
+                    $response['message'] = "Les cours a bien été enregistrés.";
+                    $response['type'] = "success";
+                }
+
+                return response()->json($response);
+            }
+        }
+
+        return redirect()->route('courses.index')->with('success', 'Le cours a bien été modifié');
     }
 
     /**
@@ -305,7 +458,98 @@ class CoursesController extends Controller
         }
 
         $inputDates = array_flip($switchedInputdates);
-
         return $inputDates;
+    }
+
+    // Recherche cours ajax
+    public function chercheCourse(Request $request)
+    {
+        $query = Course::query();
+        $hasFilters = false;
+        if ($request->filled('date_debut') && $request->filled('date_fin')) {
+            $hasFilters = true;
+            $dateDebut = Carbon::createFromFormat('d/m/Y', $request->date_debut)->startOfDay()->format('Y-m-d');
+            $dateFin = Carbon::createFromFormat('d/m/Y', $request->date_fin)->startOfDay()->format('Y-m-d');
+            $query->whereBetween('date', [
+                $dateDebut,
+                $dateFin
+            ]);
+        } elseif ($request->filled('date_debut')) {
+            $hasFilters = true;
+            $dateDebut = Carbon::createFromFormat('d/m/Y', $request->date_debut)->startOfDay()->format('Y-m-d');
+            $query->where('date', '>=', $dateDebut);
+        } elseif ($request->filled('date_fin')) {
+            $hasFilters = true;
+            $dateFin = Carbon::createFromFormat('d/m/Y', $request->date_fin)->startOfDay()->format('Y-m-d');
+            $query->where('date', '<=', $dateFin);
+        }
+
+        // Autres filtres
+        $filters = [
+            'start_time' => '=',
+            'weekday' => '=',
+            'professor_id' => '=',
+            'group_id' => '=',
+            'room_id' => '=',
+            'subject_id' => '='
+        ];
+
+        foreach ($filters as $key => $operator) {
+            if ($request->filled($key)) {
+                $hasFilters = true;
+                $query->where($key, $operator, $request->$key);
+            }
+        }
+        if (!$hasFilters) {
+            return [];
+        }
+        $query->with(['room', 'subject', 'group', 'professor']);
+        $results = $query->get();
+        return $results;
+    }
+
+    // Vérifier le cours à modifier
+    public function searchCoursesVerify($fromDate, $toDate, $dayWeek, $group, $startTime, $prof, $room)
+    {
+        $searchQuery = Course::selectRaw('MIN(courses.id) AS id, MIN(courses.date) AS date, group_id, subject_id, room_id, professor_id, weekday, start_time, end_time, duration')
+            ->when(!is_null($fromDate), function ($query) use ($fromDate) {
+                return $query->whereDate('date', '>=', $fromDate);
+            })->when(!is_null($group), function ($query) use ($group) {
+                return $query->where('group_id', intval($group));
+            })->when(!is_null($toDate), function ($query) use ($toDate) {
+                return $query->whereDate('date', '<=', $toDate);
+            })->when(!is_null($dayWeek), function ($query) use ($dayWeek) {
+                return $query->where('weekday', strtolower($dayWeek));
+            })->when(!is_null($startTime), function ($query) use ($startTime) {
+                return $query->whereTime('start_time', '<=', $startTime)->whereTime('end_time', '>=', $startTime);
+            })->when(!is_null($prof), function ($query) use ($prof) {
+                return $query->where('professor_id', intval($prof));
+            })->when(!is_null($room), function ($query) use ($room) {
+                return $query->where('room_id', intval($room));
+            });
+
+        return $searchQuery->orderBy('date', 'desc')->groupBy('group_id', 'subject_id', 'room_id', 'professor_id', 'weekday', 'start_time', 'end_time', 'duration')->get();
+    }
+
+    public function searchGroupedCoursesLimited($fromDate, $toDate, $dayWeek, $group, $startTime, $subject, $prof, $room)
+    {
+        $searchQuery = Course::selectRaw('MIN(courses.id) AS id, MIN(courses.date) AS date, group_id, subject_id, room_id, professor_id, weekday, start_time, end_time, duration')
+            ->when(!is_null($fromDate), function ($query) use ($fromDate) {
+                return $query->whereDate('date', '>=', $fromDate);
+            })->when(!is_null($group), function ($query) use ($group) {
+                return $query->where('group_id', intval($group));
+            })->when(!is_null($toDate), function ($query) use ($toDate) {
+                return $query->whereDate('date', '<=', $toDate);
+            })->when(!is_null($dayWeek), function ($query) use ($dayWeek) {
+                return $query->where('weekday', strtolower($dayWeek));
+            })->when(!is_null($startTime), function ($query) use ($startTime) {
+                return $query->whereTime('start_time', '<=', $startTime)->whereTime('end_time', '>=', $startTime);
+            })->when(!is_null($prof), function ($query) use ($prof) {
+                return $query->where('professor_id', intval($prof));
+            })->when(!is_null($room), function ($query) use ($room) {
+                return $query->where('room_id', intval($room));
+            });
+
+        return $searchQuery->orderBy('date', 'desc')->groupBy('group_id', 'subject_id', 'room_id', 'professor_id', 'weekday', 'start_time', 'end_time', 'duration')->get();
     }
 }

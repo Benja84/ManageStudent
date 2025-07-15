@@ -16,7 +16,7 @@
     <meta name="description"
         content="Matrix Admin Lite Free Version is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
-    <title>Student management</title>
+    <title>SIU</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
     
@@ -40,12 +40,13 @@
         <header class="topbar" data-navbarbg="skin5">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
                 <div class="navbar-header" data-logobg="skin5">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="{{ route('dashboard') }}">
                         <b class="logo-icon ps-2">
-                            <img src="{{asset('assets/images/logo-icon.png')}}" alt="homepage" class="light-logo" />
+                            <img src="{{asset('assets/images/logo-icon.png')}}" alt="homepage" class="light-logo"/>
                         </b>
                         <span class="logo-text">
-                            <img src="{{asset('assets/images/logo-text.png')}}" alt="homepage" class="light-logo" />
+                            {{-- <img src="{{asset('assets/images/logo-text.png')}}" alt="homepage" class="light-logo" /> --}}
+                            <img class="light-logo" alt="Géstion Universitaire">
                         </span>
                     </a>
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
@@ -209,7 +210,7 @@
                                 <li class="sidebar-item">
                                     <a href="{{ route('courses.index') }}" class="sidebar-link">
                                         <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des cours </span>
+                                        <span class="hide-menu"> Calendrier des cours </span>
                                     </a>
                                 </li>
                                 <li class="sidebar-item">

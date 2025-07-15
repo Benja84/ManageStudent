@@ -98,7 +98,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success btn-default">Ajouter</button>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
                         </div>
                     </div>
                 </form>
@@ -108,6 +108,11 @@
 @endsection
 
 @section('scripts')
+    @if(Session::has('success'))
+        <script>
+            toastr.success("{{ Session::get('success') }}", "Succès!");
+        </script>
+    @endif
     <script>
 
         $(document).ready(function (){

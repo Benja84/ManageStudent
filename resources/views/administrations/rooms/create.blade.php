@@ -8,7 +8,6 @@
                 <form action="{{ route('rooms.store') }}" method="POST">
                     @csrf
                     <div class="card-body">
-                        <h5 class="card-title mb-0">Ajouter une salle</h5>
                         <div class="form-group mt-3">
                             <label>Lieu</label>
                             <input class="form-control" type="text" name="name" placeholder="ex: Arcade" required>
