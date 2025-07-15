@@ -181,6 +181,7 @@ class GroupsController extends Controller
     public function destroy($id)
     {
         $group = Group::find($id);
+        GroupSubject::where('group_id',$group->id)->delete();
         if($group->delete()){
             return redirect()->route('groups.index')->with('success', 'Le groupe  a bien été supprimé');
         }

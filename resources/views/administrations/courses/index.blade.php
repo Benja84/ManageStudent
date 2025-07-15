@@ -213,6 +213,11 @@
   <!-- END MODAL -->
 @endsection
 @section('scripts')
+  @if(Session::has('success'))
+    <script>
+      toastr.success("{{ Session::get('success') }}", "Succès!");
+    </script>
+  @endif
   <script src="{{ asset('assets/libs/fullcalendar/dist/fullcalendar.min.js') }}"></script>
   <script src="{{ asset('assets/libs/fullcalendar/dist/locale/fr.js') }}"></script>
   <script>
