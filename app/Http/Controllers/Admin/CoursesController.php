@@ -307,7 +307,9 @@ class CoursesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $course = Course::find($id);
+        $course->delete();
+        return redirect()->route('courses.index')->with('success','Cours supprimé avec succès!');
     }
 
     // Récuperer le jour choisi entre deux dates

@@ -90,7 +90,9 @@ class MembersController extends Controller
     public function show($id)
     {
         $member = Advisor::find($id);
-        return $member;
+        $title = "Fiche du membre";
+        $page = "Détail du membre";
+        return view('administrations.members.show',compact('title','page','member'));
     }
 
     /**

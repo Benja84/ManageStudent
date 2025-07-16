@@ -251,21 +251,23 @@
       let courses = [];
       let colors = generateColorPalette(100);
       datas.forEach(element => {
-        courses.push({
-          '_id':element.id,
-          'title':element.subject.abbreviation+' - '+element.professor.user.firstname+' '+element.professor.user.lastname+ ' - '+element.group.abbreviation,
-          'start':element.date+' '+element.start_time,
-          'end':element.date+' '+element.end_time,
-          'color':colors[element.id],
-          extendedProps: {
-            course: element.subject.abbreviation,
-            startHour: element.start_time,
-            endHour: element.end_time,
-            teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
-            class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
-            location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
-          }
-        } )
+        if(element.subject){
+          courses.push({
+            '_id':element.id,
+            'title':element.subject.abbreviation+' - '+element.professor.user.firstname+' '+element.professor.user.lastname+ ' - '+element.group.abbreviation,
+            'start':element.date+' '+element.start_time,
+            'end':element.date+' '+element.end_time,
+            'color':colors[element.id],
+            extendedProps: {
+              course: element.subject.abbreviation,
+              startHour: element.start_time,
+              endHour: element.end_time,
+              teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
+              class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
+              location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
+            }
+          } );
+        }
       });
       
       $('#calendar').fullCalendar({
@@ -356,46 +358,48 @@
             if(response.length){
               // S'il y a des valeurs dans response
               response.forEach(element => {
-                // Remplacer :id et :id_cours par id cours trouvé 
-                const edit_route = url_edit.replace(':id',element.id);
-                const delete_route = url_delete.replace(':id_cours',element.id);
+                if(element.subject){
+                  // Remplacer :id et :id_cours par id cours trouvé 
+                  const edit_route = url_edit.replace(':id',element.id);
+                  const delete_route = url_delete.replace(':id_cours',element.id);
 
-                moment.locale('en');
-                // Récuperer l'index du tableau weekdays
-                const dayIndex = moment.weekdays().indexOf(element.weekday.charAt(0).toUpperCase() + element.weekday.slice(1));
-                
-                const date = new Date(element.date);
-                const jour = date.getDate().toString().padStart(2, '0');
-                const mois = (date.getMonth() + 1).toString().padStart(2, '0');
-                const annee = date.getFullYear();
+                  moment.locale('en');
+                  // Récuperer l'index du tableau weekdays
+                  const dayIndex = moment.weekdays().indexOf(element.weekday.charAt(0).toUpperCase() + element.weekday.slice(1));
+                  
+                  const date = new Date(element.date);
+                  const jour = date.getDate().toString().padStart(2, '0');
+                  const mois = (date.getMonth() + 1).toString().padStart(2, '0');
+                  const annee = date.getFullYear();
 
-                // Formatter heure ex: 08:30 => 08h30
-                const heure_debut = element.start_time.substring(0, 5).replace(':', 'h');
-                const heure_fin = element.end_time.substring(0, 5).replace(':', 'h');
+                  // Formatter heure ex: 08:30 => 08h30
+                  const heure_debut = element.start_time.substring(0, 5).replace(':', 'h');
+                  const heure_fin = element.end_time.substring(0, 5).replace(':', 'h');
 
-                moment.locale('fr');
-                // Prepare la ligne et colonne du tableau (<tr> <td></td> </tr>)
-                let result = '<tr>';
-                result +='<td class="text-center">'+moment.weekdays()[dayIndex].charAt(0).toUpperCase() + moment.weekdays()[dayIndex].slice(1)+' '+`${jour}/${mois}/${annee} </td>`;
-                result +=`<td class="text-center">${heure_debut} à ${heure_fin} </td>`;
-                result += `<td class="text-center">${element.subject.name} </td>`;
-                result += `<td class="text-center">${element.professor.user.firstname} ${element.professor.user.lastname}</td>`;
-                result += `<td class="text-center">${element.room.name} (${element.room.department}), n° ${element.room.number}, étage ${element.room.floor}</td>`;
-                result += `<td class="text-center">
-                  <div class="d-flex justify-content-between">
-                    <div>
-                    <a class="btn btn-primary text-white" href="${edit_route}"><i class="mdi mdi-pencil"></i></a>
+                  moment.locale('fr');
+                  // Prepare la ligne et colonne du tableau (<tr> <td></td> </tr>)
+                  let result = '<tr>';
+                  result +='<td class="text-center">'+moment.weekdays()[dayIndex].charAt(0).toUpperCase() + moment.weekdays()[dayIndex].slice(1)+' '+`${jour}/${mois}/${annee} </td>`;
+                  result +=`<td class="text-center">${heure_debut} à ${heure_fin} </td>`;
+                  result += `<td class="text-center">${element.subject.name} </td>`;
+                  result += `<td class="text-center">${element.professor.user.firstname} ${element.professor.user.lastname}</td>`;
+                  result += `<td class="text-center">${element.room.name} (${element.room.department}), n° ${element.room.number}, étage ${element.room.floor}</td>`;
+                  result += `<td class="text-center">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                      <a class="btn btn-primary text-white" href="${edit_route}"><i class="mdi mdi-pencil"></i></a>
+                      </div>
+                      <form action="${delete_route}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger text-white" onclick="return confirm('Confirmer la suppression ?')"><i class="mdi mdi-delete"></i></button>
+                      </form>
                     </div>
-                    <form action="${delete_route}" mthod="POST">
-                      @csrf
-                      @method('DELETE')
-                      <button class="btn btn-danger text-white"><i class="mdi mdi-delete"></i></button>
-                    </form>
-                  </div>
-                  </td>`;
-                result +='</tr>';
-                // Afficher dans la table les rérultats
-                $('#data_tr').append(result);
+                    </td>`;
+                  result +='</tr>';
+                  // Afficher dans la table les rérultats
+                  $('#data_tr').append(result);
+                }
               });
             }else{
               $('#data_tr').append('<tr><td colspan="8" class="text-muted">Aucun cours trouvé</td></tr>');

@@ -2,7 +2,8 @@
 
 @section('aditionnal_css')
     <!-- Custom CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> --}}
+    <link href="{{asset('css/tailwind.min.css')}}" rel="stylesheet">
     <style>
         .progress-container {
             display: flex;
@@ -115,10 +116,12 @@
                                             <select name="advisor_id" class="select2 form-select" placeholder="Selectionner les matières">
                                                 <option value=""  disabled>Selectionner un(e) conseiller-ère</option>
                                                 @foreach ($advisors as $key => $advisor)
+                                                    @if($advisor->user->hasRole('advisor'))
                                                     <option class="form-control-alt" data-tokens="{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}"
                                                         @if (old('advisor_id') == $key) @php($advisored = TRUE) selected  @endif
                                                         value="{{ $advisor->id }}">{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}</option>
                                                     @php($advisored = false)
+                                                    @endif
                                                 @endforeach
                                             </select>
                                         </div>

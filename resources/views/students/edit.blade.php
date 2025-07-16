@@ -126,10 +126,12 @@
                                             <select name="advisor_id" class="select2 form-select" placeholder="Selectionner les matières">
                                                 <option value=""  disabled>Selectionner un(e) conseiller-ère</option>
                                                 @foreach ($advisors as $key => $advisor)
+                                                @if($advisor->user->hasRole('advisor'))
                                                     <option class="form-control-alt" data-tokens="{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}"
                                                         @if (old('advisor_id',$student->advisor_id) == $advisor->id) @php($advisored = TRUE) selected  @endif
                                                         value="{{ $advisor->id }}">{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}</option>
                                                     @php($advisored = false)
+                                                @endif
                                                 @endforeach
                                             </select>
                                         </div>

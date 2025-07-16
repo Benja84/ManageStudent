@@ -329,21 +329,23 @@
       let courses = [];
       let colors = generateColorPalette(100);
       datas.forEach(element => {
-        courses.push({
-          '_id':element.id,
-          'title':element.subject.abbreviation+' - '+element.professor.user.firstname+' '+element.professor.user.lastname+ ' - '+element.group.abbreviation,
-          'start':element.date+'T'+element.start_time,
-          'end':element.date+'T'+element.end_time,
-          'color':colors[element.id],
-          extendedProps: {
-            course: element.subject.abbreviation,
-            startHour: element.start_time,
-            endHour: element.end_time,
-            teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
-            class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
-            location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
-          }
-        } )
+        if(element.subject){
+          courses.push({
+            '_id':element.id,
+            'title':element.subject.abbreviation+' - '+element.professor.user.firstname+' '+element.professor.user.lastname+ ' - '+element.group.abbreviation,
+            'start':element.date+'T'+element.start_time,
+            'end':element.date+'T'+element.end_time,
+            'color':colors[element.id],
+            extendedProps: {
+              course: element.subject.abbreviation,
+              startHour: element.start_time,
+              endHour: element.end_time,
+              teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
+              class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
+              location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
+            }
+          } );
+        }
       });
       $('#calendar').fullCalendar('destroy');
       $('#calendar').fullCalendar({

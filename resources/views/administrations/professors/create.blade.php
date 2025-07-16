@@ -1,7 +1,8 @@
 
     @extends('layouts.base')
     @section('aditionnal_css')
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> --}}
+    <link href="{{asset('css/tailwind.min.css')}}" rel="stylesheet">
     <style>
         .progress-container {
             display: flex;
