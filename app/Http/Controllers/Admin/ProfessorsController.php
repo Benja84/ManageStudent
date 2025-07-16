@@ -154,7 +154,7 @@ class ProfessorsController extends Controller
             'nationality' => 'required|string',
             'country' => 'string',
         ]);
-        if($prof->geoups){
+        if($prof->groups){
             $prof->groups()->detach();
         }
         if($request->group_id){

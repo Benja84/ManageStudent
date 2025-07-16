@@ -398,7 +398,7 @@
                 $('#data_tr').append(result);
               });
             }else{
-              $('#data_tr').append('<tr><td colspan="8" class="text-muted">Aucun cours trouvé</td></tr>')
+              $('#data_tr').append('<tr><td colspan="8" class="text-muted">Aucun cours trouvé</td></tr>');
             }
           },
           error: function (error){
@@ -411,16 +411,12 @@
         $('input[name="start_date"]').val('');
         $('input[name="end_date"]').val('');
         $('input[name="start_time"]').val('') ;
-        $('select[name="weekday"] option').each(element =>{
-          console.log(element)
-          // if($(option).hasAttribute('selected')){
-          //   $(option).removeAttr('selected');
-          // }
-        });
-        $('select[name="prof_id"]').val('');
-        $('select[name="group_id"]').val('');
-        $('select[name="subject_id"]').val('');
-        $('select[name="room_id"]').val(''); 
+        $('select[name="weekday"]').val(null).trigger('change');
+        $('select[name="prof_id"]').val(null).trigger('change');
+        $('select[name="group_id"]').val(null).trigger('change');
+        $('select[name="subject_id"]').val(null).trigger('change');
+        $('select[name="room_id"]').val(null).trigger('change'); 
+        $('#data_tr').html('<tr><td colspan="8" class="text-muted">Aucun cours trouvé</td></tr>')
       });
     })
   </script>
