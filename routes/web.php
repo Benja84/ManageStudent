@@ -30,7 +30,11 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 // voire profile
 // Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 

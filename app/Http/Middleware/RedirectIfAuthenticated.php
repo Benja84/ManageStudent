@@ -23,7 +23,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                // Redirigez vers l'URL précédente si disponible
+                if (session()->has('previous_url')) {
+                    return redirect()->to(session()->pull('previous_url'));
+                }
+                return redirect()->intended(RouteServiceProvider::HOME);
             }
         }
 
