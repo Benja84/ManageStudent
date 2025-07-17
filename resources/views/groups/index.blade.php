@@ -42,6 +42,7 @@
                         <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">
                           <i class="mdi mdi-pencil"></i>
                         </a>
+                        @if(count($group->students) == 0) 
                         <form action="{{ route('groups.destroy', $group->id) }}" method="POST">
                           @csrf
                           @method('DELETE')
@@ -49,6 +50,11 @@
                             <i class="mdi mdi-delete"></i>
                           </button>
                         </form>
+                        @else 
+                          <button class="btn btn-sm btn-secondary text-white" title="Ce groupe a des étudiant donc on ne peut pas le supprimer">
+                            <i class="mdi mdi-delete"></i>
+                          </button>
+                        @endif
                       </div>
                     </td>
                   </tr>

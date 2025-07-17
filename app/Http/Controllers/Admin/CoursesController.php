@@ -269,7 +269,7 @@ class CoursesController extends Controller
         $subject = $toUpdate[0]['subject_id'];
 
         $inputDates = $this->avoidClosedDays($request);
-        dd($inputDates);
+        // dd($inputDates);
         $allcourse = $this->searchGroupedCoursesLimited($fromDate, $toDate, $dayWeek, $group, $startTime, $subject, $prof, $room);
         if (count($allcourse) > 0) {
             $coursessources = collect($allcourse[0]);
@@ -280,30 +280,10 @@ class CoursesController extends Controller
                 if ($attributes['group_id'] != $course->group_id) {
                     $attributes['absences_checked'] = false;
                 }
-                $this->coursesService->update($attributes->toArray(), $course);
-                $response['message'] = "Le cours a bien été modifié.";
-                $response['type'] = "success";
-                return response()->json($response);
+                $course->update($attributes->toArray());
+                return redirect()->route('courses.index')->with('success', 'Le cours a bien été modifié.');
             } else {
-                $createdCourses = [];
-                $attributes['date'] = $inputDates[0];
-                $course = Course::find($coursessources['id']);
-                if ($attributes['group_id'] != $course->group_id) {
-                    $attributes['absences_checked'] = false;
-                }
-                $created = $this->coursesService->update($attributes->toArray(), $course);
-                array_push($createdCourses, $created);
-
-
-                if (empty($createdCourses)) {
-                    $response['message'] = 'Aucun cours n\'a été créé car les dates sont hors du jour indiqué ou sur des jours fermés';
-                    $response['type'] = "error";
-                } else {
-                    $response['message'] = "Les cours a bien été enregistrés.";
-                    $response['type'] = "success";
-                }
-
-                return response()->json($response);
+                return redirect()->back()->with('error', 'Aucun cours n\'a été créé car les dates sont hors du jour indiqué ou sur des jours fermés');
             }
         }
 

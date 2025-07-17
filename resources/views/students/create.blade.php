@@ -52,7 +52,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-body">                    
+                <div class="card-body">
                     <div class="flex  mb-4">
                         <h2 class="text-gray w-1/3">1. Identité</h2>
                         <h2 class="text-gray w-1/3">2. Informations</h2>
@@ -80,7 +80,7 @@
                                         </label>
                                         <input id="photo-upload" type="file" name="photo" accept="image/*" class="upload-input">
                                     </div>
-                                    
+
                                     <div class="flex space-x-4">
                                         <label class="inline-flex items-center">
                                             <input type="radio" name="gender" value="M" class="form-radio" checked>
@@ -122,7 +122,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        
+
                                         <div>
                                             <label class="block text-gray-700">Affectation aux groupes</label>
                                             <select name="group_id" class="select2 form-select"  placeholder="Selectionner les groupes" title="Sélectionner les groupes">
@@ -367,7 +367,7 @@
                     if(photoUpload.files[0]){
                         const photo = photoUpload.files[0];
                     }
-                    
+
 
                     // Check for missing fields
                     if (!lastName) {
@@ -398,7 +398,7 @@
                     }else{
                         $('input[name="phone"]').removeClass('is-invalid');
                     }
-                    
+
                     // if (!photo) {
                     //     alert("Une image de profil est requise. Veuillez sélectionner une image.");
                     //     return false;

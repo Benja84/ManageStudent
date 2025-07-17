@@ -66,8 +66,8 @@
                   @forelse ($group->students as $index => $student)
                     <tr>
                       <td>
-                        @if ($student->photo)
-                          <img src="{{ asset('storage/' . $student->photo) }}"
+                        @if ($student->user->photo)
+                          <img src="{{ asset('storage/' . $student->user->photo) }}"
                               alt="Photo de {{ $student->lastname }}"
                               width="60"
                               height="60"
@@ -122,8 +122,8 @@
                   @forelse ($group->professors as $index => $prof)
                     <tr>
                       <td>
-                          @if ($prof->photo && file_exists(public_path('storage/' . $prof->photo)))
-                            <img src="{{ asset('storage/' . $prof->photo) }}" alt="Photo de {{ $prof->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
+                          @if ($prof->user->photo && file_exists(public_path('storage/' . $prof->user->photo)))
+                            <img src="{{ asset('storage/' . $prof->user->photo) }}" alt="Photo de {{ $prof->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
                           @else
                             <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px; font-size: 14px; margin-top:-0.5rem">N/A</div>
                           @endif
@@ -174,8 +174,8 @@
                   @forelse ($group->coordinators as $index => $prof)
                     <tr>
                       <td>
-                          @if ($prof->photo && file_exists(public_path('storage/' . $prof->photo)))
-                            <img src="{{ asset('storage/' . $prof->photo) }}" alt="Photo de {{ $prof->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
+                          @if ($prof->user->photo && file_exists(public_path('storage/' . $prof->user->photo)))
+                            <img src="{{ asset('storage/' . $prof->user->photo) }}" alt="Photo de {{ $prof->user->lastname }}" width="50" height="50" class="rounded-circle shadow" style="object-fit: cover;margin-top:-1em">
                           @else
                             <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center text-white" style="width: 50px; height: 50px; font-size: 14px; margin-top:-0.5rem">N/A</div>
                           @endif
