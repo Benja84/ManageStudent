@@ -29,7 +29,19 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // return redirect()->intended(RouteServiceProvider::HOME);
+        // Récupérez l'URL demandée avant la redirection
+        $intended = session()->pull('url.intended', RouteServiceProvider::HOME);
+        
+        // Si l'URL est une route POST, redirigez vers la page précédente
+        if ($request->session()->has('_previous.url')) {
+            $previous = $request->session()->get('_previous.url');
+            if ($previous && !str_contains($previous, 'login')) {
+                return redirect()->to($previous);
+            }
+        }
+        
+        return redirect()->to($intended);
     }
 
     /**

@@ -300,6 +300,16 @@
             </footer>
         </div>
     </div>
+    @if(auth()->check())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Empêche le retour à la page de login
+            if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+                window.location.reload();
+            }
+        });
+    </script>
+    @endif
     <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/js/jquery.ui.touch-punch-improved.js') }}"></script>
 
