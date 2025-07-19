@@ -12,6 +12,66 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
+                <div class="col-lg-12 p-2">
+                    <div class="row">
+                        <div class="col-2">
+                            <a href="{{route('students.index')}}">
+                            <div class="bg-dark p-10 text-white text-center">
+                                <i class="mdi mdi-school mb-1 font-16"></i>
+                                <h5 class="mb-0 mt-1">{{$students}}</h5>
+                                <small class="font-light">Total étudiants</small>
+                            </div>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="{{route('professors.index')}}">
+                            <div class="bg-dark p-10 text-white text-center">
+                                <i class="mdi mdi-account-multiple mb-1 font-16"></i>
+                                <h5 class="mb-0 mt-1">{{$professors}}</h5>
+                                <small class="font-light">Nombre des professeurs</small>
+                            </div>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="{{route('groups.index')}}">
+                            <div class="bg-dark p-10 text-white text-center">
+                                <i class="mdi mdi-briefcase-check mb-1 font-16"></i>
+                                <h5 class="mb-0 mt-1">{{$groups}}</h5>
+                                <small class="font-light">Nombre des groupes</small>
+                            </div>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="{{route('subjects.index')}}">
+                            <div class="bg-dark p-10 text-white text-center">
+                                <i class="mdi mdi-book mb-1 font-16"></i>
+                                <h5 class="mb-0 mt-1">{{$subjects}}</h5>
+                                <small class="font-light">Nombre des matières</small>
+                            </div>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="{{route('rooms.index')}}">
+                            <div class="bg-dark p-10 text-white text-center">
+                                <i class="mdi mdi-home-modern mb-1 font-16"></i>
+                                <h5 class="mb-0 mt-1">{{$rooms}}</h5>
+                                <small class="font-light">Nombre des salles</small>
+                            </div>
+                            </a>
+                        </div>
+                        <div class="col-2">
+                            <a href="{{route('courses.index')}}">
+                            <div class="bg-dark p-10 text-white text-center">
+                                <i class="mdi mdi-book-multiple mb-1 font-16"></i>
+                                <h5 class="mb-0 mt-1">{{count($courses)}}</h5>
+                                <small class="font-light">Nombre des cours</small>
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
                 <div class="">
                     <div class="row">
                         <div class="col-lg-12">

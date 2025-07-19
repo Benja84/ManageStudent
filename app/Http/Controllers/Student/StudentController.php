@@ -70,6 +70,7 @@ class StudentController extends Controller
         ]);
         $pass = strtolower(normaliserChaine($request->firstname).'school');
         $data['password'] = Hash::make($pass);
+        $data['country'] = $request->country;
         // Upload de la photo
         $photoPath = null;
         if ($request->hasFile('photo')) {
@@ -169,6 +170,8 @@ class StudentController extends Controller
             'birthplace_city' => 'required|string|max:255',
             'address_street' => 'required|string|max:255',
             'address_city' => 'required|string|max:255',
+            'nationality' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
             'address_postcode' => 'required|string|max:20',
         ]);
         // Gestion de la photo

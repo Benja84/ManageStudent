@@ -37,7 +37,12 @@ class MembersController extends Controller
     {
         $title = "Ajouter un membre du personnel";
         $page = 'Membres';
-        $roles = [User::ADMIN => 'administrateur-trice', User::ADVISOR => 'conseiller-ère', User::SECRETARY => 'secrétaire'];
+        
+        if(auth()->user()->hasRole('administrators')){
+            $roles = [User::ADMIN => 'Administrateur-trice', User::SECRETARY => 'Secrétaire'];
+        }else{
+            $roles = [User::SECRETARY => 'Secrétaire'];
+        }
         return view('administrations.members.create', compact('roles', 'title', 'page'));
     }
 
@@ -63,6 +68,7 @@ class MembersController extends Controller
         ]);
         $fields['address_postcode'] = $request->address_postcode;
         $fields['nationality'] = $request->nationality;
+        $fields['country'] = $request->country;
         $fields['password'] = Hash::make(strtolower($request->firstname) . 'school');
         if ($request->hasFile('photo')) {
             $request->validate([
@@ -106,7 +112,11 @@ class MembersController extends Controller
         $title = "Editer un membre du personnel";
         $page = "Membres";
         $member = Advisor::find($id);
-        $roles = [User::ADMIN => 'Administrateur-trice', User::ADVISOR => 'Conseiller-ère', User::SECRETARY => 'Secrétaire'];
+        if(auth()->user()->hasRole('administrators')){
+            $roles = [User::ADMIN => 'Administrateur-trice', User::SECRETARY => 'Secrétaire'];
+        }else{
+            $roles = [User::SECRETARY => 'Secrétaire'];
+        }
         return view('administrations.members.edit', compact('member', 'roles', 'title', 'page'));
     }
 
@@ -148,6 +158,16 @@ class MembersController extends Controller
         }
         
         $user = User::find($advisor->user_id);
+        if($user->hasRole('admin')){
+            $user->removeRole('admin');
+        }
+        if($user->hasRole('advisor')){
+            $user->removeRole('advisor');
+        }
+        if($user->hasRole('secretary')){
+            $user->removeRole('secretary');
+        }
+
         $user->gender = $request->gender;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -157,10 +177,13 @@ class MembersController extends Controller
         $user->address_city = $request->address_city;
         $user->address_postcode = $request->address_postcode;
         $user->address_street = $request->address_street;
+        $user->nationality = $request->nationality;
+        $user->country = $request->country;
         $user->photo = $photoPath;
 
         $user->save();
 
+        $user->assignRole($request->role);
         return redirect()->route('members.index')->with('success','Membre modifié avec succès');
     }
 

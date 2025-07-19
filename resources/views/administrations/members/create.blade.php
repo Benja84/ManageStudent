@@ -145,7 +145,7 @@
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Nationalité <span class="text-warning">*</span></label>
                                     <select name="nationality" class="w-full p-2 border rounded form-select">
-                                        <option value="France">Francaise</option>
+                                        <option value="Francaise">Française</option>
                                         <option value="Malagasy">Malagasy</option>
                                     </select>
                                 </div>

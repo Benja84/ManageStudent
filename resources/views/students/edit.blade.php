@@ -173,7 +173,7 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Nationalité</label>
                                         <select name="nationality" class="w-full p-2 border rounded form-select">
-                                            <option value="France" @if($student->user->nationality == 'France') selected @endif>Francaise</option>
+                                            <option value="Francaise" @if($student->user->nationality == 'Francaise') selected @endif>Française</option>
                                             <option value="Malagasy" @if($student->user->nationality == 'Malagasy') selected @endif>Malagasy</option>
                                         </select>
                                     </div>
@@ -194,8 +194,8 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Pays</label>
                                         <select name="country" class="w-full p-2 border rounded form-select">
-                                            <option value="France">France</option>
-                                            <option value="Madagascar">Madagascar</option>
+                                            <option value="France" @if($student->user->country == 'France') selected @endif>France</option>
+                                            <option value="Madagascar" @if($student->user->country == 'Madagascar') selected @endif>Madagascar</option>
                                         </select>
                                     </div>
                                 </div>

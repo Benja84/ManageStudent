@@ -54,16 +54,18 @@
                         <a href="{{ route('members.show', $member->id) }}" class="btn btn-sm btn-info">
                           <i class="mdi mdi-eye"></i>
                         </a>
-                        <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-primary">
-                          <i class="mdi mdi-pencil"></i>
-                        </a>
-                        <form action="{{ route('members.destroy', $member->id) }}" method="POST">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
-                            <i class="mdi mdi-delete"></i>
-                          </button>
-                        </form>
+                        @if(auth()->user()->hasRole('admin'))
+                          <a href="{{ route('members.edit', $member->id) }}" class="btn btn-sm btn-primary">
+                            <i class="mdi mdi-pencil"></i>
+                          </a>
+                          <form action="{{ route('members.destroy', $member->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                              <i class="mdi mdi-delete"></i>
+                            </button>
+                          </form>
+                        @endif
                       </div>
                     </td>
                   </tr>

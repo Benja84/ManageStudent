@@ -68,6 +68,8 @@ class ProfessorsController extends Controller
 
             // Prépare les données validées
             $validated['password'] = Hash::make(strtolower($request->firstname).'school123');
+            $validated['nationality'] = $request->nationality;
+            $validated['country'] = $request->country;
             if ($request->hasFile('photo')) {
                 $request->validate([
                     'photo' => 'image|mimes:jpeg,png|max:20480',

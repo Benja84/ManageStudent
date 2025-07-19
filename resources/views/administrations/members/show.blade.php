@@ -9,7 +9,7 @@
     <div class="card-header">
       {{-- <p>Groupe {{ $group->abreviation }} ({{ count($group->students)}} étudiants)</p> --}}
       <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
+      {{-- <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item"> 
           <a class="nav-link active" data-bs-toggle="tab" href="#info" role="tab">
             <span class="hidden-sm-up"></span> 
@@ -24,7 +24,7 @@
           </a> 
         </li>
         @endif
-      </ul>
+      </ul> --}}
     </div>
     <div class="card-body">
       <!-- Tab panes -->
@@ -102,7 +102,7 @@
             </div>
           </div>
         </div>
-        <div class="tab-pane" id="student" role="tabpanel">
+        {{-- <div class="tab-pane" id="student" role="tabpanel">
           <div class="p-20">
             <div class="table-responsive">
               <table id="liste_student" class="table table-striped table-bordered">
@@ -157,12 +157,14 @@
               </table>
             </div>
           </div>
-        </div>
+        </div> --}}
       </div>
 
       <div class="mt-4">
           <a href="{{ route('members.index') }}" class="btn btn-secondary"> Retour</a>
+          @if(auth()->user()->hasRole('admin'))
           <a href="{{ route('members.edit', $member->id) }}" class="btn btn-primary">Modifier</a>
+          @endif
       </div>
     </div>
   </div>

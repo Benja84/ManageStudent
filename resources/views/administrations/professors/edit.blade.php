@@ -169,7 +169,7 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Nationalité</label>
                                         <select name="nationality" class="w-full p-2 border rounded form-select">
-                                            <option value="France" {{ $prof->user->nationality == 'France' ?? 'selected' }}>Francaise</option>
+                                            <option value="Francaise" {{ $prof->user->nationality == 'Francaise' ?? 'selected' }}>Française</option>
                                             <option value="Malagasy" {{ $prof->user->nationality == 'Malagasy' ?? 'selected' }}>Malagasy</option>
                                         </select>
                                     </div>
@@ -190,8 +190,8 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Pays</label>
                                         <select name="country" class="w-full p-2 border rounded form-select">
-                                            <option value="France">France</option>
-                                            <option value="Madagascar">Madagascar</option>
+                                            <option value="France" @if($prof->user->country =='France') selected @endif>France</option>
+                                            <option value="Madagascar" @if($prof->user->country =='Madagascar') selected @endif>Madagascar</option>
                                         </select>
                                     </div>
                                 </div>
