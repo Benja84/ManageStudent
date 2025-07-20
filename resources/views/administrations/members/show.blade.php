@@ -160,7 +160,7 @@
         </div> --}}
       </div>
 
-      <div class="mt-4">
+      <div class="d-flex justify-content-between">
           <a href="{{ route('members.index') }}" class="btn btn-secondary"> Retour</a>
           @if(auth()->user()->hasRole('admin'))
           <a href="{{ route('members.edit', $member->id) }}" class="btn btn-primary">Modifier</a>

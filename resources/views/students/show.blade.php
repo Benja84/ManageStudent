@@ -68,8 +68,8 @@
                     </div>
             </div>
 
-            <div class="mt-4">
-                <a href="{{ route('students.index') }}" class="btn btn-secondary">← Retour</a>
+           <div class="d-flex justify-content-between">
+                <a href="{{ route('students.index') }}" class="btn btn-secondary">Retour</a>
                 <a href="{{ route('students.edit', $student->id) }}" class="btn btn-primary">Modifier</a>
             </div>
         </div>
