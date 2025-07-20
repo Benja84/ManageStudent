@@ -113,6 +113,9 @@ class ProfessorsController extends Controller
     public function show($id)
     {
         $prof = Professor::find($id);
+        $title = "Détail du professeur";
+        $page = "Détail";
+        return view('administrations.professors.show',compact('title','page','prof'));
     }
 
     /**
@@ -192,7 +195,11 @@ class ProfessorsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prof = Professor::find($id);
+        $user  = User::find($prof->user_id);
+        $user->delete();
+
+        return redirect()->route('professors.index')->with('success','Professeur supprimé avec succès');
     }
 
     public function getProfSubject($id){

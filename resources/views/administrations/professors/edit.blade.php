@@ -169,8 +169,8 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Nationalité</label>
                                         <select name="nationality" class="w-full p-2 border rounded form-select">
-                                            <option value="Francaise" {{ $prof->user->nationality == 'Francaise' ?? 'selected' }}>Française</option>
-                                            <option value="Malagasy" {{ $prof->user->nationality == 'Malagasy' ?? 'selected' }}>Malagasy</option>
+                                            <option value="Francaise" @if($prof->user->nationality =='Francaise') selected @endif>Française</option>
+                                            <option value="Malagasy" @if($prof->user->nationality =='Malagasy') selected @endif>Malagasy</option>
                                         </select>
                                     </div>
                                 </div>

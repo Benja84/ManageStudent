@@ -222,6 +222,7 @@
                 </thead>
                 <tbody>
                   @forelse ($group->courses as $course)
+                  @if($course->subject)
                     <tr>
                       <td class="text-center">{{ weekdays()[$course->weekday] }} {{ DateTime::createFromFormat('Y-m-d', $course->date)->format('d/m/Y') }}</td>
                       <td class="text-center">{{ DateTime::createFromFormat('H:i:s', $course->start_time)->format('H\hi') }} à {{ DateTime::createFromFormat('H:i:s', $course->end_time)->format('H\hi') }}</td>
@@ -229,6 +230,7 @@
                       <td class="text-center">{{ $course->professor->user->firstname }} {{ $course->professor->user->lastname }}</td>
                       <td class="text-center">{{ $course->room->name }} ({{ $course->room->department }}), n° {{ $course->room->number }}, étage {{ $course->room->floor ?? '' }} </td>
                     </tr>
+                    @endif
                   @empty
                     <tr>
                       <td colspan="8" class="text-muted">Aucun coordinateur-trice trouvé</td>

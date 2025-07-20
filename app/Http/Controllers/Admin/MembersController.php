@@ -146,16 +146,6 @@ class MembersController extends Controller
         $fields['nationality'] = $request->nationality;
 
         $photoPath = null;
-        if ($request->hasFile('photo')) {
-            $request->validate([
-                'photo' => 'image|mimes:jpeg,png|max:20480',
-            ]);
-            // Supprimer l’ancienne photo si elle existe
-            if ($advisor->user->photo && Storage::disk('public')->exists($advisor->user->photo)) {
-                Storage::disk('public')->delete($advisor->user->photo);
-            }
-            $photoPath = $request->file('photo')->store('members/photos', 'public');
-        }
         
         $user = User::find($advisor->user_id);
         if($user->hasRole('admin')){
@@ -167,7 +157,19 @@ class MembersController extends Controller
         if($user->hasRole('secretary')){
             $user->removeRole('secretary');
         }
-
+        
+        if ($request->hasFile('photo')) {
+            $request->validate([
+                'photo' => 'image|mimes:jpeg,png|max:20480',
+            ]);
+            // Supprimer l’ancienne photo si elle existe
+            if ($advisor->user->photo && Storage::disk('public')->exists($advisor->user->photo)) {
+                Storage::disk('public')->delete($advisor->user->photo);
+            }
+            $photoPath = $request->file('photo')->store('members/photos', 'public');
+            
+            $user->photo = $photoPath;
+        }
         $user->gender = $request->gender;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -179,7 +181,6 @@ class MembersController extends Controller
         $user->address_street = $request->address_street;
         $user->nationality = $request->nationality;
         $user->country = $request->country;
-        $user->photo = $photoPath;
 
         $user->save();
 
