@@ -19,7 +19,7 @@
                             <div class="bg-dark p-10 text-white text-center">
                                 <i class="mdi mdi-school mb-1 font-16"></i>
                                 <h5 class="mb-0 mt-1">{{$students}}</h5>
-                                <small class="font-light">Total étudiants</small>
+                                <small class="font-light">Nombre d'étudiants</small>
                             </div>
                             </a>
                         </div>
@@ -28,7 +28,7 @@
                             <div class="bg-dark p-10 text-white text-center">
                                 <i class="mdi mdi-account-multiple mb-1 font-16"></i>
                                 <h5 class="mb-0 mt-1">{{$professors}}</h5>
-                                <small class="font-light">Nombre des professeurs</small>
+                                <small class="font-light">Nombre de professeurs</small>
                             </div>
                             </a>
                         </div>
@@ -37,7 +37,7 @@
                             <div class="bg-dark p-10 text-white text-center">
                                 <i class="mdi mdi-briefcase-check mb-1 font-16"></i>
                                 <h5 class="mb-0 mt-1">{{$groups}}</h5>
-                                <small class="font-light">Nombre des groupes</small>
+                                <small class="font-light">Nombre de groupes</small>
                             </div>
                             </a>
                         </div>
@@ -46,7 +46,7 @@
                             <div class="bg-dark p-10 text-white text-center">
                                 <i class="mdi mdi-book mb-1 font-16"></i>
                                 <h5 class="mb-0 mt-1">{{$subjects}}</h5>
-                                <small class="font-light">Nombre des matières</small>
+                                <small class="font-light">Nombre de matières</small>
                             </div>
                             </a>
                         </div>
@@ -55,7 +55,7 @@
                             <div class="bg-dark p-10 text-white text-center">
                                 <i class="mdi mdi-home-modern mb-1 font-16"></i>
                                 <h5 class="mb-0 mt-1">{{$rooms}}</h5>
-                                <small class="font-light">Nombre des salles</small>
+                                <small class="font-light">Nombre de salles</small>
                             </div>
                             </a>
                         </div>
@@ -64,7 +64,7 @@
                             <div class="bg-dark p-10 text-white text-center">
                                 <i class="mdi mdi-book-multiple mb-1 font-16"></i>
                                 <h5 class="mb-0 mt-1">{{count($courses)}}</h5>
-                                <small class="font-light">Nombre des cours</small>
+                                <small class="font-light">Nombre de cours</small>
                             </div>
                             </a>
                         </div>
