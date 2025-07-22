@@ -23,7 +23,7 @@
                 <span class="hidden-xs-down">Calendrier des cours</span>
               </a> 
             </li>
-            <li class="nav-item"> 
+            <li class="nav-item @if($title == 'Cours d\'aujourd\'hui') hide @endif"> 
               <a class="nav-link" data-bs-toggle="tab" href="#course" role="tab">
                 <span class="hidden-sm-up"></span> 
                 <span class="hidden-xs-down">Recherche des cours</span>
@@ -149,7 +149,9 @@
                         <th class=" text-center" scope="col">COURS</th>
                         <th class=" text-center" scope="col">PROFESSEUR</th>
                         <th class=" text-center" scope="col">SALLE</th>
+                        @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary'))
                         <th class=" text-center" scope="col">Action</th>
+                        @endif
                       </tr>
                     </thead>
                     <tbody id="data_tr">
@@ -384,7 +386,8 @@
                   result += `<td class="text-center">${element.subject.name} </td>`;
                   result += `<td class="text-center">${element.professor.user.firstname} ${element.professor.user.lastname}</td>`;
                   result += `<td class="text-center">${element.room.name} (${element.room.department}), n° ${element.room.number}, étage ${element.room.floor}</td>`;
-                  result += `<td class="text-center">
+                  
+                  result += `@if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary'))<td class="text-center">
                     <div class="d-flex justify-content-between">
                       <div>
                       <a class="btn btn-primary text-white" href="${edit_route}"><i class="mdi mdi-pencil"></i></a>
@@ -395,7 +398,7 @@
                         <button class="btn btn-danger text-white" onclick="return confirm('Confirmer la suppression ?')"><i class="mdi mdi-delete"></i></button>
                       </form>
                     </div>
-                    </td>`;
+                    </td> @endif`;
                   result +='</tr>';
                   // Afficher dans la table les rérultats
                   $('#data_tr').append(result);

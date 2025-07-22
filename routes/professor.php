@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CloseDayController;
 use App\Http\Controllers\Admin\CoursesController;
 use App\Http\Controllers\Admin\MembersController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ProfessorsController;
 use App\Http\Controllers\Admin\SectionsController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -28,21 +29,21 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-// Route::get('/', function () {
-//     return redirect()->route('dashboard');
-// });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-// voire profile
-// Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 
 
-Route::middleware(['auth', 'role:student'])->group(function () {
-    Route::get('/my_courses', [StudentCoursesController::class, 'index'])->name('student.courses');
-    Route::get('/my_courses/aujourdhui', [StudentCoursesController::class, 'index'])->name('student.course_today');
+Route::middleware(['auth', 'role:coordinator'])->group(function () {
+    Route::get('groups-coordinator', [GroupsController::class,'indexForCoordinator'])->name('groups-coordinator.index');
+    Route::get('groups-coordinator/{group}', [GroupsController::class,'showForCoordinator'])->name('groups-coordinator.show');
 });
-Route::group(['middleware' => 'role:admin|advisor|coordinator|student|secretary'], function () {
-    Route::resource('students', StudentController::class, ['only' => ['show']]);
+Route::group(['middleware' => 'role:admin|coordinator|professor|secretary'], function () {
+    Route::resource('groups', GroupsController::class, ['only' => ['index','show']]);
+    Route::resource('professors', ProfessorsController::class, ['only' => ['show']]);
+});
+
+Route::group(['middleware' => 'role:coordinator|professor'], function () {
+    Route::get('my-courses',[CoursesController::class, 'getCourseByProf'])->name('prof.courses');
 });
 
 

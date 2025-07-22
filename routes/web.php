@@ -39,7 +39,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 // Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 
 
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin|secretary'])->group(function () {
     // Route::resource('/roles',RoleController::class);
     // Route::resource('/permissions',PermissionController::class);
     Route::resource('/students', StudentController::class);
@@ -52,8 +52,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/rooms',RoomsController::class);
     Route::resource('/closedays',CloseDayController::class);
     Route::get('/subject/{id}',[SectionsController::class,'getSubject'])->name('subject');
-    // Route::get('/professorSubject/{subject_id}',[ProfessorsController::class,'getProfSubject'])->name('professorSubject');
     Route::get('/professorSubject/{subject_id}',[SubjectController::class,'getProf'])->name('professorSubject');
+});
+
+Route::middleware(['auth', 'role:admin|secretary|coordinator|professor|student|advisor'])->group(function () {
     Route::post('/courses/recherche',[CoursesController::class,'chercheCourse'])->name('search_courses');
 });
 

@@ -7,10 +7,12 @@ use App\Models\Group;
 use App\Models\GroupSubject;
 use App\Models\Professor;
 use App\Models\Section;
+use App\Models\StudentGroupHistory;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rule;
 
 class GroupsController extends Controller
@@ -191,5 +193,36 @@ class GroupsController extends Controller
     // Récuperer les abréviations d'une année scolaire
     public function getYearAbreviation($school_year){
         return Group::where('school_year',$school_year)->get()->pluck('abbreviation');
+    }
+
+    public function indexForCoordinator()
+    {
+        $coordinator = TRUE;
+        $title = "Liste groupe";
+        $page = "Liste des groupes";
+        // $groupsRoute = explode('.', Route::current()->getName())[0];
+
+        $groups = auth()->user()->professor->groupsCoordinator()->sort()->orderBy('groups.school_year', 'desc')->get();
+        
+
+        return $this->view('index', compact('groups', 'coordinator'));
+    }
+
+    public function showForCoordinator(Group $group)
+    {
+        if (auth()->user()->professor->groupsCoordinator->contains($group)) {
+            $historyGroupStudent = StudentGroupHistory::where('group_id',$group->id)->get();
+            // dd($history[0]->group->school_year);
+            foreach($group->students as $student){
+                foreach ($historyGroupStudent as $key => $value) {
+                    if($student->id == $value->student->id){
+                        unset($historyGroupStudent[$key]);
+                    }
+                }
+            }
+            return $this->view('show', compact('group','historyGroupTrainee'));
+        }
+
+        return abort(401, 'Accès non authorisé');
     }
 }
