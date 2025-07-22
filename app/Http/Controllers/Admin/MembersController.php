@@ -38,7 +38,7 @@ class MembersController extends Controller
         $title = "Ajouter un membre du personnel";
         $page = 'Membres';
         
-        if(auth()->user()->hasRole('administrators')){
+        if(auth()->user()->hasRole('admin')){
             $roles = [User::ADMIN => 'Administrateur-trice', User::SECRETARY => 'Secrétaire'];
         }else{
             $roles = [User::SECRETARY => 'Secrétaire'];
@@ -69,7 +69,7 @@ class MembersController extends Controller
         $fields['address_postcode'] = $request->address_postcode;
         $fields['nationality'] = $request->nationality;
         $fields['country'] = $request->country;
-        $fields['password'] = Hash::make(strtolower($request->firstname) . 'school');
+        $fields['password'] = Hash::make(strtolower(normaliserChaine($request->firstname)) . 'school');
         if ($request->hasFile('photo')) {
             $request->validate([
                 'photo' => 'image|mimes:jpeg,png|max:20480',
