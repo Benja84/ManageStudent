@@ -55,18 +55,18 @@ Route::middleware(['auth', 'role:admin|secretary'])->group(function () {
     Route::get('/professorSubject/{subject_id}',[SubjectController::class,'getProf'])->name('professorSubject');
 });
 
-Route::middleware(['auth', 'role:admin|secretary|coordinator|professor|student|advisor'])->group(function () {
+Route::middleware(['auth', 'role:admin|secretary|coordinator|professor|student'])->group(function () {
     Route::post('/courses/recherche',[CoursesController::class,'chercheCourse'])->name('search_courses');
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('/groups', GroupsController::class);
 });
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+// Route::middleware(['auth', 'role:admin'])->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 
 

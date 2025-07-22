@@ -46,7 +46,7 @@
                         </b>
                         <span class="logo-text">
                             {{-- <img src="{{asset('assets/images/logo-text.png')}}" alt="homepage" class="light-logo" /> --}}
-                            <img class="light-logo" alt="Géstion Universitaire">
+                            <label class="light-logo mt-2" >{{auth()->user()->firstname}} {{auth()->user()->lastname}}</label>
                         </span>
                     </a>
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
@@ -66,9 +66,9 @@
                                 <img src="{{asset('assets/images/users/1.jpg')}}" alt="user" class="rounded-circle" width="31">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                {{-- <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                     <i class="ti-user me-1 ms-1"></i>My Profile
-                                </a>
+                                </a> --}}
                                 <a class="dropdown-item">
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf

@@ -17,31 +17,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Auth;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
-// Route::get('/', function () {
-//     return redirect()->route('dashboard');
-// });
-
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
-// voire profile
-// Route::get('/students/{student}', [StudentController::class, 'show'])->name('students.show');
 
 
 Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/my_courses', [StudentCoursesController::class, 'index'])->name('student.courses');
     Route::get('/my_courses/aujourdhui', [StudentCoursesController::class, 'index'])->name('student.course_today');
 });
-Route::group(['middleware' => 'role:admin|advisor|coordinator|student|secretary'], function () {
+Route::group(['middleware' => 'role:admin|coordinator|student|secretary'], function () {
     Route::resource('students', StudentController::class, ['only' => ['show']]);
 });
 

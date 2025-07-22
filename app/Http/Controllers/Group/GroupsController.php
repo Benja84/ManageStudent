@@ -202,10 +202,10 @@ class GroupsController extends Controller
         $page = "Liste des groupes";
         // $groupsRoute = explode('.', Route::current()->getName())[0];
 
-        $groups = auth()->user()->professor->groupsCoordinator()->sort()->orderBy('groups.school_year', 'desc')->get();
+        $groups = auth()->user()->professor->groupsCoordinator()->orderBy('groups.school_year', 'desc')->get();
         
 
-        return $this->view('index', compact('groups', 'coordinator'));
+        return view('groups.index', compact('title','page','groups', 'coordinator'));
     }
 
     public function showForCoordinator(Group $group)
