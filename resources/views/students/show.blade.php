@@ -140,7 +140,7 @@
       </div>
     </div>
     <div class="card-footer">
-        @if(auth()->user()->hasRole('admin'))
+        @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
         <div class="mt-4 d-flex justify-content-between">
             <a href="{{ route('students.index') }}" class="btn btn-secondary"> Retour</a>
             <a href="{{ route('students.edit', $student->id) }}" class="btn btn-primary">Modifier</a>

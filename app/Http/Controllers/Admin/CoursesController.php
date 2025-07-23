@@ -547,12 +547,24 @@ class CoursesController extends Controller
     public function getCourseByProf(){
         
         $courses = Course::with(['group.section','professor','subject','room'])->where('professor_id',auth()->user()->professor->id)->get();
-        $groups = Group::all();
-        $professors = Professor::all();
-        $subjects = Subject::all();
+        $groups = auth()->user()->professor->groups;
+        $professors = Professor::where('id',auth()->user()->professor->id)->get();
+        $subjects = auth()->user()->professor->subjects;
         $rooms = Room::all();
         $title = "Liste de mes cours";
         $page = "Mes cours";
+        return view('administrations.courses.index', compact('courses','title','page','professors','groups','rooms','subjects'));
+    }
+
+    // Récuperer les cours cours du jour
+    public function getTodayCourses(){
+        $courses = Course::with(['group.section','professor','subject','room'])->where('professor_id',auth()->user()->professor->id)->where('date',now()->format('Y-m-d'))->get();
+        $groups = auth()->user()->professor->groups;
+        $professors = Professor::where('id',auth()->user()->professor->id)->get();
+        $subjects = auth()->user()->professor->subjects;
+        $rooms = Room::all();
+        $title = "Cours d'aujourd'hui";
+        $page = "Cours du jour";
         return view('administrations.courses.index', compact('courses','title','page','professors','groups','rooms','subjects'));
     }
 }
