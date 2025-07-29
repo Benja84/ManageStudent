@@ -462,7 +462,15 @@
                         step2.querySelector('input[name="birthdate"]').focus();
                         return false;
                     }else{
-                        $('input[name="birthdate"]').removeClass('is-invalid');
+                        let age = calculerAge(birthDate);
+                        if(age >= 16){
+                            $('input[name="birthdate"]').removeClass('is-invalid');
+                        }else{
+                            $('input[name="birthdate"]').addClass('is-invalid');
+                            step2.querySelector('input[name="birthdate"]').focus();
+                            toastr.error('L\'âge minimum est 25 !','Erreur!')
+                            return false;
+                        }
                     }
                     if (!birthPlace) {
                         $('input[name="birthplace_city"]').addClass('is-invalid');
@@ -512,6 +520,19 @@
                     toastr.error('Veuillez completer les champs requis','Erreur!')
                     return false;
                 }
+            }
+
+            function calculerAge(date){
+                const dNaiss = new Date(date);
+                if (isNaN(dNaiss)) return null;
+
+                const today = new Date();
+                let age = today.getFullYear() - dNaiss.getFullYear();
+                const m = today.getMonth() - dNaiss.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < dNaiss.getDate())) {
+                    age--;
+                }
+                return age;
             }
 
             // Navigation to Step 2
