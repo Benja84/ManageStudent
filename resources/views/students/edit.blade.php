@@ -121,7 +121,7 @@
                                             <label class="block text-gray-700">Portable</label>
                                             <input type="tel" name="phone" class="w-full p-2 border rounded form-control" value="{{ old('phone',$student->user->phone) }}">
                                         </div>
-                                        <div>
+                                        {{-- <div>
                                             <label class="block text-gray-700">Conseiller-ère</label>
                                             <select name="advisor_id" class="select2 form-select" placeholder="Selectionner les matières">
                                                 <option value=""  disabled>Selectionner un(e) conseiller-ère</option>
@@ -134,7 +134,7 @@
                                                 @endif
                                                 @endforeach
                                             </select>
-                                        </div>
+                                        </div> --}}
                                         
                                         <div>
                                             <label class="block text-gray-700">Affectation aux groupes</label>
@@ -468,7 +468,7 @@
                         }else{
                             $('input[name="birthdate"]').addClass('is-invalid');
                             step2.querySelector('input[name="birthdate"]').focus();
-                            toastr.error('L\'âge minimum est 25 !','Erreur!')
+                            toastr.error('L\'âge minimum est 16 !','Erreur!')
                             return false;
                         }
                     }
@@ -522,18 +522,6 @@
                 }
             }
 
-            function calculerAge(date){
-                const dNaiss = new Date(date);
-                if (isNaN(dNaiss)) return null;
-
-                const today = new Date();
-                let age = today.getFullYear() - dNaiss.getFullYear();
-                const m = today.getMonth() - dNaiss.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < dNaiss.getDate())) {
-                    age--;
-                }
-                return age;
-            }
 
             // Navigation to Step 2
             nextBtn.addEventListener('click', function (e) {

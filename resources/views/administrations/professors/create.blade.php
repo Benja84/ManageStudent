@@ -409,18 +409,6 @@
                 }
             }
 
-            function calculerAge(date){
-                const dNaiss = new Date(date);
-                if (isNaN(dNaiss)) return null;
-
-                const today = new Date();
-                let age = today.getFullYear() - dNaiss.getFullYear();
-                const m = today.getMonth() - dNaiss.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < dNaiss.getDate())) {
-                    age--;
-                }
-                return age;
-            }
 
             // Navigation to Step 2
             nextBtn.addEventListener('click', function (e) {
