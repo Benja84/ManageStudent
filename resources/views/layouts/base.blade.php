@@ -46,7 +46,7 @@
                         </b>
                         <span class="logo-text">
                             {{-- <img src="{{asset('assets/images/logo-text.png')}}" alt="homepage" class="light-logo" /> --}}
-                            <img class="light-logo" alt="Géstion Universitaire">
+                            <label class="light-logo mt-2" >{{auth()->user()->firstname}} {{auth()->user()->lastname}}</label>
                         </span>
                     </a>
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
@@ -66,9 +66,9 @@
                                 <img src="{{asset('assets/images/users/1.jpg')}}" alt="user" class="rounded-circle" width="31">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                {{-- <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                     <i class="ti-user me-1 ms-1"></i>My Profile
-                                </a>
+                                </a> --}}
                                 <a class="dropdown-item">
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
@@ -82,189 +82,9 @@
                 </div>
             </nav>
         </header>
-        <aside class="left-sidebar" data-sidebarbg="skin5">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav" class="pt-4">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('dashboard') }}" aria-expanded="false">
-                                <i class="mdi mdi-view-dashboard"></i>
-                                <span class="hide-menu">Tableaux de bord</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="mdi mdi-account-multiple"></i>
-                                <span class="hide-menu">Membres du personnel </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('members.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('members.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste du personnel </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="mdi mdi-school"></i>
-                                <span class="hide-menu">Etudiants </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('students.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('students.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des étudiants </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="mdi mdi-clipboard-account"></i>
-                                <span class="hide-menu">Proffesseurs </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('professors.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('professors.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des Professors </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="fas fa-bookmark"></i>
-                                <span class="hide-menu">Groupes </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('groups.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('groups.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des Goupes </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="fas fa-bookmark"></i>
-                                <span class="hide-menu">Sections </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('sections.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('sections.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des sections </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="fas fa-calendar"></i>
-                                <span class="hide-menu">Cours </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('courses.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('courses.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Calendrier des cours </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('closedays.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-calendar-check"></i>
-                                        <span class="hide-menu"> Gérer les jours fermés</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="fas fa-book"></i>
-                                <span class="hide-menu">Matières </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('subjects.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('subjects.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des matières </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i class="fas fa-building"></i>
-                                <span class="hide-menu">Salle </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item">
-                                    <a href="{{ route('rooms.create') }}" class="sidebar-link">
-                                        <i class="mdi mdi-note-outline"></i>
-                                        <span class="hide-menu"> Créer  </span>
-                                    </a>
-                                </li>
-                                <li class="sidebar-item">
-                                    <a href="{{ route('rooms.index') }}" class="sidebar-link">
-                                        <i class="mdi mdi-receipt"></i>
-                                        <span class="hide-menu"> Liste des salles </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </aside>
+        {{-- Menu gauche --}}
+        @include('layouts.sidebar')
+                
         <div class="page-wrapper">
             <div class="page-breadcrumb">
                 <div class="row">
@@ -300,6 +120,16 @@
             </footer>
         </div>
     </div>
+    @if(auth()->check())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Empêche le retour à la page de login
+            if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
+                window.location.reload();
+            }
+        });
+    </script>
+    @endif
     <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('dist/js/jquery.ui.touch-punch-improved.js') }}"></script>
 

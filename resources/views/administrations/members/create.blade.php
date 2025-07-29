@@ -2,7 +2,7 @@
 
 @section('aditionnal_css')
 <!-- Custom CSS -->
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link href="{{asset('css/tailwind.min.css')}}" rel="stylesheet">
 <style>
     .progress-container {
         display: flex;
@@ -145,7 +145,7 @@
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Nationalité <span class="text-warning">*</span></label>
                                     <select name="nationality" class="w-full p-2 border rounded form-select">
-                                        <option value="France">Francaise</option>
+                                        <option value="Francaise">Française</option>
                                         <option value="Malagasy">Malagasy</option>
                                     </select>
                                 </div>
@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Ville <span class="text-warning">*</span></label>
-                                    <input type="text" name="birthplace_city" class="w-full p-2 border rounded form-control">
+                                    <input type="text" name="address_city" class="w-full p-2 border rounded form-control">
                                 </div>
                                 <div class="w-1/3">
                                     <label class="block text-gray-700">Code postal <span class="text-warning">*</span></label>
@@ -331,12 +331,13 @@
         function validateStep2() {
             try {
                 const birthDate = step2.querySelector('input[name="birthdate"]').value;
-                const birthPlace = step2.querySelector('input[name="birthplace"]').value.trim();
-                const nationality = step2.querySelector('select[name="nationality"]').value;
+                // const birthPlace = step2.querySelector('input[name="birthplace"]').value.trim();
                 const address = step2.querySelector('input[name="address_street"]').value.trim();
-                const city = step2.querySelector('input[name="birthplace_city"]').value.trim();
+                const birthplace_city = step2.querySelector('input[name="birthplace_city"]').value.trim();
+                const city = step2.querySelector('input[name="address_city"]').value.trim();
                 const zipCode = step2.querySelector('input[name="address_postcode"]').value.trim();
                 const country = step2.querySelector('select[name="country"]').value;
+                const nationality = step2.querySelector('select[name="nationality"]').value;
                 // Check for missing fields
                 if (!birthDate) {
                     $('input[name="birthdate"]').addClass('is-invalid');
@@ -345,13 +346,13 @@
                 }else{
                     $('input[name="birthdate"]').removeClass('is-invalid');
                 }
-                if (!birthPlace) {
-                    $('input[name="birthplace"]').addClass('is-invalid');
-                    step2.querySelector('input[name="birthplace"]').focus();
-                    return false;
-                }else{
-                    $('input[name="birthplace"]').removeClass('is-invalid');
-                }
+                // if (!birthPlace) {
+                //     $('input[name="birthplace"]').addClass('is-invalid');
+                //     step2.querySelector('input[name="birthplace"]').focus();
+                //     return false;
+                // }else{
+                //     $('input[name="birthplace"]').removeClass('is-invalid');
+                // }
                 if (!nationality) {
                     $('select[name="nationality"]').addClass('is-invalid');
                     step2.querySelector('select[name="nationality"]').focus();
@@ -367,6 +368,13 @@
                     $('input[name="address_street"]').removeClass('is-invalid');
                 }
                 if (!city) {
+                    $('input[name="address_city"]').addClass('is-invalid');
+                    step2.querySelector('input[name="address_city"]').focus();
+                    return false;
+                }else{
+                    $('input[name="address_city"]').removeClass('is-invalid');
+                }
+                if (!birthplace_city) {
                     $('input[name="birthplace_city"]').addClass('is-invalid');
                     step2.querySelector('input[name="birthplace_city"]').focus();
                     return false;
@@ -419,58 +427,6 @@
             e.preventDefault();
             if (validateStep2()){
                 $('#action_save').submit();
-                // const formData = new FormData(step2);
-
-                // // Add Step 1 data to FormData
-                // const lastName = step1.querySelector('input[name="lastname"]').value;
-                // const firstName = step1.querySelector('input[name="firstname"]').value;
-                // const phone = step1.querySelector('input[name="phone"]').value;
-                // const email = step1.querySelector('input[name="email"]').value;
-                // const gender = step1.querySelector('input[name="gender"]:checked')?.value;
-                // const role = step1.querySelector('select[name="role"]').value;
-
-                // // Step2
-                // const birthDate = step2.querySelector('input[name="birthdate"]').value;
-                // const birthPlace = step2.querySelector('input[name="birthplace"]').value.trim();
-                // const nationality = step2.querySelector('select[name="nationality"]').value;
-                // const address = step2.querySelector('input[name="address_street"]').value.trim();
-                // const city = step2.querySelector('input[name="birthplace_city"]').value.trim();
-                // const zipCode = step2.querySelector('input[name="address_postcode"]').value.trim();
-                // const country = step2.querySelector('select[name="country"]').value;
-
-                // formData.append('lastname', lastName);
-                // formData.append('firstname', firstName);
-                // formData.append('phone', phone);
-                // formData.append('email', email);
-                // formData.append('gender', gender);
-                // formData.append('role', role);
-
-                // // Add photo (already validated as required in Step 1)
-                // if(photoUpload.files[0]){
-                //     formData.append('photo', photoUpload.files[0]);
-                // }
-
-                // fetch('{{ route('members.store') }}', {
-                //     method: 'POST',
-                //     body: formData,
-                //     headers: {
-                //         'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                //     }
-                // })
-                // .then(response => response)
-                // .then(data => {
-                //     if (data.status === 201) {
-                //         console.log('data',data)
-                //         toastr.success('Membre enregistré avec succés','Success!');
-                //         window.location.href = data.url || '{{ route('members.index') }}';
-                //     } else {
-                //         toastr.error('Erreur lors de l\'enregistrement','Erreur !');
-                //     }
-                // })
-                // .catch(error => {
-                //     console.log('Erreur lors de la soumission:', error);
-                //     toastr.error('Une erreur est survenue lors de l\'enregistrement. Vérifiez la console.','Erreur!');
-                // });
             }
         });
     });

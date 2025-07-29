@@ -84,8 +84,8 @@
                                         <form action="{{ route('closedays.destroy', $closed_day->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
-                                                <i class="fa fa-trash"></i>
+                                            <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                                                <i class="mdi mdi-delete"></i>
                                             </button>
                                         </form>
                                    </div>

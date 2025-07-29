@@ -298,7 +298,9 @@ class CoursesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $course = Course::find($id);
+        $course->delete();
+        return redirect()->route('courses.index')->with('success', 'Cours supprimé avec succès!');
     }
 
     // Récuperer le jour choisi entre deux dates
@@ -531,5 +533,19 @@ class CoursesController extends Controller
             });
 
         return $searchQuery->orderBy('date', 'desc')->groupBy('group_id', 'subject_id', 'room_id', 'professor_id', 'weekday', 'start_time', 'end_time', 'duration')->get();
+    }
+
+    // Récuperer les cours du prof connecté
+    public function getCourseByProf()
+    {
+
+        $courses = Course::with(['group.section', 'professor', 'subject', 'room'])->where('professor_id', auth()->user()->professor->id)->get();
+        $groups = Group::all();
+        $professors = Professor::all();
+        $subjects = Subject::all();
+        $rooms = Room::all();
+        $title = "Liste de mes cours";
+        $page = "Mes cours";
+        return view('administrations.courses.index', compact('courses', 'title', 'page', 'professors', 'groups', 'rooms', 'subjects'));
     }
 }

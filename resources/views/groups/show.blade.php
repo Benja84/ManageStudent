@@ -222,6 +222,7 @@
                 </thead>
                 <tbody>
                   @forelse ($group->courses as $course)
+                  @if($course->subject)
                     <tr>
                       <td class="text-center">{{ weekdays()[$course->weekday] }} {{ DateTime::createFromFormat('Y-m-d', $course->date)->format('d/m/Y') }}</td>
                       <td class="text-center">{{ DateTime::createFromFormat('H:i:s', $course->start_time)->format('H\hi') }} à {{ DateTime::createFromFormat('H:i:s', $course->end_time)->format('H\hi') }}</td>
@@ -229,6 +230,7 @@
                       <td class="text-center">{{ $course->professor->user->firstname }} {{ $course->professor->user->lastname }}</td>
                       <td class="text-center">{{ $course->room->name }} ({{ $course->room->department }}), n° {{ $course->room->number }}, étage {{ $course->room->floor ?? '' }} </td>
                     </tr>
+                    @endif
                   @empty
                     <tr>
                       <td colspan="8" class="text-muted">Aucun coordinateur-trice trouvé</td>
@@ -329,21 +331,23 @@
       let courses = [];
       let colors = generateColorPalette(100);
       datas.forEach(element => {
-        courses.push({
-          '_id':element.id,
-          'title':element.subject.abbreviation+' - '+element.professor.user.firstname+' '+element.professor.user.lastname+ ' - '+element.group.abbreviation,
-          'start':element.date+'T'+element.start_time,
-          'end':element.date+'T'+element.end_time,
-          'color':colors[element.id],
-          extendedProps: {
-            course: element.subject.abbreviation,
-            startHour: element.start_time,
-            endHour: element.end_time,
-            teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
-            class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
-            location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
-          }
-        } )
+        if(element.subject){
+          courses.push({
+            '_id':element.id,
+            'title':element.subject.abbreviation+' - '+element.professor.user.firstname+' '+element.professor.user.lastname+ ' - '+element.group.abbreviation,
+            'start':element.date+'T'+element.start_time,
+            'end':element.date+'T'+element.end_time,
+            'color':colors[element.id],
+            extendedProps: {
+              course: element.subject.abbreviation,
+              startHour: element.start_time,
+              endHour: element.end_time,
+              teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
+              class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
+              location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
+            }
+          } );
+        }
       });
       $('#calendar').fullCalendar('destroy');
       $('#calendar').fullCalendar({

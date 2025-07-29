@@ -67,7 +67,9 @@ class ProfessorsController extends Controller
             ]);
 
             // Prépare les données validées
-            $validated['password'] = Hash::make(strtolower($request->firstname).'school123');
+            $validated['password'] = Hash::make(strtolower(normaliserChaine($request->firstname)).'school123');
+            $validated['nationality'] = $request->nationality;
+            $validated['country'] = $request->country;
             if ($request->hasFile('photo')) {
                 $request->validate([
                     'photo' => 'image|mimes:jpeg,png|max:20480',
@@ -111,6 +113,9 @@ class ProfessorsController extends Controller
     public function show($id)
     {
         $prof = Professor::find($id);
+        $title = "Détail du professeur";
+        $page = "Détail";
+        return view('administrations.professors.show',compact('title','page','prof'));
     }
 
     /**
@@ -190,7 +195,11 @@ class ProfessorsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $prof = Professor::find($id);
+        $user  = User::find($prof->user_id);
+        $user->delete();
+
+        return redirect()->route('professors.index')->with('success','Professeur supprimé avec succès');
     }
 
     public function getProfSubject($id){

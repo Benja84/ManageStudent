@@ -2,7 +2,7 @@
 
 @section('aditionnal_css')
     <!-- Custom CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{{asset('css/tailwind.min.css')}}" rel="stylesheet">
     <style>
         .progress-container {
             display: flex;
@@ -126,10 +126,12 @@
                                             <select name="advisor_id" class="select2 form-select" placeholder="Selectionner les matières">
                                                 <option value=""  disabled>Selectionner un(e) conseiller-ère</option>
                                                 @foreach ($advisors as $key => $advisor)
+                                                @if($advisor->user->hasRole('advisor'))
                                                     <option class="form-control-alt" data-tokens="{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}"
                                                         @if (old('advisor_id',$student->advisor_id) == $advisor->id) @php($advisored = TRUE) selected  @endif
                                                         value="{{ $advisor->id }}">{{ $advisor->user->firstname }} {{ $advisor->user->lastname }}</option>
                                                     @php($advisored = false)
+                                                @endif
                                                 @endforeach
                                             </select>
                                         </div>
@@ -171,7 +173,7 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Nationalité</label>
                                         <select name="nationality" class="w-full p-2 border rounded form-select">
-                                            <option value="France" @if($student->user->nationality == 'France') selected @endif>Francaise</option>
+                                            <option value="Francaise" @if($student->user->nationality == 'Francaise') selected @endif>Française</option>
                                             <option value="Malagasy" @if($student->user->nationality == 'Malagasy') selected @endif>Malagasy</option>
                                         </select>
                                     </div>
@@ -192,8 +194,8 @@
                                     <div class="w-1/3">
                                         <label class="block text-gray-700">Pays</label>
                                         <select name="country" class="w-full p-2 border rounded form-select">
-                                            <option value="France">France</option>
-                                            <option value="Madagascar">Madagascar</option>
+                                            <option value="France" @if($student->user->country == 'France') selected @endif>France</option>
+                                            <option value="Madagascar" @if($student->user->country == 'Madagascar') selected @endif>Madagascar</option>
                                         </select>
                                     </div>
                                 </div>

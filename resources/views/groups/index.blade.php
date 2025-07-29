@@ -42,7 +42,7 @@
                         <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">
                           <i class="mdi mdi-pencil"></i>
                         </a>
-                        @if(count($group->students) == 0) 
+                        @if(count($group->students) == 0 && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) ) 
                         <form action="{{ route('groups.destroy', $group->id) }}" method="POST">
                           @csrf
                           @method('DELETE')
