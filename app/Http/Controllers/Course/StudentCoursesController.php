@@ -19,8 +19,8 @@ class StudentCoursesController extends Controller
             request('groupBy', $groups->sortBy('school_year')->pluck('id')->last()),
             $today
         );
-        $professors = Professor::all();
-        $subjects = Subject::all();
+        $professors = $groups ? $groups[0]->professors : [];
+        $subjects = $groups ? $groups[0]->subjects : [];
         $rooms = Room::all();
 
         return view('administrations.courses.index', [

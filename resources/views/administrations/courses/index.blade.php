@@ -13,9 +13,11 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <div class="d-flex justify-content-end">
-            <a class="btn btn-success text-white" href="{{route('courses.create')}}"><i class="mdi mdi-plus"></i> Ajouter un cours</a>
-          </div>
+          @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+            <div class="d-flex justify-content-end">
+              <a class="btn btn-success text-white" href="{{route('courses.create')}}"><i class="mdi mdi-plus"></i> Ajouter un cours</a>
+            </div>
+          @endif
           <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item"> 
               <a class="nav-link active" data-bs-toggle="tab" href="#courses_calendar" role="tab">

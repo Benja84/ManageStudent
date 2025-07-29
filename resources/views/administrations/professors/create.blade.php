@@ -349,7 +349,15 @@
                         step2.querySelector('input[name="birthdate"]').focus();
                         return false;
                     }else{
-                        $('input[name="birthdate"]').removeClass('is-invalid');
+                        let age = calculerAge(birthDate);
+                        if(age >= 25){
+                            $('input[name="birthdate"]').removeClass('is-invalid');
+                        }else{
+                            $('input[name="birthdate"]').addClass('is-invalid');
+                            step2.querySelector('input[name="birthdate"]').focus();
+                            toastr.error('L\'âge minimum est 25 !','Erreur!')
+                            return false;
+                        }
                     }
                     if (!birthPlace) {
                         $('input[name="birthplace_city"]').addClass('is-invalid');
@@ -401,6 +409,7 @@
                 }
             }
 
+
             // Navigation to Step 2
             nextBtn.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -424,64 +433,6 @@
                 e.preventDefault();
                 if (validateStep2()) {
                     $("#form_data").submit();
-                    // const formData = new FormData(step2);
-
-                    // // Add Step 1 data to FormData
-                    // const lastName = step1.querySelector('input[name="lastname"]').value;
-                    // const firstName = step1.querySelector('input[name="firstname"]').value;
-                    // const phone = step1.querySelector('input[name="phone"]').value;
-                    // const email = step1.querySelector('input[name="email"]').value;
-                    // const gender = step1.querySelector('input[name="gender"]:checked')?.value;
-                    // // Récupérer l'élément <select> pour subject_id
-                    // const subjectSelect = step1.querySelector('select[name="subject_id[]"]');
-                    // // Extraire TOUTES les valeurs sélectionnées
-                    // const subject_ids = Array.from(subjectSelect.selectedOptions).flatMap(option => option.value.split(',').map(v => v.trim()));
-
-                    // // Récupérer l'élément <select> pour group_id
-                    // const groupSelect = step1.querySelector('select[name="group_id[]"]');
-                    // // Extraire TOUTES les valeurs sélectionnées
-                    // const group_ids = Array.from(groupSelect.selectedOptions).map(option => option.value);
-
-                    // // Step2
-                    // const birthDate = step2.querySelector('input[name="birthdate"]').value;
-                    // const birthPlace = step2.querySelector('input[name="birthplace_city"]').value.trim();
-                    // const nationality = step2.querySelector('select[name="nationality"]').value;
-                    // const address = step2.querySelector('input[name="address_street"]').value.trim();
-                    // const city = step2.querySelector('input[name="address_city"]').value.trim();
-                    // const zipCode = step2.querySelector('input[name="address_postcode"]').value.trim();
-                    // const country = step2.querySelector('select[name="country"]').value;
-
-                    // formData.append('lastname', lastName);
-                    // formData.append('firstname', firstName);
-                    // formData.append('phone', phone);
-                    // formData.append('email', email);
-                    // formData.append('gender', gender);
-                    // subject_ids.forEach(id => formData.append('subject_id[]', id));
-                    // group_ids.forEach(id => formData.append('group_id[]', id));
-
-                    // // Add photo (already validated as required in Step 1)
-                    // formData.append('photo', photoUpload.files[0]);
-
-                    // fetch('{{ route('professors.store') }}', {
-                    //     method: 'POST',
-                    //     body: formData,
-                    //     headers: {
-                    //         'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-                    //     }
-                    // })
-                    // .then(response => response)
-                    // .then(data => {
-                    //     if (data.status === 201) {
-                    //         toastr.success('Professeur enregistré avec succés','Success!');
-                    //         window.location.href = data.redirect || '{{ route('professors.index') }}';
-                    //     } else {
-                    //         toastr.error(data.message,'Erreur');
-                    //     }
-                    // })
-                    // .catch(error => {
-                    //     console.log('Erreur lors de la soumission:', error);
-                    //     toastr.error('Une erreur est survenue lors de l\'enregistrement. Vérifiez la console.','Erreur!');
-                    // });
                 }
             });
         });

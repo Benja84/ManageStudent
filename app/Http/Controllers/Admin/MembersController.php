@@ -112,7 +112,7 @@ class MembersController extends Controller
         $title = "Editer un membre du personnel";
         $page = "Membres";
         $member = Advisor::find($id);
-        if (auth()->user()->hasRole('administrators')) {
+        if (auth()->user()->hasRole('admin')) {
             $roles = [User::ADMIN => 'Administrateur-trice', User::SECRETARY => 'Secrétaire'];
         } else {
             $roles = [User::SECRETARY => 'Secrétaire'];

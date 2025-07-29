@@ -359,7 +359,15 @@
                         step2.querySelector('input[name="birthdate"]').focus();
                         return false;
                     }else{
-                        $('input[name="birthdate"]').removeClass('is-invalid');
+                        let age = calculerAge(birthDate);
+                        if(age >= 25){
+                            $('input[name="birthdate"]').removeClass('is-invalid');
+                        }else{
+                            $('input[name="birthdate"]').addClass('is-invalid');
+                            step2.querySelector('input[name="birthdate"]').focus();
+                            toastr.error('L\'âge minimum est 25 !','Erreur!')
+                            return false;
+                        }
                     }
                     if (!birthPlace) {
                         $('input[name="birthplace_city"]').addClass('is-invalid');

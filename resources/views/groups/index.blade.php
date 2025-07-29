@@ -8,12 +8,14 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
+          @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
           <div class="d-flex justify-content-end">
 
             <a href="{{ route('groups.create') }}" class="btn btn-success mb-3 text-white">
               <i class="mdi mdi-plus"></i> Ajouter un groupe
             </a>
           </div>
+          @endif
           <div class="table-responsive">
             <table id="liste_groupe" class="table table-striped table-bordered">
               <thead>
@@ -39,21 +41,23 @@
                         <a href="{{ route('groups.show', $group->id) }}" class="btn btn-sm btn-info">
                           <i class="mdi mdi-eye"></i>
                         </a>
-                        <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">
-                          <i class="mdi mdi-pencil"></i>
-                        </a>
-                        @if(count($group->students) == 0 && (auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) ) 
-                        <form action="{{ route('groups.destroy', $group->id) }}" method="POST">
-                          @csrf
-                          @method('DELETE')
-                          <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
-                            <i class="mdi mdi-delete"></i>
-                          </button>
-                        </form>
-                        @else 
-                          <button class="btn btn-sm btn-secondary text-white" title="Ce groupe a des étudiant donc on ne peut pas le supprimer">
-                            <i class="mdi mdi-delete"></i>
-                          </button>
+                        @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                          <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">
+                            <i class="mdi mdi-pencil"></i>
+                          </a>
+                          @if(count($group->students) == 0) 
+                          <form action="{{ route('groups.destroy', $group->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                              <i class="mdi mdi-delete"></i>
+                            </button>
+                          </form>
+                          @else 
+                            <button class="btn btn-sm btn-secondary text-white" title="Ce groupe a des étudiant donc on ne peut pas le supprimer">
+                              <i class="mdi mdi-delete"></i>
+                            </button>
+                          @endif
                         @endif
                       </div>
                     </td>

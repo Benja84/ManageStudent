@@ -30,6 +30,7 @@ Route::group(['middleware' => 'role:admin|coordinator|professor|secretary'], fun
 
 Route::group(['middleware' => 'role:coordinator|professor'], function () {
     Route::get('my-courses',[CoursesController::class, 'getCourseByProf'])->name('prof.courses');
+    Route::get('my-courses/today',[CoursesController::class, 'getTodayCourses'])->name('prof.courses_today');
 });
 
 

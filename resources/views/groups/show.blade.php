@@ -59,7 +59,9 @@
                     <th class=" text-center" scope="col">PRÉNOM</th>
                     <th class=" text-center" scope="col">EMAIL</th>
                     <th class=" text-center" scope="col">TELEPHONE</th>
-                    <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
+                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                      <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -85,13 +87,15 @@
                       <td>{{ $student->user->firstname }}</td>
                       <td><a href="mailto:{{ $student->user->email }}">{{ $student->user->email }}</a></td>
                       <td><a href="tel:{{ $student->user->phone }}">{{ $student->user->phone }}</a></td>
-                      <td >
-                        <div class="d-flex justify-content-center gap-3">
-                          <a href="{{ route('students.show', $student->id) }}" class="btn btn-sm btn-info"><i class="mdi mdi-eye"></i></a>
+                      @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                        <td >
+                          <div class="d-flex justify-content-center gap-3">
+                            <a href="{{ route('students.show', $student->id) }}" class="btn btn-sm btn-info"><i class="mdi mdi-eye"></i></a>
 
-                          <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-primary"><i class="mdi mdi-pencil"></i></a>
-                        </div>
-                      </td>
+                            <a href="{{ route('students.edit', $student->id) }}" class="btn btn-sm btn-primary"><i class="mdi mdi-pencil"></i></a>
+                          </div>
+                        </td>
+                      @endif
                     </tr>
                   @empty
                     <tr>
@@ -115,7 +119,9 @@
                     <th class=" text-center" scope="col">PRÉNOM</th>
                     <th class=" text-center" scope="col">EMAIL</th>
                     <th class=" text-center" scope="col">TELEPHONE</th>
-                    <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
+                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                      <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -136,12 +142,14 @@
                       <td class="text-center"><a href="tel:{{ $prof->phone }}">{{ $prof->user->phone }}</a></td>
                       <td >
                         <div class="d-flex justify-content-around">
-                          <a href="{{ route('professors.show', $prof->id) }}" class="btn btn-sm btn-info">
-                            <i class="mdi mdi-eye"></i>
-                          </a>
-                          <a href="{{ route('professors.edit', $prof->id) }}" class="btn btn-sm btn-primary">
-                            <i class="mdi mdi-pencil"></i>
-                          </a>
+                          @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                            <a href="{{ route('professors.show', $prof->id) }}" class="btn btn-sm btn-info">
+                              <i class="mdi mdi-eye"></i>
+                            </a>
+                            <a href="{{ route('professors.edit', $prof->id) }}" class="btn btn-sm btn-primary">
+                              <i class="mdi mdi-pencil"></i>
+                            </a>
+                          @endif
                         </div>
                       </td>
                     </tr>
@@ -167,7 +175,9 @@
                     <th class=" text-center" scope="col">PRÉNOM</th>
                     <th class=" text-center" scope="col">EMAIL</th>
                     <th class=" text-center" scope="col">TELEPHONE</th>
-                    <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
+                    @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                      <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
+                    @endif
                   </tr>
                 </thead>
                 <tbody>
@@ -186,16 +196,18 @@
                       <td class="text-center">{{ $prof->user->firstname }}</td>
                       <td class="text-center">{{ $prof->user->email }}</td>
                       <td class="text-center"><a href="tel:{{ $prof->phone }}">{{ $prof->user->phone }}</a></td>
-                      <td >
-                        <div class="d-flex justify-content-around">
-                          <a href="{{ route('professors.show', $prof->id) }}" class="btn btn-sm btn-info">
-                            <i class="mdi mdi-eye"></i>
-                          </a>
-                          <a href="{{ route('professors.edit', $prof->id) }}" class="btn btn-sm btn-primary">
-                            <i class="mdi mdi-pencil"></i>
-                          </a>
-                        </div>
-                      </td>
+                      @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                        <td >
+                          <div class="d-flex justify-content-around">
+                            <a href="{{ route('professors.show', $prof->id) }}" class="btn btn-sm btn-info">
+                              <i class="mdi mdi-eye"></i>
+                            </a>
+                            <a href="{{ route('professors.edit', $prof->id) }}" class="btn btn-sm btn-primary">
+                              <i class="mdi mdi-pencil"></i>
+                            </a>
+                          </div>
+                        </td>
+                      @endif
                     </tr>
                   @empty
                     <tr>
@@ -248,7 +260,9 @@
 
       <div class="mt-4">
           <a href="{{ route('groups.index') }}" class="btn btn-secondary"> Retour</a>
+          @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
           <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-primary">Modifier</a>
+          @endif
       </div>
     </div>
   </div>

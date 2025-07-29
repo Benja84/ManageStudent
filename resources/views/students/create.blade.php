@@ -111,7 +111,7 @@
                                             <label class="block text-gray-700">Portable</label>
                                             <input type="tel" name="phone" class="w-full p-2 border rounded form-control">
                                         </div>
-                                        <div>
+                                        {{-- <div>
                                             <label class="block text-gray-700">Conseiller-ère</label>
                                             <select name="advisor_id" class="select2 form-select" placeholder="Selectionner les matières">
                                                 <option value=""  disabled>Selectionner un(e) conseiller-ère</option>
@@ -124,18 +124,17 @@
                                                     @endif
                                                 @endforeach
                                             </select>
-                                        </div>
+                                        </div> --}}
 
                                         <div>
                                             <label class="block text-gray-700">Affectation aux groupes</label>
-                                            <select name="group_id" class="select2 form-select"  placeholder="Selectionner les groupes" title="Sélectionner les groupes">
-                                                <option value=""  disabled>Selectionner un groupe</option>
+                                            <select name="group_id" class="select2 form-select  shadow-none"  placeholder="Selectionner un groupe" title="Sélectionner un groupe">
+                                                <option value="" hidden disabled selected>Selectionner un groupe</option>
                                                 @foreach($groups as $group)
                                                     <option data-tokens="{{ $group->fullname }}"
-                                                        @if(old('group_id')) selected @php($selected = TRUE) @endif
+                                                        @if(old('group_id')) selected @endif
                                                         value="{{$group->id}}">{{ $group->fullname }}
                                                     </option>
-                                                    @php($selected = FALSE)
                                                 @endforeach
                                             </select>
                                         </div>
@@ -452,7 +451,15 @@
                         step2.querySelector('input[name="birthdate"]').focus();
                         return false;
                     }else{
-                        $('input[name="birthdate"]').removeClass('is-invalid');
+                        let age = calculerAge(birthDate);
+                        if(age >= 16){
+                            $('input[name="birthdate"]').removeClass('is-invalid');
+                        }else{
+                            $('input[name="birthdate"]').addClass('is-invalid');
+                            step2.querySelector('input[name="birthdate"]').focus();
+                            toastr.error('L\'âge minimum est 16 !','Erreur!')
+                            return false;
+                        }
                     }
                     if (!birthPlace) {
                         $('input[name="birthplace_city"]').addClass('is-invalid');

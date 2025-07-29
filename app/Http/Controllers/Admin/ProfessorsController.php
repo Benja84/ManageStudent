@@ -112,6 +112,9 @@ class ProfessorsController extends Controller
      */
     public function show($id)
     {
+        if(auth()->user()->hasRole('professor') && auth()->user()->professor->id != $id){
+            return redirect()->back()->with('error',"Vous n'avez pas le droit!");
+        }
         $prof = Professor::find($id);
         $title = "Détail du professeur";
         $page = "Détail";
