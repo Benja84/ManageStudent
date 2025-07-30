@@ -18,8 +18,8 @@ class SectionsController extends Controller
     public function index()
     {
         $sections = Section::all();
-        $title = "Liste des sections";
-        $page = "Liste des sections";
+        $title = "Liste des mentions";
+        $page = "Liste des mentions";
         return view('administrations.sections.index', compact('sections', 'title', 'page'));
     }
 
@@ -30,8 +30,8 @@ class SectionsController extends Controller
      */
     public function create()
     {
-        $title = "Ajouter une section";
-        $page = "Sections";
+        $title = "Ajouter une mention";
+        $page = "Mentions";
         $subjects = Subject::all();
         $sectionsList = Section::all();
         $attitudes = $attitudes = [
@@ -65,7 +65,7 @@ class SectionsController extends Controller
             $section->subjects()->syncWithoutDetaching($request->subject_id);
         }
 
-        return redirect()->route('sections.create')->with('success','Section créé avec succés');
+        return redirect()->route('sections.create')->with('success','Mention créé avec succés');
     }
 
     /**
@@ -95,8 +95,8 @@ class SectionsController extends Controller
             ' GESTION ',
             ' DROIT',
         ];
-        $title = "Editer setion";
-        $page = "Membre";
+        $title = "Editer une mention";
+        $page = "Mention";
         $sectionsList = Section::all();
         $subjects = Subject::all();
         return view('administrations.sections.edit', compact('section', 'attitudes', 'title', 'page','sectionsList','subjects'));
@@ -124,7 +124,7 @@ class SectionsController extends Controller
             $section->subjects()->syncWithoutDetaching($request->subject_id);
         }
         
-        return redirect()->route('sections.index')->with('success', 'Section mise à jour avec succès');
+        return redirect()->route('sections.index')->with('success', 'Mention mise à jour avec succès');
     }
 
     /**
@@ -136,7 +136,7 @@ class SectionsController extends Controller
     public function destroy(Section $section)
     {
         $section->delete();
-        return redirect()->route('sections.index')->with('success', 'Section supprimée avec succès');
+        return redirect()->route('sections.index')->with('success', 'Mention supprimée avec succès');
     }
 
     public function getSubject($id){

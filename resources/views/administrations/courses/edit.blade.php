@@ -53,7 +53,7 @@
             <div class="form-group mt-3">
               <label>Group</label>
               <select class="select2 form-select shadow-none" name="group_id" id="group">
-                <option value="" selected disabled>Séléctionner un groupe</option>
+                <option value="" selected disabled>Séléctionner un parcours</option>
                 @foreach($course->subject->groups as $group)
                   <option value="{{ $group->id }}"  @if(old('group_id',$course->group_id) == $group->id) selected @endif>{{ $group->abbreviation }}</option>
                 @endforeach
@@ -136,14 +136,14 @@
                 });
               }
               if(response.groups.length){
-                $('#group').html('<option value="" selected disabled>Séléctionner un groupe</option>')
+                $('#group').html('<option value="" selected disabled>Séléctionner un parcours</option>')
                 response.groups.forEach(group => {
-                    $('#group').append('<option value="'+group.id+'" data-tokens="'+group.abbreviation+' '+group.school_year+' ( Section '+group.section.name+')">'+group.abbreviation+' '+group.school_year+' ( Section '+group.section.name+')</option>')
+                    $('#group').append('<option value="'+group.id+'" data-tokens="'+group.abbreviation+' '+group.school_year+' ( Mention '+group.section.name+')">'+group.abbreviation+' '+group.school_year+' ( Mention '+group.section.name+')</option>')
                 })
               }
             }else{
               $('#professor').html('<option value="" disabled>Aucun professeurs trouvés</option>');
-              $('#group').html('<option value="" disabled>Aucun groupes trouvés</option>');
+              $('#group').html('<option value="" disabled>Aucun parcours trouvés</option>');
             }
           }
         })

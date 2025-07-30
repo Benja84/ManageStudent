@@ -9,7 +9,7 @@
                     @csrf
                     <div class="card-body">
                         <div class="form-group mt-3">
-                            <label>Lieu</label>
+                            <label>Nom</label>
                             <input class="form-control" type="text" name="name" placeholder="ex: Arcade" required>
                         </div>
                         <div class="form-group mt-3">

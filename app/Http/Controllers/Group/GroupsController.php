@@ -24,8 +24,8 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        $title = "Liste groupe";
-        $page = "Liste des groupes";
+        $title = "Liste des parcours";
+        $page = "Liste des parcours";
         $groups = Group::with('section')->get();
         return view('groups.index',compact('title','page','groups'));
     }
@@ -37,8 +37,8 @@ class GroupsController extends Controller
      */
     public function create()
     {
-        $title = "Ajouter une groupe";
-        $page = "Groupe";
+        $title = "Ajouter un parcours";
+        $page = "Parcours";
         $sections = Section::all();
         $professors = Professor::all();
         $subjects = Subject::all();
@@ -63,7 +63,7 @@ class GroupsController extends Controller
 
         $yearAbbreviations = $this->getYearAbreviation($request->school_year);
         if(in_array($request->abbreviation,$yearAbbreviations->toArray())){
-            return redirect()->back()->with('error', 'Ce groupe existe déjà pour cette année scolaire');
+            return redirect()->back()->with('error', 'Ce parcours existe déjà pour cette année scolaire');
         }
         
         $group = Group::create($data);
@@ -79,7 +79,7 @@ class GroupsController extends Controller
             }
         }
         
-        return redirect()->route('groups.index')->with('success','Le groupe <a href="' . route('groups.show', $group->id) . '">' . $group->abbreviation . '</a> a bien été ajouté');
+        return redirect()->route('groups.index')->with('success','Le parcours <a href="' . route('groups.show', $group->id) . '">' . $group->abbreviation . '</a> a bien été ajouté');
     }
 
     /**
@@ -91,8 +91,8 @@ class GroupsController extends Controller
     public function show($id)
     {
         $group = Group::with('courses.group.section','courses.professor','courses.subject','courses.room')->find($id);
-        $title = "Groupe ".$group->abbreviation;
-        $page = "Editer un groupe";
+        $title = "Parcours ".$group->abbreviation;
+        $page = "Editer un parcours";
         $sections = Section::all();
         return view('groups.show',compact('title','page','sections','group'));
     }
@@ -105,8 +105,8 @@ class GroupsController extends Controller
      */
     public function edit($id)
     {
-        $title = "Editer un groupe";
-        $page = "Editer un groupe";
+        $title = "Editer un parcours";
+        $page = "Editer un parcours";
         $sections = Section::with('subjects')->get();
         $professors = Professor::all();
         $group = Group::with('coordinators','subjects')->find($id);
@@ -142,7 +142,7 @@ class GroupsController extends Controller
         // Révoque les rôles des anciens coordinateurs
 
         if (!empty($oldUserIds)) {
-            // 1. Trouver les users qui sont encore coordinateurs dans d'autres groupes
+            // 1. Trouver les users qui sont encore coordinateurs dans d'autres parcours
             $usersStillCoordinators = DB::table('groupables')
                 ->join('professors', 'professors.id', '=', 'groupables.groupable_id')
                 ->where('groupables.groupable_type', Professor::class)
@@ -185,9 +185,9 @@ class GroupsController extends Controller
         $group = Group::find($id);
         GroupSubject::where('group_id',$group->id)->delete();
         if($group->delete()){
-            return redirect()->route('groups.index')->with('success', 'Le groupe  a bien été supprimé');
+            return redirect()->route('groups.index')->with('success', 'Le parcours  a bien été supprimé');
         }
-        return redirect()->route('groups.index')->with('error', 'Problème. Le groupe n\'a pas été supprimé');
+        return redirect()->route('groups.index')->with('error', 'Problème. Le parcours n\'a pas été supprimé');
     }
 
     // Récuperer les abréviations d'une année scolaire
@@ -198,8 +198,8 @@ class GroupsController extends Controller
     public function indexForCoordinator()
     {
         $coordinator = TRUE;
-        $title = "Liste groupe";
-        $page = "Liste des groupes";
+        $title = "Liste des parcours";
+        $page = "Liste des parcours";
         // $groupsRoute = explode('.', Route::current()->getName())[0];
 
         $groups = auth()->user()->professor->groupsCoordinator()->orderBy('groups.school_year', 'desc')->get();

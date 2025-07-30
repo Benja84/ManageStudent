@@ -137,9 +137,9 @@
                                         </div> --}}
                                         
                                         <div>
-                                            <label class="block text-gray-700">Affectation aux groupes</label>
-                                            <select name="group_id[]" class="select2 form-select"  placeholder="Selectionner les groupes" title="Sélectionner les groupes">
-                                                <option value=""  disabled>Selectionner un groupe</option>
+                                            <label class="block text-gray-700">Etudiant du parcours</label>
+                                            <select name="group_id[]" class="select2 form-select"  placeholder="Selectionner les parcours" title="Sélectionner les parcours">
+                                                <option value=""  disabled>Selectionner un parcours</option>
                                                 @foreach($groups as $group)
                                                     <option data-tokens="{{ $group->fullname }}"
                                                         @if(old('group_id') || $student->groups->contains($group->id)) selected @php($selected = TRUE) @endif

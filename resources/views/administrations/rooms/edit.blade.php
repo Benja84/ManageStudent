@@ -9,7 +9,7 @@
                     @method('PUT')
                     <div class="card-body">
                         <div class="form-group">
-                            <label>Lieu :</label>
+                            <label>Nom :</label>
                             <input type="text" name="name" class="form-control" value="{{ old('name', $room->name) }}" required>
                         </div>
 

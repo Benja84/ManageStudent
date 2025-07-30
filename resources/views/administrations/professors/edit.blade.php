@@ -137,9 +137,9 @@
                                         </div>
                                         
                                         <div>
-                                            <label class="block text-gray-700">Affectation aux groupes</label>
-                                            <select name="group_id[]" class="select2 form-select selectpicker" multiple placeholder="Selectionner les groupes" title="Sélectionner les groupes">
-                                                <option value=""  disabled>Selectionner les groupes</option>
+                                            <label class="block text-gray-700">Enseignant des parcours</label>
+                                            <select name="group_id[]" class="select2 form-select selectpicker" multiple placeholder="Selectionner les parcours" title="Sélectionner les parcours">
+                                                <option value=""  disabled>Selectionner les parcours</option>
                                                 @foreach($groups as $group)
                                                 <option value="{{$group->id}}" data-token="{{$group->fullname}}" @if($prof->groups->contains($group->id)) selected @endif>{{$group->fullname}}</option>
                                                 @endforeach

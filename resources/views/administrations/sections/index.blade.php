@@ -6,54 +6,6 @@
 @endsection
 
 @section('content')
-{{-- <div class="container mt-4">
-    <div class="d-flex justify-content-end mb-3">
-        <a href="{{ route('sections.create') }}" class="btn btn-primary"><i class="mdi mdi-plus"></i> Ajouter une section</a>
-    </div>
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    <div class="table-responsive">
-        <table id="liste_groupe" class="table table-striped table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th>Nom</th>
-                    <th>Abréviation</th>
-                    <th>Promotion</th>
-                    <th>Niveau</th>
-                    <th>Année</th>
-                    <th>Prix de l'année scolaire</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($sections as $section)
-                    <tr>
-                        <td>{{ $section->name }}</td>
-                        <td>{{ $section->abbreviation }}</td>
-                        <td>{{ $section->promotion }}</td>
-                        <td>{{ $section->niveau }}</td>
-                        <td>{{ $section->year }}</td>
-                        <td>{{ number_format($section->pricing, 2, ',', ' ') }} </td>
-                        <td class="text-center">
-                            <a href="{{ route('sections.edit', $section) }}" class="btn btn-sm btn-warning">✏️</a>
-                            <form action="{{ route('sections.destroy', $section) }}" method="POST" class="d-inline" onsubmit="return confirm('Voulez-vous vraiment supprimer ?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">🗑</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="text-center">Aucune section enregistrée.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-</div> --}}
     <div class="row">
         <div class="col-12">
         <div class="card">
@@ -61,7 +13,7 @@
             <div class="d-flex justify-content-end">
 
                 <a href="{{ route('sections.create') }}" class="btn btn-success mb-3 text-white">
-                <i class="mdi mdi-plus"></i> Ajouter une séction
+                <i class="mdi mdi-plus"></i> Ajouter une mention
                 </a>
             </div>
             <div class="table-responsive">
@@ -71,8 +23,8 @@
                     <th class="d-none" scope="col">#</th>
                     <th class="text-center" scope="col">Nom</th>
                     <th class="text-center" scope="col">Abréviation</th>
-                    <th class="text-center" scope="col">Promotion</th>
-                    <th class="text-center" scope="col">Prix de l'année scolaire</th>
+                    <th class="text-center" scope="col">Niveau</th>
+                    <th class="text-center" scope="col">Prix de l'année universitaire</th>
                     <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
                     </tr>
                 </thead>
@@ -86,8 +38,8 @@
                         <td class="text-center">{{number_format($section->pricing, 0, ',', ' ')  }} Ar</td>
                         <td >
                         <div class="d-flex justify-content-around">
-                            <a href="{{ route('sections.show', $section->id) }}" class="btn btn-sm btn-info">
-                            <i class="mdi mdi-eye"></i>
+                            {{-- <a href="{{ route('sections.show', $section->id) }}" class="btn btn-sm btn-info">
+                            <i class="mdi mdi-eye"></i> --}}
                             </a>
                             <a href="{{ route('sections.edit', $section->id) }}" class="btn btn-sm btn-primary">
                             <i class="mdi mdi-pencil"></i>
@@ -104,7 +56,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-muted">Aucun séction trouvé</td>
+                        <td colspan="8" class="text-muted">Aucun mention trouvé</td>
                     </tr>
                     @endforelse
                 </tbody>
