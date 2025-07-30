@@ -21,7 +21,7 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Lieu</th>
+                            <th scope="col">Nom</th>
                             <th scope="col">Numéro</th>
                             <th scope="col">Bâtiment</th>
                             <th scope="col">Étage</th>

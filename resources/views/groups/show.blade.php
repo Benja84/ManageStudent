@@ -9,31 +9,31 @@
 <div class="container-fluid py-3">
   <div class="card shadow-sm">
     <div class="card-header">
-      {{-- <p>Groupe {{ $group->abreviation }} ({{ count($group->students)}} étudiants)</p> --}}
+      {{-- <p>Parcours {{ $group->abreviation }} ({{ count($group->students)}} étudiants)</p> --}}
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item"> 
           <a class="nav-link active" data-bs-toggle="tab" href="#student" role="tab">
             <span class="hidden-sm-up"></span> 
-            <span class="hidden-xs-down">Etudiants du groupe</span>
+            <span class="hidden-xs-down">Etudiants du parcours</span>
           </a> 
         </li>
         <li class="nav-item"> 
           <a class="nav-link" data-bs-toggle="tab" href="#prof" role="tab">
             <span class="hidden-sm-up"></span> 
-            <span class="hidden-xs-down">Professeur du groupe</span>
+            <span class="hidden-xs-down">Professeur du parcours</span>
           </a> 
         </li>
         <li class="nav-item"> 
           <a class="nav-link" data-bs-toggle="tab" href="#coordinator" role="tab">
             <span class="hidden-sm-up"></span> 
-            <span class="hidden-xs-down">Coordinateurs du groupe</span>
+            <span class="hidden-xs-down">Responsable du parcours</span>
           </a> 
         </li>
         <li class="nav-item"> 
           <a class="nav-link" data-bs-toggle="tab" href="#course" role="tab">
             <span class="hidden-sm-up"></span> 
-            <span class="hidden-xs-down">Cours du groupe</span>
+            <span class="hidden-xs-down">Cours du parcours</span>
           </a> 
         </li>
         <li class="nav-item"> 
@@ -211,7 +211,7 @@
                     </tr>
                   @empty
                     <tr>
-                      <td colspan="8" class="text-muted">Aucun coordinateur-trice trouvé</td>
+                      <td colspan="8" class="text-muted">Aucun responsable trouvé</td>
                     </tr>
                   @endforelse
                 </tbody>
@@ -245,7 +245,7 @@
                     @endif
                   @empty
                     <tr>
-                      <td colspan="8" class="text-muted">Aucun coordinateur-trice trouvé</td>
+                      <td colspan="8" class="text-muted">Aucun cours trouvé</td>
                     </tr>
                   @endforelse
                 </tbody>
@@ -357,7 +357,7 @@
               startHour: element.start_time,
               endHour: element.end_time,
               teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
-              class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
+              class: element.group.abbreviation+' '+element.group.school_year+' ( Mention '+element.group.section.abbreviation+' )',
               location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
             }
           } );

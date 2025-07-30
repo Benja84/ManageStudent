@@ -21,19 +21,19 @@
                             <input class="form-control" type="text" value="{{ $group->abbreviation }}" name="abbreviation" placeholder="ex: GL" required>
                         </div>
                         <div class="form-group mt-3">
-                            <label>Section</label>
+                            <label>Mention</label>
                             <select class="select2 form-select shadow-none" id="section" name="section_id" id="role" style="width: 100%; height:36px;">
-                              <option value="" selected hidden disabled>Séléctionner la section</option>
+                              <option value="" selected hidden disabled>Séléctionner la mention</option>
                               @foreach($sections as $section)
                                 <option value="{{ $section->id }}" @if($group->section_id == $section->id) selected @endif>{{ $section->name }}</option>
                               @endforeach
                             </select>
                         </div>
                         <div class="form-group mt-3">
-                          <label>Année scolaire</label>
+                          <label>Année universitaire</label>
                           @php($schoolYears = school_years())
-                          <select class="form-control" name="school_year" title="Sélectionner l'année scolaire">
-                            <option value="" selected hidden disabled>Séléctionner l'année scolaire</option>
+                          <select class="form-control" name="school_year" title="Sélectionner l'année universitaire">
+                            <option value="" selected hidden disabled>Séléctionner l'année universitaire</option>
                             @foreach ($schoolYears as $year)
                               <option class="form-control" data-tokens="{{ $year }}"
                                 @if($group->school_year == $year) @php($selected = TRUE) selected @endif
@@ -59,10 +59,10 @@
                           </select>
                         </div>
                         <div class="form-group mt-3">
-                          <label>Professeurs coordinateurs</label>
+                          <label>Professeurs responsables</label>
                           <select name="coordinator_id[]" class="select2 form-select shadow-none mt-3" multiple="multiple"
-                          title="Sélectionner les professeurs coordinateurs">
-                            <option value="" hidden disabled>Séléctionner les professeurs coordinateurs</option>
+                          title="Sélectionner les professeurs responsables">
+                            <option value="" hidden disabled>Séléctionner les professeurs responsables</option>
                             @foreach($professors as $coordinator)
                               <option data-tokens="{{ $coordinator->user->firstname }} {{ $coordinator->user->lastname }}"
                                 @if($group->coordinators && $group->coordinators->contains($coordinator->id)) selected @php($selected = TRUE) @endif

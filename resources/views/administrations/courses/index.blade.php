@@ -82,10 +82,10 @@
                     </div>
                     <div class="d-flex justify-content-between">
                       <div class="col-md-3">
-                        <label for="">Groupe :</label>
+                        <label for="">Parcours :</label>
                         <div>
                         <select class="select2 form-select shadow-none" style="width: 100%"   name="group_id">
-                          <option value="" disabled selected hidden>Selectionner un groupe</option>
+                          <option value="" disabled selected hidden>Selectionner un parcours</option>
                           @foreach ($groups as $group)
                             <option class="form-control" data-tokens="{{ $group->fullname }}" value="{{ $group->id }}">
                               {{ $group->fullname }}
@@ -267,7 +267,7 @@
               startHour: element.start_time,
               endHour: element.end_time,
               teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
-              class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
+              class: element.group.abbreviation+' '+element.group.school_year+' ( Mention '+element.group.section.abbreviation+' )',
               location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
             }
           } );

@@ -68,7 +68,7 @@
 <li class="sidebar-item">
     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
         <i class="fas fa-bookmark"></i>
-        <span class="hide-menu">Groupes </span>
+        <span class="hide-menu">Parcours </span>
     </a>
     <ul aria-expanded="false" class="collapse  first-level">
         <li class="sidebar-item">
@@ -80,7 +80,7 @@
         <li class="sidebar-item">
             <a href="{{ route('groups.index') }}" class="sidebar-link">
                 <i class="mdi mdi-receipt"></i>
-                <span class="hide-menu"> Liste des Goupes </span>
+                <span class="hide-menu"> Liste des parcours </span>
             </a>
         </li>
     </ul>
@@ -88,7 +88,7 @@
 <li class="sidebar-item">
     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
         <i class="fas fa-bookmark"></i>
-        <span class="hide-menu">Sections </span>
+        <span class="hide-menu">Mentions </span>
     </a>
     <ul aria-expanded="false" class="collapse  first-level">
         <li class="sidebar-item">
@@ -100,7 +100,7 @@
         <li class="sidebar-item">
             <a href="{{ route('sections.index') }}" class="sidebar-link">
                 <i class="mdi mdi-receipt"></i>
-                <span class="hide-menu"> Liste des sections </span>
+                <span class="hide-menu"> Liste des mentions </span>
             </a>
         </li>
     </ul>

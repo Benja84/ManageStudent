@@ -37,7 +37,7 @@
                             <div class="bg-dark p-10 text-white text-center">
                                 <i class="mdi mdi-briefcase-check mb-1 font-16"></i>
                                 <h5 class="mb-0 mt-1">{{$groups}}</h5>
-                                <small class="font-light">Nombre de groupes</small>
+                                <small class="font-light">Nombre de parcours</small>
                             </div>
                             </a>
                         </div>
@@ -176,7 +176,7 @@
                             startHour: element.start_time,
                             endHour: element.end_time,
                             teacher: element.professor.user.firstname+' '+element.professor.user.lastname,
-                            class: element.group.abbreviation+' '+element.group.school_year+' ( Section '+element.group.section.abbreviation+' )',
+                            class: element.group.abbreviation+' '+element.group.school_year+' ( Mention '+element.group.section.abbreviation+' )',
                             location: element.room.name+'('+element.room.department+') ('+element.room.seating_capacity+' places)'+' n° '+element.room.number
                         }
                     });

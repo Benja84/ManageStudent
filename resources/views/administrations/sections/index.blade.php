@@ -13,7 +13,7 @@
             <div class="d-flex justify-content-end">
 
                 <a href="{{ route('sections.create') }}" class="btn btn-success mb-3 text-white">
-                <i class="mdi mdi-plus"></i> Ajouter une séction
+                <i class="mdi mdi-plus"></i> Ajouter une mention
                 </a>
             </div>
             <div class="table-responsive">
@@ -23,8 +23,8 @@
                     <th class="d-none" scope="col">#</th>
                     <th class="text-center" scope="col">Nom</th>
                     <th class="text-center" scope="col">Abréviation</th>
-                    <th class="text-center" scope="col">Promotion</th>
-                    <th class="text-center" scope="col">Prix de l'année scolaire</th>
+                    <th class="text-center" scope="col">Niveau</th>
+                    <th class="text-center" scope="col">Prix de l'année universitaire</th>
                     <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
                     </tr>
                 </thead>
@@ -38,8 +38,8 @@
                         <td class="text-center">{{number_format($section->pricing, 0, ',', ' ')  }} Ar</td>
                         <td >
                         <div class="d-flex justify-content-around">
-                            <a href="{{ route('sections.show', $section->id) }}" class="btn btn-sm btn-info">
-                            <i class="mdi mdi-eye"></i>
+                            {{-- <a href="{{ route('sections.show', $section->id) }}" class="btn btn-sm btn-info">
+                            <i class="mdi mdi-eye"></i> --}}
                             </a>
                             <a href="{{ route('sections.edit', $section->id) }}" class="btn btn-sm btn-primary">
                             <i class="mdi mdi-pencil"></i>
@@ -56,7 +56,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-muted">Aucun séction trouvé</td>
+                        <td colspan="8" class="text-muted">Aucun mention trouvé</td>
                     </tr>
                     @endforelse
                 </tbody>

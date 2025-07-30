@@ -12,7 +12,7 @@
                     @csrf
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="form-label">Nom de la section</label>
+                            <label class="form-label">Nom de la mention</label>
                             <input list="sections" type="text" name="name" class="form-control" value="{{ old('name') }}" required>
                             {{-- <select name="name" class="form-select" required>
                                 <option value="">Sélectionnez une option</option>
@@ -31,7 +31,7 @@
                             <input type="text" class="form-control" name="abbreviation" placeholder="Ex: GL">
                         </div>
                         <div class="form-group mt-3">
-                            <label>Année de la section</label>
+                            <label>Niveau</label>
                             <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année">
                                 @for($i=1; $i<=5; $i++)
                                     <option class="form-control" data-tokens="{{ yearth($i) }}"
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div class="form-group mt-3">
-                            <label>Prix année scolaire</label>
+                            <label>Prix année universitaire</label>
                             <input class="form-control" type="text" name="pricing" placeholder="ex: 200 000" required>
                         </div>
 

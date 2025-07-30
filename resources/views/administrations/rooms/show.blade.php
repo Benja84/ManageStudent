@@ -6,7 +6,7 @@
 
     <div class="card mt-3">
         <div class="card-body">
-            <p><strong>Lieu :</strong> {{ $room->name }}</p>
+            <p><strong>Nom :</strong> {{ $room->name }}</p>
             <p><strong>Numéro :</strong> {{ $room->number ?? 'N/A' }}</p>
             <p><strong>Bâtiment :</strong> {{ $room->department ?? 'N/A' }}</p>
             <p><strong>Étage :</strong> {{ $room->floor ?? 'N/A' }}</p>

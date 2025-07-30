@@ -22,8 +22,8 @@
                 <tr>
                   <th class="d-none" scope="col">#</th>
                   <th class="text-center" scope="col">Abréviation</th>
-                  <th class="text-center" scope="col">Section</th>
-                  <th class="text-center" scope="col">Année scolaire</th>
+                  <th class="text-center" scope="col">Mention</th>
+                  <th class="text-center" scope="col">Année universitaire</th>
                   <th class="text-center" scope="col">Périodicité</th>
                   <th class="sorting_disabled text-center" scope="col">ACTIONS</th>
                 </tr>

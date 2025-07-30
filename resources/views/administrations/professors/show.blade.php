@@ -32,10 +32,10 @@
             </ul>
           </div>
           <div>
-            <h4>Groupes gérés</h4>
+            <h4>Parcours gérés</h4>
             <ul>
               @foreach ($prof->groupsCoordinator as $group)
-                <li>{{$group->abbreviation}} ({{$group->school_year}}), Section: {{$group->section->name}}</li>
+                <li>{{$group->abbreviation}} ({{$group->school_year}}), Mention: {{$group->section->name}}</li>
               @endforeach
             </ul>
           </div>
