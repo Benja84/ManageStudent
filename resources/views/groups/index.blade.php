@@ -8,11 +8,11 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+          @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary'))
           <div class="d-flex justify-content-end">
 
             <a href="{{ route('groups.create') }}" class="btn btn-success mb-3 text-white">
-              <i class="mdi mdi-plus"></i> Ajouter un groupe
+              <i class="mdi mdi-plus"></i> Ajouter une parcours
             </a>
           </div>
           @endif
@@ -41,11 +41,11 @@
                         <a href="{{ route('groups.show', $group->id) }}" class="btn btn-sm btn-info">
                           <i class="mdi mdi-eye"></i>
                         </a>
-                        @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary')) 
+                        @if(auth()->user()->hasRole('admin') || auth()->user()->hasRole('secretary'))
                           <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-sm btn-primary">
                             <i class="mdi mdi-pencil"></i>
                           </a>
-                          @if(count($group->students) == 0) 
+                          @if(count($group->students) == 0)
                           <form action="{{ route('groups.destroy', $group->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -53,8 +53,8 @@
                               <i class="mdi mdi-delete"></i>
                             </button>
                           </form>
-                          @else 
-                            <button class="btn btn-sm btn-secondary text-white" title="Ce groupe a des étudiant donc on ne peut pas le supprimer">
+                          @else
+                            <button class="btn btn-sm btn-secondary text-white" title="Ce parcours a des étudiant donc on ne peut pas le supprimer">
                               <i class="mdi mdi-delete"></i>
                             </button>
                           @endif
@@ -64,7 +64,7 @@
                   </tr>
                 @empty
                   <tr>
-                    <td colspan="8" class="text-muted">Aucun groupe trouvé</td>
+                    <td colspan="8" class="text-muted">Aucun parcours trouvé</td>
                   </tr>
                 @endforelse
               </tbody>

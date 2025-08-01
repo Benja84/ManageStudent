@@ -21,26 +21,6 @@
                             <label>Abréviation</label>
                             <input class="form-control" type="text" name="abbreviation" value="{{ old('abbreviation', $section->abbreviation) }}" required>
                         </div>
-<<<<<<< HEAD
-                        <div class="form-group mt-3">
-                            <label>Année de la section</label>
-                            <select name="promotion" class="form-control selectpicker" title="Sélectionner l'année" required>
-                                @for($i=1; $i<=5; $i++)
-                                    <option value="{{ $i }}" {{ old('promotion', $section->promotion) == $i ? 'selected' : '' }}>
-                                        {{ yearth($i) }}
-                                    </option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="form-group mt-3">
-                            <label>Prix année scolaire</label>
-                            <input class="form-control" type="text" name="pricing" value="{{ old('pricing', $section->pricing) }}" required>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-warning btn-rounded">Modifier</button>
-=======
 
                         <div class="mb-3">
                             <label for="year" class="form-label">Niveau</label>
@@ -79,7 +59,6 @@
                                 <button  class="btn btn-secondary">Annuler</button>
                                 <button type="submit" class="btn btn-primary">Valider</a>
                             </div>
->>>>>>> dev_bis
                         </div>
                     </div>
                 </form>

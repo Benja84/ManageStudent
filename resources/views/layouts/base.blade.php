@@ -16,10 +16,10 @@
     <meta name="description"
         content="Matrix Admin Lite Free Version is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
     <meta name="robots" content="noindex,nofollow">
-    <title>SIU</title>
+    <title>SGS</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
-    
+
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
     <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
@@ -84,7 +84,7 @@
         </header>
         {{-- Menu gauche --}}
         @include('layouts.sidebar')
-                
+
         <div class="page-wrapper">
             <div class="page-breadcrumb">
                 <div class="row">
@@ -159,7 +159,7 @@
 
 
 
-    
+
     {{-- <script src="{{ asset('dist/js/pages/mask/mask.init.js')}}"></script> --}}
     <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js')}}"></script>
@@ -176,7 +176,7 @@
         //***********************************//
         $(".select2").select2();
 
-        
+
         function calculerAge(date){
             const dNaiss = new Date(date);
             if (isNaN(dNaiss)) return null;
