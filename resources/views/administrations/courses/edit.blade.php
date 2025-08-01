@@ -51,7 +51,7 @@
               </select>
             </div>
             <div class="form-group mt-3">
-              <label>Group</label>
+              <label>Parcours</label>
               <select class="select2 form-select shadow-none" name="group_id" id="group">
                 <option value="" selected disabled>Séléctionner un parcours</option>
                 @foreach($course->subject->groups as $group)

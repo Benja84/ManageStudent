@@ -199,6 +199,7 @@ class ProfessorsController extends Controller
     public function destroy($id)
     {
         $prof = Professor::find($id);
+        ProfessorSubject::where('professor_id',$id)->delete();
         $user  = User::find($prof->user_id);
         $user->delete();
 
