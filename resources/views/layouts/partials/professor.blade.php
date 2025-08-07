@@ -26,13 +26,13 @@
 <li class="sidebar-item">
     <a href="{{ route('groups-coordinator.index') }}" class="sidebar-link">
         <i class="mdi mdi-book-multiple"></i>
-        <span class="hide-menu"> Mes groupes coordonnés</span>
+        <span class="hide-menu"> Mes parcours coordonnés</span>
     </a>
 </li>
 @endif
 <li class="sidebar-item">
     <a href="{{ route('groups.index') }}" class="sidebar-link">
         <i class="mdi mdi-book"></i>
-        <span class="hide-menu"> Tous les groupes </span>
+        <span class="hide-menu"> Tous les parcours </span>
     </a>
 </li>

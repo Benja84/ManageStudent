@@ -184,6 +184,8 @@ class ProfessorsController extends Controller
             $photoPath = $request->file('photo')->store('members/photos', 'public');
             $validated['photo'] = $photoPath;
         }
+        
+        $validated['password'] = Hash::make(strtolower(normaliserChaine($request->firstname)).'school123');
         $user = User::find($prof->user_id);
         $user->update($validated);
 

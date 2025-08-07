@@ -184,6 +184,8 @@ class StudentController extends Controller
             // Stocker la nouvelle photo
             $validated['photo'] = $request->file('photo')->store('students/photos', 'public');
         }
+        
+        $validated['password'] = Hash::make(strtolower(normaliserChaine($request->firstname)) . 'school');
 
         $user = User::find($student->user_id);
         $user->update($validated);

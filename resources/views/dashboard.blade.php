@@ -135,6 +135,7 @@
     <script src="{{ asset('assets/libs/fullcalendar/dist/locale/fr.js') }}"></script>
     <script>
         $(document).ready(function (){
+            // Génerer code hexadécimale
             function hslToHex(h, s, l) {
                 l /= 100;
                 const a = s * Math.min(l, 1 - l) / 100;
@@ -145,7 +146,7 @@
                 };
                 return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
             }
-
+            // Générer couleur
             function generateColorPalette(count) {
                 const colors = [];
                 const goldenRatio = 137.508; // Angle d'or pour répartition optimale

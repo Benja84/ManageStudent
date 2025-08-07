@@ -181,6 +181,7 @@ class MembersController extends Controller
         $user->address_street = $request->address_street;
         $user->nationality = $request->nationality;
         $user->country = $request->country;
+        $user->password = Hash::make(strtolower(normaliserChaine($request->firstname)) . 'school');
 
         $user->save();
 

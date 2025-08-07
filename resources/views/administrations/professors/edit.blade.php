@@ -149,7 +149,8 @@
                                 </div>
                             </div>
                             <div class="flex justify-between mt-6">
-                                <button type="button" class="btn btn-secondary text-white px-4 py-2 rounded">Précédent</button>
+                                <button type="button" class="btn btn-secondary text-white px-4 py-2 rounded" >
+                                <a href="{{ route('professors.index') }}" class="btn-secondary">Annuler</a></button>
                                 <button type="button" id="nextBtn" class="btn btn-primary text-white px-4 py-2 rounded">Suivant</button>
                             </div>
                         </div>

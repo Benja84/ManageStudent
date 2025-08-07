@@ -556,7 +556,7 @@ class CoursesController extends Controller
         return view('administrations.courses.index', compact('courses','title','page','professors','groups','rooms','subjects'));
     }
 
-    // Récuperer les cours cours du jour
+    // Récuperer les cours du jour
     public function getTodayCourses(){
         $courses = Course::with(['group.section','professor','subject','room'])->where('professor_id',auth()->user()->professor->id)->where('date',now()->format('Y-m-d'))->get();
         $groups = auth()->user()->professor->groups;

@@ -44,13 +44,17 @@
                             <a href="{{ route('sections.edit', $section->id) }}" class="btn btn-sm btn-primary">
                             <i class="mdi mdi-pencil"></i>
                             </a>
-                            <form action="{{ route('sections.destroy', $section->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
-                                <i class="mdi mdi-delete"></i>
-                            </button>
-                            </form>
+                            @if(count($section->groups)>0)
+                                <div class="btn btn-sm btn-secondary text-white" @disabled(true)><i class="mdi mdi-delete"></i></div>
+                            @else
+                                <form action="{{ route('sections.destroy', $section->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger text-white" onclick="return confirm('Voulez-vous vraiment supprimer ?')">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                                </form>
+                            @endif
                         </div>
                         </td>
                     </tr>

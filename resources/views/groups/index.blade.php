@@ -12,7 +12,7 @@
           <div class="d-flex justify-content-end">
 
             <a href="{{ route('groups.create') }}" class="btn btn-success mb-3 text-white">
-              <i class="mdi mdi-plus"></i> Ajouter un groupe
+              <i class="mdi mdi-plus"></i> Ajouter un parcours
             </a>
           </div>
           @endif
@@ -54,7 +54,7 @@
                             </button>
                           </form>
                           @else 
-                            <button class="btn btn-sm btn-secondary text-white" title="Ce groupe a des étudiant donc on ne peut pas le supprimer">
+                            <button class="btn btn-sm btn-secondary text-white" title="Ce parcours a des étudiant donc on ne peut pas le supprimer">
                               <i class="mdi mdi-delete"></i>
                             </button>
                           @endif
@@ -64,7 +64,7 @@
                   </tr>
                 @empty
                   <tr>
-                    <td colspan="8" class="text-muted">Aucun groupe trouvé</td>
+                    <td colspan="8" class="text-muted">Aucun parcours trouvé</td>
                   </tr>
                 @endforelse
               </tbody>
